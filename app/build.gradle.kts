@@ -57,4 +57,12 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // material
+    implementation("androidx.compose.material:material-icons-extended")
+
+    // navigation
+    val navigationVersion = "2.7.5"
+    implementation("androidx.navigation:navigation-compose:$navigationVersion")
+    androidTestImplementation("androidx.navigation:navigation-testing:$navigationVersion")
 }
