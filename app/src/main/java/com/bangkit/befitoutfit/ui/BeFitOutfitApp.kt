@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bangkit.befitoutfit.ui.component.BottomBar
+import com.bangkit.befitoutfit.ui.component.FloatingActionButton
 import com.bangkit.befitoutfit.ui.component.TopBar
 import com.bangkit.befitoutfit.ui.screen.Screen
 import com.bangkit.befitoutfit.ui.theme.BeFitOutfitTheme
@@ -31,6 +32,8 @@ fun BeFitOutfitApp(
             currentRoute = currentRoute,
             navController = navController
         )
+    }, floatingActionButton = {
+        FloatingActionButton(currentRoute = currentRoute, onClick = {})
     }) {
         NavHost(
             navController = navController,
