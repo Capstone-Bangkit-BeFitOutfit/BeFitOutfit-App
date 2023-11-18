@@ -16,13 +16,14 @@ import androidx.compose.ui.Modifier
 fun TopBar(
     title: String,
     modifier: Modifier = Modifier,
+    logout: () -> Unit = {},
 ) {
     CenterAlignedTopAppBar(title = { Text(text = title) }, modifier = modifier, navigationIcon = {
         IconButton(onClick = { /*TODO: feature profile*/ }) {
             Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Profile")
         }
     }, actions = {
-        IconButton(onClick = { /*TODO: feature logout*/ }) {
+        IconButton(onClick = logout) {
             Icon(imageVector = Icons.Default.Logout, contentDescription = "Logout")
         }
     })

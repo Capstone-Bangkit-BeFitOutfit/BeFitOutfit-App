@@ -58,6 +58,14 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    // datastore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // koin
+    val koinVersion = "3.5.0"
+    implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
+    testImplementation("io.insert-koin:koin-test-junit4:$koinVersion")
+
     // material
     implementation("androidx.compose.material:material-icons-extended")
 
@@ -65,4 +73,7 @@ dependencies {
     val navigationVersion = "2.7.5"
     implementation("androidx.navigation:navigation-compose:$navigationVersion")
     androidTestImplementation("androidx.navigation:navigation-testing:$navigationVersion")
+
+    // viewmodel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 }
