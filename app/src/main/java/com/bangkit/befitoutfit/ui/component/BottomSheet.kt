@@ -1,14 +1,18 @@
 package com.bangkit.befitoutfit.ui.component
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -37,6 +41,7 @@ fun BottomSheet(
     session: Session = Session(email = "", name = ""),
     onClickDismiss: () -> Unit = {},
     onClickProfile: (Session) -> Unit = {},
+    onClickAddOutfit: () -> Unit = {},
     onClickSettingRecommend: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
@@ -56,13 +61,9 @@ fun BottomSheet(
                 style = MaterialTheme.typography.labelLarge
             )
 
-            Divider()
+            Divider(modifier = Modifier.padding(bottom = 16.dp))
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, top = 16.dp, end = 16.dp)
-            ) {
+            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 when (bottomSheetType) {
                     BottomSheetType.Profile -> {
                         var nameValue by remember { mutableStateOf(session.name) }
@@ -95,7 +96,7 @@ fun BottomSheet(
                             focusManager = focusManager
                         )
 
-                        Button(
+                        OutlinedButton(
                             onClick = {
                                 focusManager.clearFocus()
                                 onClickProfile(Session(name = nameValue, email = emailValue))
@@ -106,8 +107,39 @@ fun BottomSheet(
                         ) { Text(text = "Update") }
                     }
 
+                    BottomSheetType.AddOutfit -> {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                                .padding(bottom = 16.dp)
+                        ) {}
+
+                        Row(modifier = Modifier.padding(bottom = 16.dp)) {
+                            Button(
+                                onClick = { /*TODO: feature add image from camera*/ },
+                                modifier = Modifier.weight(1f)
+                            ) { Text(text = "Camera") }
+
+                            Spacer(modifier = Modifier.padding(8.dp))
+
+                            Button(
+                                onClick = { /*TODO: feature add image from gallery*/ },
+                                modifier = Modifier.weight(1f)
+                            ) { Text(text = "Gallery") }
+                        }
+
+                        OutlinedButton(
+                            onClick = {
+                                /*TODO: feature add outfit*/
+                                onClickAddOutfit()
+                                onClickDismiss()
+                            }, modifier = Modifier.fillMaxWidth(), enabled = true
+                        ) { Text(text = "Upload") }
+                    }
+
                     BottomSheetType.SettingRecommend -> {/*TODO: feature recommend setting*/
-                        Button(
+                        OutlinedButton(
                             onClick = {
                                 onClickSettingRecommend()
                                 onClickDismiss()

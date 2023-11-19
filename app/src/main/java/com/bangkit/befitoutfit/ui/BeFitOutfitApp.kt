@@ -64,13 +64,14 @@ fun BeFitOutfitApp(
         })
     }, bottomBar = {
         if (currentRoute != Screen.Auth.route) BottomBar(
-            screens = listOf(Screen.MyOutfit, Screen.AddOutfit, Screen.Recommend),
+            screens = listOf(Screen.MyOutfit, Screen.Recommend),
             currentRoute = currentRoute,
             navController = navController
         )
     }, floatingActionButton = {
         FloatingActionButton(currentRoute = currentRoute, onClick = {
             when (currentRoute) {
+                Screen.MyOutfit.route -> bottomSheetType = BottomSheetType.AddOutfit
                 Screen.Recommend.route -> bottomSheetType = BottomSheetType.SettingRecommend
             }
             showBottomSheet = true
@@ -93,10 +94,6 @@ fun BeFitOutfitApp(
                 composable(route = Screen.MyOutfit.route) {
                     /*TODO: feature my outfit*/
                     Text(text = Screen.MyOutfit.route)
-                }
-                composable(route = Screen.AddOutfit.route) {
-                    /*TODO: feature add outfit*/
-                    Text(text = Screen.AddOutfit.route)
                 }
                 composable(route = Screen.Recommend.route) {
                     /*TODO: feature recommend*/
