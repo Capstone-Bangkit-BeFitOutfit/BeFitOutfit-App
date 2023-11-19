@@ -1,5 +1,6 @@
 package com.bangkit.befitoutfit.ui.component
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -39,7 +40,9 @@ fun TextField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier.padding(bottom = 8.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(bottom = 8.dp),
         enabled = enable,
         label = { Text(text = textFieldType.type) },
         placeholder = { Text(text = "Enter your ${textFieldType.type}") },

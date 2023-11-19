@@ -74,7 +74,6 @@ fun AuthScreen(
         AnimatedVisibility(visible = !isLogin) {
             TextField(
                 textFieldType = TextFieldType.Name,
-                modifier = Modifier.fillMaxWidth(),
                 enable = !isLoadingRegister,
                 value = nameValue,
                 isValid = nameValid,
@@ -89,7 +88,6 @@ fun AuthScreen(
 
         TextField(
             textFieldType = TextFieldType.Email,
-            modifier = Modifier.fillMaxWidth(),
             enable = !isLoadingLogin && !isLoadingRegister,
             value = emailValue,
             isValid = emailValid,
@@ -103,7 +101,6 @@ fun AuthScreen(
 
         TextField(
             textFieldType = TextFieldType.Password,
-            modifier = Modifier.fillMaxWidth(),
             enable = !isLoadingLogin && !isLoadingRegister,
             value = passwordValue,
             isValid = passwordValid,
