@@ -44,7 +44,7 @@ dependencies {
     // default
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.activity:activity-compose:1.8.0")
+    implementation("androidx.activity:activity-compose:1.8.1")
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -57,4 +57,26 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // coil
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
+    // datastore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // koin
+    val koinVersion = "3.5.0"
+    implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
+    testImplementation("io.insert-koin:koin-test-junit4:$koinVersion")
+
+    // material
+    implementation("androidx.compose.material:material-icons-extended")
+
+    // navigation
+    val navigationVersion = "2.7.5"
+    implementation("androidx.navigation:navigation-compose:$navigationVersion")
+    androidTestImplementation("androidx.navigation:navigation-testing:$navigationVersion")
+
+    // viewmodel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 }
