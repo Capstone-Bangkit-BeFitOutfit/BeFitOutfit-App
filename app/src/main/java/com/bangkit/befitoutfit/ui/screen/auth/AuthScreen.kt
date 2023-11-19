@@ -41,7 +41,8 @@ fun AuthScreen(
 
     val focusManager = LocalFocusManager.current
 
-    val isLoading = stateLogin is State.Loading || stateRegister is State.Loading
+    val isLoadingLogin = stateLogin is State.Loading
+    val isLoadingRegister = stateRegister is State.Loading
 
     var nameValue by remember { mutableStateOf("") }
     var nameValid by remember { mutableStateOf(true) }
@@ -55,6 +56,14 @@ fun AuthScreen(
 
     if (stateLogin is State.Success) navigateToMain()
 
+    if (stateRegister is State.Success) {
+        focusManager.clearFocus()
+        nameValue = ""
+        emailValue = ""
+        passwordValue = ""
+        isLogin = true
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -66,7 +75,7 @@ fun AuthScreen(
             TextField(
                 textFieldType = TextFieldType.Name,
                 modifier = Modifier.fillMaxWidth(),
-                enable = !isLoading,
+                enable = !isLoadingRegister,
                 value = nameValue,
                 isValid = nameValid,
                 onValueChange = {
@@ -81,7 +90,7 @@ fun AuthScreen(
         TextField(
             textFieldType = TextFieldType.Email,
             modifier = Modifier.fillMaxWidth(),
-            enable = !isLoading,
+            enable = !isLoadingLogin && !isLoadingRegister,
             value = emailValue,
             isValid = emailValid,
             onValueChange = {
@@ -95,7 +104,7 @@ fun AuthScreen(
         TextField(
             textFieldType = TextFieldType.Password,
             modifier = Modifier.fillMaxWidth(),
-            enable = !isLoading,
+            enable = !isLoadingLogin && !isLoadingRegister,
             value = passwordValue,
             isValid = passwordValid,
             onValueChange = {
@@ -116,19 +125,22 @@ fun AuthScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
-            enabled = if (isLogin) emailValid && passwordValid && emailValue.isNotEmpty() && passwordValue.isNotEmpty() && !isLoading
-            else nameValid && emailValid && passwordValid && nameValue.isNotEmpty() && emailValue.isNotEmpty() && passwordValue.isNotEmpty()
+            enabled = if (isLogin) emailValid && passwordValid && emailValue.isNotEmpty() && passwordValue.isNotEmpty() && !isLoadingLogin
+            else nameValid && emailValid && passwordValid && nameValue.isNotEmpty() && emailValue.isNotEmpty() && passwordValue.isNotEmpty() && !isLoadingRegister
         ) { Text(text = if (isLogin) "Login" else "Register") }
 
         Row {
             Text(text = "${if (isLogin) "Don't" else "Already"} have an account? ")
             Text(
                 text = if (isLogin) "Register" else "Login", modifier = Modifier.clickable {
-                    if (!isLoading) {
+                    if (!isLoadingLogin && !isLoadingRegister) {
                         focusManager.clearFocus()
                         nameValue = ""
+                        nameValid = true
                         emailValue = ""
+                        emailValid = true
                         passwordValue = ""
+                        passwordValid = true
                         isLogin = !isLogin
                     }
                 }, color = MaterialTheme.colorScheme.primary
