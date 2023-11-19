@@ -20,6 +20,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import com.bangkit.befitoutfit.data.model.Session
+import com.bangkit.befitoutfit.helper.BottomSheetType
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.ui.component.BottomBar
 import com.bangkit.befitoutfit.ui.component.BottomSheet
@@ -38,17 +40,25 @@ fun BeFitOutfitApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     isLoggedIn: Boolean = false,
+    session: Session = Session(email = "", name = ""),
+    setSession: (Session) -> Unit = {},
     logout: () -> Unit = {},
 ) {
+    val scope = rememberCoroutineScope()
+
     val startDestination = if (isLoggedIn) Screen.Main.route else Screen.Auth.route
     val currentRoute =
         navController.currentBackStackEntryAsState().value?.destination?.route ?: startDestination
+
     val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
+    var bottomSheetType by remember { mutableStateOf<BottomSheetType>(BottomSheetType.Profile) }
 
     Scaffold(modifier = modifier, topBar = {
-        if (currentRoute != Screen.Auth.route) TopBar(title = currentRoute, logout = {
+        if (currentRoute != Screen.Auth.route) TopBar(title = currentRoute, profile = {
+            bottomSheetType = BottomSheetType.Profile
+            showBottomSheet = true
+        }, logout = {
             logout()
             navController.navigate(Screen.Auth.route) { navController.popBackStack() }
         })
@@ -59,7 +69,12 @@ fun BeFitOutfitApp(
             navController = navController
         )
     }, floatingActionButton = {
-        FloatingActionButton(currentRoute = currentRoute, onClick = { showBottomSheet = true })
+        FloatingActionButton(currentRoute = currentRoute, onClick = {
+            when (currentRoute) {
+                Screen.Recommend.route -> bottomSheetType = BottomSheetType.SettingRecommend
+            }
+            showBottomSheet = true
+        })
     }) {
         NavHost(
             navController = navController,
@@ -90,14 +105,18 @@ fun BeFitOutfitApp(
             }
         }
 
-        BottomSheet(showBottomSheet = showBottomSheet,
+        BottomSheet(
+            showBottomSheet = showBottomSheet,
+            bottomSheetType = bottomSheetType,
             onDismissRequest = { showBottomSheet = false },
             sheetState = sheetState,
-            currentRoute = currentRoute,
-            onClick = {
+            session = session,
+            onClickDismiss = {
                 scope.launch { sheetState.hide() }
                     .invokeOnCompletion { if (!sheetState.isVisible) showBottomSheet = false }
-            })
+            },
+            onClickProfile = setSession
+        )
     }
 }
 

@@ -11,22 +11,36 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.bangkit.befitoutfit.ui.screen.Screen
+import com.bangkit.befitoutfit.data.model.Session
+import com.bangkit.befitoutfit.helper.BottomSheetType
+import com.bangkit.befitoutfit.helper.InputChecker.emailChecker
+import com.bangkit.befitoutfit.helper.TextFieldType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheet(
     showBottomSheet: Boolean,
-    onDismissRequest: () -> Unit,
-    sheetState: SheetState,
-    currentRoute: String,
-    onClick: () -> Unit,
+    bottomSheetType: BottomSheetType,
     modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit = {},
+    sheetState: SheetState = rememberModalBottomSheetState(),
+    session: Session = Session(email = "", name = ""),
+    onClickDismiss: () -> Unit = {},
+    onClickProfile: (Session) -> Unit = {},
+    onClickSettingRecommend: () -> Unit = {},
 ) {
+    val focusManager = LocalFocusManager.current
+
     if (showBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = onDismissRequest,
@@ -34,32 +48,77 @@ fun BottomSheet(
             sheetState = sheetState,
         ) {
             Text(
-                text = when (currentRoute) {
-                    Screen.Recommend.route -> "Recommend setting"
-                    else -> ""
-                },
+                text = bottomSheetType.title,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.labelLarge
             )
+
             Divider()
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(start = 16.dp, top = 16.dp, end = 16.dp)
             ) {
-                when (currentRoute) {
-                    Screen.Recommend.route -> {/*TODO: feature recommend setting*/
+                when (bottomSheetType) {
+                    BottomSheetType.Profile -> {
+                        var nameValue by remember { mutableStateOf(session.name) }
+                        var nameValid by remember { mutableStateOf(true) }
+
+                        var emailValue by remember { mutableStateOf(session.email) }
+                        var emailValid by remember { mutableStateOf(true) }
+
+                        TextField(
+                            textFieldType = TextFieldType.Name,
+                            value = nameValue,
+                            isValid = nameValid,
+                            onValueChange = {
+                                nameValid = it.isNotEmpty()
+                                nameValue = it
+                            },
+                            onClick = { nameValue = "" },
+                            focusManager = focusManager
+                        )
+
+                        TextField(
+                            textFieldType = TextFieldType.Email,
+                            value = emailValue,
+                            isValid = emailValid,
+                            onValueChange = {
+                                emailValue = it
+                                emailValid = it.emailChecker().isEmpty()
+                            },
+                            onClick = { emailValue = "" },
+                            focusManager = focusManager
+                        )
+
+                        Button(
+                            onClick = {
+                                focusManager.clearFocus()
+                                onClickProfile(Session(name = nameValue, email = emailValue))
+                                onClickDismiss()
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = (session.name != nameValue || session.email != emailValue) && nameValid && emailValid && nameValue.isNotEmpty() && emailValue.isNotEmpty()
+                        ) { Text(text = "Update") }
                     }
+
+                    BottomSheetType.SettingRecommend -> {/*TODO: feature recommend setting*/
+                        Button(
+                            onClick = {
+                                onClickSettingRecommend()
+                                onClickDismiss()
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) { Text(text = "Save") }
+                    }
+
                 }
             }
-            Button(
-                onClick = onClick, modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            ) { Text("Hide bottom sheet") }
+
             Spacer(modifier = Modifier.padding(32.dp))
         }
     }

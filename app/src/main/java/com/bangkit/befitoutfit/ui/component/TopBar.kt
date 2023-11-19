@@ -16,10 +16,11 @@ import androidx.compose.ui.Modifier
 fun TopBar(
     title: String,
     modifier: Modifier = Modifier,
+    profile: () -> Unit = {},
     logout: () -> Unit = {},
 ) {
     CenterAlignedTopAppBar(title = { Text(text = title) }, modifier = modifier, navigationIcon = {
-        IconButton(onClick = { /*TODO: feature profile*/ }) {
+        IconButton(onClick = profile) {
             Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Profile")
         }
     }, actions = {
