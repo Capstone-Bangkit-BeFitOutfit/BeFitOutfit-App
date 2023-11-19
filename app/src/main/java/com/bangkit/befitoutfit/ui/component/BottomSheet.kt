@@ -41,6 +41,7 @@ fun BottomSheet(
     session: Session = Session(email = "", name = ""),
     onClickDismiss: () -> Unit = {},
     onClickProfile: (Session) -> Unit = {},
+    onClickUpdateOutfit: () -> Unit = {},
     onClickAddOutfit: () -> Unit = {},
     onClickSettingRecommend: () -> Unit = {},
 ) {
@@ -107,7 +108,42 @@ fun BottomSheet(
                         ) { Text(text = "Update") }
                     }
 
+                    BottomSheetType.DetailOutfit -> {
+                        TextField(textFieldType = TextFieldType.OutfitName)
+
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                                .padding(bottom = 16.dp)
+                        ) {}
+
+                        Row(modifier = Modifier.padding(bottom = 16.dp)) {
+                            Button(
+                                onClick = { /*TODO: feature add image from camera*/ },
+                                modifier = Modifier.weight(1f)
+                            ) { Text(text = "Camera") }
+
+                            Spacer(modifier = Modifier.padding(8.dp))
+
+                            Button(
+                                onClick = { /*TODO: feature add image from gallery*/ },
+                                modifier = Modifier.weight(1f)
+                            ) { Text(text = "Gallery") }
+                        }
+
+                        OutlinedButton(
+                            onClick = {
+                                /*TODO: feature add outfit*/
+                                onClickUpdateOutfit()
+                                onClickDismiss()
+                            }, modifier = Modifier.fillMaxWidth(), enabled = true
+                        ) { Text(text = "Update") }
+                    }
+
                     BottomSheetType.AddOutfit -> {
+                        TextField(textFieldType = TextFieldType.OutfitName)
+
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()

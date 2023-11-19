@@ -7,8 +7,10 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.bangkit.befitoutfit.data.local.preferences.SessionPreferences
 import com.bangkit.befitoutfit.data.repository.AuthRepository
+import com.bangkit.befitoutfit.data.repository.OutfitRepository
 import com.bangkit.befitoutfit.data.repository.SessionRepository
 import com.bangkit.befitoutfit.ui.screen.auth.AuthViewModel
+import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -36,9 +38,13 @@ class MainApplication : Application() {
 
             single { AuthRepository() }
 
+            single { OutfitRepository() }
+
             viewModel { MainViewModel(get()) }
 
             viewModel { AuthViewModel(get(), get()) }
+
+            viewModel { MyOutfitViewModel(get()) }
         }
     }
 }

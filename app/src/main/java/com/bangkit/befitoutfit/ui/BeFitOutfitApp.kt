@@ -30,6 +30,8 @@ import com.bangkit.befitoutfit.ui.component.TopBar
 import com.bangkit.befitoutfit.ui.screen.Screen
 import com.bangkit.befitoutfit.ui.screen.auth.AuthScreen
 import com.bangkit.befitoutfit.ui.screen.auth.AuthViewModel
+import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitScreen
+import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitViewModel
 import com.bangkit.befitoutfit.ui.theme.BeFitOutfitTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -69,13 +71,15 @@ fun BeFitOutfitApp(
             navController = navController
         )
     }, floatingActionButton = {
-        FloatingActionButton(currentRoute = currentRoute, onClick = {
-            when (currentRoute) {
-                Screen.MyOutfit.route -> bottomSheetType = BottomSheetType.AddOutfit
-                Screen.Recommend.route -> bottomSheetType = BottomSheetType.SettingRecommend
-            }
-            showBottomSheet = true
-        })
+        if (currentRoute != Screen.Auth.route) FloatingActionButton(
+            currentRoute = currentRoute,
+            onClick = {
+                when (currentRoute) {
+                    Screen.MyOutfit.route -> bottomSheetType = BottomSheetType.AddOutfit
+                    Screen.Recommend.route -> bottomSheetType = BottomSheetType.SettingRecommend
+                }
+                showBottomSheet = true
+            })
     }) {
         NavHost(
             navController = navController,
@@ -92,8 +96,13 @@ fun BeFitOutfitApp(
             }
             navigation(startDestination = Screen.MyOutfit.route, route = Screen.Main.route) {
                 composable(route = Screen.MyOutfit.route) {
-                    /*TODO: feature my outfit*/
-                    Text(text = Screen.MyOutfit.route)
+                    val viewModel: MyOutfitViewModel = koinViewModel()
+                    MyOutfitScreen(state = viewModel.state.collectAsState(initial = State.Idle).value,
+                        getOutfit = viewModel::getOutfit,
+                        detailOutfit = {
+                            bottomSheetType = BottomSheetType.DetailOutfit
+                            showBottomSheet = true
+                        })
                 }
                 composable(route = Screen.Recommend.route) {
                     /*TODO: feature recommend*/
