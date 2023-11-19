@@ -1,8 +1,8 @@
 package com.bangkit.befitoutfit.ui.component
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -21,11 +21,11 @@ fun TopBar(
 ) {
     CenterAlignedTopAppBar(title = { Text(text = title) }, modifier = modifier, navigationIcon = {
         IconButton(onClick = profile) {
-            Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Profile")
+            Icon(imageVector = Icons.Outlined.AccountCircle, contentDescription = "Profile")
         }
     }, actions = {
         IconButton(onClick = logout) {
-            Icon(imageVector = Icons.Default.Logout, contentDescription = "Logout")
+            Icon(imageVector = Icons.Outlined.Logout, contentDescription = "Logout")
         }
     })
 }

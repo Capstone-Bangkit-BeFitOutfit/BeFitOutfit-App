@@ -1,32 +1,32 @@
 package com.bangkit.befitoutfit.ui.screen
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddAPhoto
-import androidx.compose.material.icons.filled.Checkroom
-import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material.icons.filled.Recommend
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.AddAPhoto
+import androidx.compose.material.icons.outlined.Checkroom
+import androidx.compose.material.icons.outlined.Circle
+import androidx.compose.material.icons.outlined.Recommend
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class Screen(
     val route: String,
-    val icon: ImageVector = Icons.Default.Circle,
+    val icon: ImageVector = Icons.Outlined.Circle,
     val fabTitle: String = "",
-    val fabIcon: ImageVector = Icons.Default.Circle,
+    val fabIcon: ImageVector = Icons.Outlined.Circle,
 ) {
     data object Auth : Screen(route = "Auth")
     data object Main : Screen(route = "Main")
     data object MyOutfit : Screen(
         route = "My Outfit",
-        icon = Icons.Default.Checkroom,
+        icon = Icons.Outlined.Checkroom,
         fabTitle = "Add Outfit",
-        fabIcon = Icons.Default.AddAPhoto
+        fabIcon = Icons.Outlined.AddAPhoto
     )
 
     data object Recommend : Screen(
         route = "Recommend",
-        icon = Icons.Default.Recommend,
+        icon = Icons.Outlined.Recommend,
         fabTitle = "Setting Recommend",
-        fabIcon = Icons.Default.Settings
+        fabIcon = Icons.Outlined.Settings
     )
 }
