@@ -33,11 +33,10 @@ class AuthViewModel(
 
     fun register(name: String, email: String, password: String) = viewModelScope.launch {
         stateRegister.value = State.Loading
-        delay(5000L)
-        authRepository.register(name, email, password)
+        authRepository.register(name = name, email = email, password = password)
             .catch { stateRegister.value = State.Error(it.message ?: "Unknown error") }.collect {
                 stateRegister.value = State.Success(it)
-                delay(1L)
+                delay(1000L)
                 stateRegister.value = State.Idle
             }
     }

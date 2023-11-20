@@ -36,7 +36,8 @@ fun AuthScreen(
     onClickLogin: (String, String) -> Unit = { _, _ -> },
     onClickRegister: (String, String, String) -> Unit = { _, _, _ -> },
     navigateToMain: () -> Unit = {},
-) {/*TODO: make AuthScreen stateless*/
+) {/*TODO: make AuthScreen stateless
+     TODO: separate AuthScreen*/
     var isLogin by remember { mutableStateOf(true) }
 
     val focusManager = LocalFocusManager.current
