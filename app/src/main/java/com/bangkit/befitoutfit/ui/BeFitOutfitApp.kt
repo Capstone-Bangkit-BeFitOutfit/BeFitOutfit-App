@@ -45,13 +45,14 @@ fun BeFitOutfitApp(
     session: Session = Session(email = "", name = ""),
     setSession: (Session) -> Unit = {},
     logout: () -> Unit = {},
-) {
+) {/*TODO: make BeFitOutfitApp stateless*/
     val scope = rememberCoroutineScope()
 
     val startDestination = if (isLoggedIn) Screen.Main.route else Screen.Auth.route
     val currentRoute =
         navController.currentBackStackEntryAsState().value?.destination?.route ?: startDestination
 
+    /*TODO: make skip partially expanded*/
     val sheetState = rememberModalBottomSheetState()
     var showBottomSheet by remember { mutableStateOf(false) }
     var bottomSheetType by remember { mutableStateOf<BottomSheetType>(BottomSheetType.Profile) }
