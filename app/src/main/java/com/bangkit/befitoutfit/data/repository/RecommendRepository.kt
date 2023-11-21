@@ -9,10 +9,10 @@ class RecommendRepository(
     private val sessionPreferences: SessionPreferences,
     private val apiService: ApiService,
 ) {
-    fun recommend() = flow {
+    fun getRecommend() = flow {
         /*TODO: get event from shared preferences*/
         emit(
-            apiService.recommend(
+            apiService.getRecommend(
                 email = sessionPreferences.getSession().first().email, event = "casual"
             )
         )

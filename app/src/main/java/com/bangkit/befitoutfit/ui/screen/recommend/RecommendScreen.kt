@@ -14,18 +14,16 @@ import com.bangkit.befitoutfit.data.model.Recommend
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.ui.component.ColumnRecommend
 
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RecommendScreen(
     state: State<Recommend>,
     modifier: Modifier = Modifier,
     getRecommend: () -> Unit = {},
-    detailOutfit: (Outfit) -> Unit = {},
-    updateRecommend: () -> Unit = {},
+    detailRecommend: (Outfit) -> Unit = {},
 ) {
     val pullRefreshState =
-        rememberPullRefreshState(refreshing = state is State.Loading, onRefresh = updateRecommend)
+        rememberPullRefreshState(refreshing = state is State.Loading, onRefresh = getRecommend)
 
     Box(
         modifier = modifier
@@ -36,7 +34,7 @@ fun RecommendScreen(
             is State.Idle -> getRecommend()
             is State.Loading -> {}
             is State.Success -> ColumnRecommend(
-                recommend = state.data, modifier = Modifier, onClick = detailOutfit
+                recommend = state.data, modifier = Modifier, onClick = detailRecommend
             )
 
             is State.Error -> {}

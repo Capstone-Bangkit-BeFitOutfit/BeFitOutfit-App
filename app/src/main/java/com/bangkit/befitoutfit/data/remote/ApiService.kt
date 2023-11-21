@@ -26,11 +26,11 @@ interface ApiService {
         @Field("password") password: String,
     ): Info
 
-    @GET("outfits")
-    suspend fun outfits(): Outfits
+    @GET("outfit")
+    suspend fun getOutfit(): Outfits
 
     @GET("recommend")
-    suspend fun recommend(
+    suspend fun getRecommend(
         @Query("email") email: String,
         @Query("event") event: String,
     ): Recommend

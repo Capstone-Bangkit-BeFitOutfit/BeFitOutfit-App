@@ -13,9 +13,9 @@ class RecommendViewModel(private val recommendRepository: RecommendRepository) :
     var state = MutableStateFlow<State<Recommend>>(State.Idle)
         private set
 
-    fun recommend() = viewModelScope.launch {
+    fun getRecommend() = viewModelScope.launch {
         state.value = State.Loading
-        recommendRepository.recommend()
+        recommendRepository.getRecommend()
             .catch { state.value = State.Error(it.message ?: "Unknown error") }
             .collect { state.value = State.Success(it) }
     }

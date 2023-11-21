@@ -73,8 +73,7 @@ fun BeFitOutfitApp(
             navController = navController
         )
     }, floatingActionButton = {
-        if (currentRoute != Screen.Auth.route) FloatingActionButton(
-            currentRoute = currentRoute,
+        if (currentRoute != Screen.Auth.route) FloatingActionButton(currentRoute = currentRoute,
             onClick = {
                 when (currentRoute) {
                     Screen.MyOutfit.route -> bottomSheetType = BottomSheetType.AddOutfit
@@ -100,7 +99,7 @@ fun BeFitOutfitApp(
                 composable(route = Screen.MyOutfit.route) {
                     val viewModel: MyOutfitViewModel = koinViewModel()
                     MyOutfitScreen(state = viewModel.state.collectAsState(initial = State.Idle).value,
-                        getOutfit = viewModel::outfits,
+                        getOutfit = viewModel::getOutfit,
                         detailOutfit = {
                             bottomSheetType = BottomSheetType.DetailOutfit
                             showBottomSheet = true
@@ -110,12 +109,11 @@ fun BeFitOutfitApp(
                     val viewModel: RecommendViewModel = koinViewModel()
                     RecommendScreen(
                         state = viewModel.state.collectAsState(initial = State.Idle).value,
-                        getRecommend = viewModel::recommend,
-                        detailOutfit = {
+                        getRecommend = viewModel::getRecommend,
+                        detailRecommend = {
                             bottomSheetType = BottomSheetType.DetailOutfit
                             showBottomSheet = true
                         },
-                        updateRecommend = viewModel::recommend
                     )
                 }
             }

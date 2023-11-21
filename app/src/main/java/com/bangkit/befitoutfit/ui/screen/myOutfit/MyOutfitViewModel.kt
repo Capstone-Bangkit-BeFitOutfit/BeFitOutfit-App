@@ -13,9 +13,9 @@ class MyOutfitViewModel(private val outfitRepository: OutfitRepository) : ViewMo
     var state = MutableStateFlow<State<Outfits>>(State.Idle)
         private set
 
-    fun outfits() = viewModelScope.launch {
+    fun getOutfit() = viewModelScope.launch {
         state.value = State.Loading
-        outfitRepository.outfits()
+        outfitRepository.getOutfit()
             .catch { state.value = State.Error(it.message ?: "Unknown error") }
             .collect { state.value = State.Success(it) }
     }
