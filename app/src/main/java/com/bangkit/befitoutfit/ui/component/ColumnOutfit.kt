@@ -23,6 +23,7 @@ fun ColumnOutfit(
     if (outfits.isEmpty()) Text(text = "No outfit found", modifier = modifier)
     else LazyColumn(
         modifier = modifier.padding(horizontal = 16.dp),
+        /*TODO: remove ColumnOutfit lazy list state*/
         state = state,
         contentPadding = PaddingValues(top = 16.dp, bottom = 88.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)

@@ -3,10 +3,12 @@ package com.bangkit.befitoutfit.data.remote
 import com.bangkit.befitoutfit.data.model.Info
 import com.bangkit.befitoutfit.data.model.Login
 import com.bangkit.befitoutfit.data.model.Outfits
+import com.bangkit.befitoutfit.data.model.Recommend
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiService {
     @FormUrlEncoded
@@ -26,4 +28,10 @@ interface ApiService {
 
     @GET("outfits")
     suspend fun outfits(): Outfits
+
+    @GET("recommend")
+    suspend fun recommend(
+        @Query("email") email: String,
+        @Query("event") event: String,
+    ): Recommend
 }

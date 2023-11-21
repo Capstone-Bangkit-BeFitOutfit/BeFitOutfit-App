@@ -3,7 +3,6 @@ package com.bangkit.befitoutfit.ui
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,6 +31,8 @@ import com.bangkit.befitoutfit.ui.screen.auth.AuthScreen
 import com.bangkit.befitoutfit.ui.screen.auth.AuthViewModel
 import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitScreen
 import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitViewModel
+import com.bangkit.befitoutfit.ui.screen.recommend.RecommendScreen
+import com.bangkit.befitoutfit.ui.screen.recommend.RecommendViewModel
 import com.bangkit.befitoutfit.ui.theme.BeFitOutfitTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -72,7 +73,8 @@ fun BeFitOutfitApp(
             navController = navController
         )
     }, floatingActionButton = {
-        if (currentRoute != Screen.Auth.route) FloatingActionButton(currentRoute = currentRoute,
+        if (currentRoute != Screen.Auth.route) FloatingActionButton(
+            currentRoute = currentRoute,
             onClick = {
                 when (currentRoute) {
                     Screen.MyOutfit.route -> bottomSheetType = BottomSheetType.AddOutfit
@@ -105,8 +107,16 @@ fun BeFitOutfitApp(
                         })
                 }
                 composable(route = Screen.Recommend.route) {
-                    /*TODO: feature recommend*/
-                    Text(text = Screen.Recommend.route)
+                    val viewModel: RecommendViewModel = koinViewModel()
+                    RecommendScreen(
+                        state = viewModel.state.collectAsState(initial = State.Idle).value,
+                        getRecommend = viewModel::recommend,
+                        detailOutfit = {
+                            bottomSheetType = BottomSheetType.DetailOutfit
+                            showBottomSheet = true
+                        },
+                        updateRecommend = viewModel::recommend
+                    )
                 }
             }
         }
