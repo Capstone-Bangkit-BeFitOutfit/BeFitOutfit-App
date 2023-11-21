@@ -26,7 +26,7 @@ class AuthViewModel(
         stateLogin.value = State.Loading
         authRepository.login(email = email, password = password)
             .catch { stateLogin.value = State.Error(it.message ?: "Unknown error") }.collect {
-                sessionRepository.setSession(it.session)
+                sessionRepository.setSession(it.data)
                 stateLogin.value = State.Success(it)
             }
     }

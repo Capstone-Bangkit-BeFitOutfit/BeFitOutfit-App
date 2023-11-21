@@ -23,8 +23,8 @@ fun MyOutfitScreen(
             is State.Idle -> getOutfit()
             is State.Loading -> {}
             is State.Success -> ColumnOutfit(
-                outfits = state.data.outfits,
-                modifier = Modifier.align(alignment = if (state.data.outfits.isEmpty()) Alignment.Center else Alignment.TopCenter),
+                outfits = state.data.data,
+                modifier = Modifier.align(alignment = if (state.data.data.isEmpty()) Alignment.Center else Alignment.TopCenter),
                 onClick = detailOutfit
             )
 
@@ -36,5 +36,5 @@ fun MyOutfitScreen(
 @Preview
 @Composable
 fun MyOutfitScreenPreview() {
-    MyOutfitScreen(state = State.Success(data = Outfits(message = "", outfits = listOf())))
+    MyOutfitScreen(state = State.Success(data = Outfits(message = "", data = listOf())))
 }
