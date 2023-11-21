@@ -2,8 +2,10 @@ package com.bangkit.befitoutfit.data.remote
 
 import com.bangkit.befitoutfit.data.model.Info
 import com.bangkit.befitoutfit.data.model.Login
+import com.bangkit.befitoutfit.data.model.Outfits
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface ApiService {
@@ -21,4 +23,7 @@ interface ApiService {
         @Field("email") email: String,
         @Field("password") password: String,
     ): Info
+
+    @GET("outfits")
+    suspend fun outfits(): Outfits
 }

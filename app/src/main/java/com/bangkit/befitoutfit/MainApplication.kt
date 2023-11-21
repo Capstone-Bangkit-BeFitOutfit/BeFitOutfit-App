@@ -59,7 +59,7 @@ class MainApplication : Application() {
 
             single { AuthRepository(get()) }
 
-            single { OutfitRepository() }
+            single { OutfitRepository(get()) }
 
             viewModel { MainViewModel(get()) }
 

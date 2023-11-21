@@ -7,12 +7,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.bangkit.befitoutfit.data.model.Outfit
+import com.bangkit.befitoutfit.data.model.Outfits
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.ui.component.ColumnOutfit
 
 @Composable
 fun MyOutfitScreen(
-    state: State<List<Outfit>>,
+    state: State<Outfits>,
     modifier: Modifier = Modifier,
     getOutfit: () -> Unit = {},
     detailOutfit: (Outfit) -> Unit = {},
@@ -22,8 +23,8 @@ fun MyOutfitScreen(
             is State.Idle -> getOutfit()
             is State.Loading -> {}
             is State.Success -> ColumnOutfit(
-                outfits = state.data,
-                modifier = Modifier.align(alignment = if (state.data.isEmpty()) Alignment.Center else Alignment.TopCenter),
+                outfits = state.data.outfits,
+                modifier = Modifier.align(alignment = if (state.data.outfits.isEmpty()) Alignment.Center else Alignment.TopCenter),
                 onClick = detailOutfit
             )
 
@@ -35,5 +36,5 @@ fun MyOutfitScreen(
 @Preview
 @Composable
 fun MyOutfitScreenPreview() {
-    MyOutfitScreen(state = State.Success(data = emptyList()))
+    MyOutfitScreen(state = State.Success(data = Outfits(message = "", outfits = listOf())))
 }
