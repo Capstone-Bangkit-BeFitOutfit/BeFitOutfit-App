@@ -12,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,7 +19,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.bangkit.befitoutfit.data.model.Outfit
-import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.helper.BottomSheetType
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.ui.component.BottomBar
@@ -34,20 +32,16 @@ import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitScreen
 import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.recommend.RecommendScreen
 import com.bangkit.befitoutfit.ui.screen.recommend.RecommendViewModel
-import com.bangkit.befitoutfit.ui.theme.BeFitOutfitTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BeFitOutfitApp(
+    isLoggedIn: Boolean,
+    clearSession: () -> Unit,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    isLoggedIn: Boolean = false,
-    session: Session = Session(email = "", name = ""),
-    setSession: (Session) -> Unit = {},
-    clearSession: () -> Unit = {},
-    addOutfit: (String, String, String) -> Unit = { _, _, _ -> },
 ) {/*TODO: make BeFitOutfitApp stateless*/
     val scope = rememberCoroutineScope()
 
@@ -130,21 +124,11 @@ fun BeFitOutfitApp(
             bottomSheetType = bottomSheetType,
             onDismissRequest = { showBottomSheet = false },
             sheetState = sheetState,
-            session = session,
             outfit = selectedOutfit,
             onClickDismiss = {
                 scope.launch { sheetState.hide() }
                     .invokeOnCompletion { if (!sheetState.isVisible) showBottomSheet = false }
             },
-            onClickProfile = setSession,
-            onClickAddOutfit = addOutfit,
-            onClickUpdateOutfit = { _ -> },
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BeFitOutfitAppPreview() {
-    BeFitOutfitTheme { BeFitOutfitApp() }
 }

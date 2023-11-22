@@ -15,8 +15,10 @@ import com.bangkit.befitoutfit.data.repository.AuthRepository
 import com.bangkit.befitoutfit.data.repository.OutfitRepository
 import com.bangkit.befitoutfit.data.repository.RecommendRepository
 import com.bangkit.befitoutfit.data.repository.SessionRepository
+import com.bangkit.befitoutfit.ui.screen.addOutfit.AddOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.auth.AuthViewModel
 import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitViewModel
+import com.bangkit.befitoutfit.ui.screen.profile.ProfileViewModel
 import com.bangkit.befitoutfit.ui.screen.recommend.RecommendViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -65,13 +67,17 @@ class MainApplication : Application() {
 
             single { RecommendRepository(get(), get()) }
 
-            viewModel { MainViewModel(get(), get()) }
+            viewModel { MainViewModel(get()) }
 
             viewModel { AuthViewModel(get(), get()) }
 
             viewModel { MyOutfitViewModel(get()) }
 
             viewModel { RecommendViewModel(get()) }
+
+            viewModel { ProfileViewModel(get()) }
+
+            viewModel { AddOutfitViewModel(get()) }
         }
     }
 }

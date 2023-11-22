@@ -17,6 +17,7 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,7 +31,11 @@ import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.helper.BottomSheetType
 import com.bangkit.befitoutfit.helper.InputChecker.emailChecker
+import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.helper.TextFieldType
+import com.bangkit.befitoutfit.ui.screen.addOutfit.AddOutfitViewModel
+import com.bangkit.befitoutfit.ui.screen.profile.ProfileViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,13 +45,8 @@ fun BottomSheet(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {},
     sheetState: SheetState = rememberModalBottomSheetState(),
-    session: Session = Session(email = "", name = ""),
     outfit: Outfit = Outfit(name = "", type = "", imageUrl = ""),
     onClickDismiss: () -> Unit = {},
-    onClickProfile: (Session) -> Unit = {},
-    onClickAddOutfit: (String, String, String) -> Unit = { _, _, _ -> },
-    onClickUpdateOutfit: (Outfit) -> Unit = {},
-    onClickSettingRecommend: () -> Unit = {},
 ) {
     if (showBottomSheet) {
         ModalBottomSheet(
@@ -68,6 +68,10 @@ fun BottomSheet(
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 when (bottomSheetType) {
                     BottomSheetType.Profile -> {
+                        val viewModel: ProfileViewModel = koinViewModel()
+
+                        val session = viewModel.session
+
                         val focusManager = LocalFocusManager.current
 
                         var nameValue by remember { mutableStateOf(session.name) }
@@ -104,7 +108,7 @@ fun BottomSheet(
                         OutlinedButton(
                             onClick = {
                                 focusManager.clearFocus()
-                                onClickProfile(Session(name = nameValue, email = emailValue))
+                                viewModel.setSession(Session(name = nameValue, email = emailValue))
                                 onClickDismiss()
                             },
                             modifier = Modifier.fillMaxWidth(),
@@ -154,26 +158,40 @@ fun BottomSheet(
 
                         OutlinedButton(
                             onClick = {
-                                onClickUpdateOutfit(
-                                    Outfit(
-                                        name = nameOutfitValue,
-                                        type = outfit.type,
-                                        imageUrl = outfit.imageUrl
-                                    )
-                                )
+                                /*TODO: feature update outfit*/
                                 onClickDismiss()
                             }, modifier = Modifier.fillMaxWidth(), enabled = true
                         ) { Text(text = "Update") }
                     }
 
                     BottomSheetType.AddOutfit -> {
+                        val viewModel: AddOutfitViewModel = koinViewModel()
+
+                        val state = viewModel.state.collectAsState().value
+
+                        val enable = state is State.Idle
+
                         val focusManager = LocalFocusManager.current
 
                         var nameOutfitValue by remember { mutableStateOf("") }
                         var nameOutfitValid by remember { mutableStateOf(true) }
 
+                        when (state) {
+                            /*TODO: add outfit state management*/
+                            is State.Idle -> {}
+                            is State.Loading -> {}
+                            is State.Success -> {
+                                nameOutfitValue = ""
+                                nameOutfitValid = true
+                                onClickDismiss()
+                            }
+
+                            is State.Error -> {}
+                        }
+
                         TextField(
                             textFieldType = TextFieldType.OutfitName,
+                            enable = enable,
                             value = nameOutfitValue,
                             isValid = nameOutfitValid,
                             onValueChange = {
@@ -195,30 +213,34 @@ fun BottomSheet(
                         Row(modifier = Modifier.padding(bottom = 16.dp)) {
                             Button(
                                 onClick = { /*TODO: feature add image from camera*/ },
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
+                                enabled = enable
                             ) { Text(text = "Camera") }
 
                             Spacer(modifier = Modifier.padding(8.dp))
 
                             Button(
                                 onClick = { /*TODO: feature add image from gallery*/ },
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
+                                enabled = enable
                             ) { Text(text = "Gallery") }
                         }
 
                         OutlinedButton(
                             onClick = {
-                                /*TODO: feature add outfit*/
-                                onClickAddOutfit(nameOutfitValue, outfit.type, outfit.imageUrl)
-                                onClickDismiss()
-                            }, modifier = Modifier.fillMaxWidth(), enabled = true
+                                viewModel.addOutfit(
+                                    name = nameOutfitValue,
+                                    type = outfit.type,
+                                    imageUrl = outfit.imageUrl
+                                )
+                            }, modifier = Modifier.fillMaxWidth(), enabled = enable
                         ) { Text(text = "Upload") }
                     }
 
-                    BottomSheetType.SettingRecommend -> {/*TODO: feature recommend setting*/
+                    BottomSheetType.SettingRecommend -> {
                         OutlinedButton(
                             onClick = {
-                                onClickSettingRecommend()
+                                /*TODO: feature recommend setting*/
                                 onClickDismiss()
                             },
                             modifier = Modifier.fillMaxWidth(),

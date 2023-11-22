@@ -4,7 +4,6 @@ import com.bangkit.befitoutfit.data.model.Info
 import com.bangkit.befitoutfit.data.model.Login
 import com.bangkit.befitoutfit.data.model.Outfits
 import com.bangkit.befitoutfit.data.model.Recommend
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -38,7 +37,8 @@ interface ApiService {
     suspend fun addOutfit(
         @Part("name") name: RequestBody,
         @Part("type") type: RequestBody,
-        @Part photo: MultipartBody.Part,
+        /*TODO: change to MultipartBody.Part*/
+        @Part("imageUrl") imageUrl: RequestBody,
     ): Info
 
     @GET("recommend")

@@ -16,6 +16,7 @@ class AuthViewModel(
     private val authRepository: AuthRepository,
     private val sessionRepository: SessionRepository,
 ) : ViewModel() {
+    /*TODO: separate between login and register*/
     var stateLogin = MutableStateFlow<State<Login>>(State.Idle)
         private set
 
