@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.helper.BottomSheetType
 import com.bangkit.befitoutfit.helper.State
@@ -45,7 +46,8 @@ fun BeFitOutfitApp(
     isLoggedIn: Boolean = false,
     session: Session = Session(email = "", name = ""),
     setSession: (Session) -> Unit = {},
-    logout: () -> Unit = {},
+    clearSession: () -> Unit = {},
+    addOutfit: (String, String, String) -> Unit = { _, _, _ -> },
 ) {/*TODO: make BeFitOutfitApp stateless*/
     val scope = rememberCoroutineScope()
 
@@ -58,12 +60,14 @@ fun BeFitOutfitApp(
     var showBottomSheet by remember { mutableStateOf(false) }
     var bottomSheetType by remember { mutableStateOf<BottomSheetType>(BottomSheetType.Profile) }
 
+    var selectedOutfit by remember { mutableStateOf(Outfit(name = "", type = "", imageUrl = "")) }
+
     Scaffold(modifier = modifier, topBar = {
         if (currentRoute != Screen.Auth.route) TopBar(title = currentRoute, profile = {
             bottomSheetType = BottomSheetType.Profile
             showBottomSheet = true
         }, logout = {
-            logout()
+            clearSession()
             navController.navigate(Screen.Auth.route) { navController.popBackStack() }
         })
     }, bottomBar = {
@@ -73,7 +77,8 @@ fun BeFitOutfitApp(
             navController = navController
         )
     }, floatingActionButton = {
-        if (currentRoute != Screen.Auth.route) FloatingActionButton(currentRoute = currentRoute,
+        if (currentRoute != Screen.Auth.route) FloatingActionButton(
+            currentRoute = currentRoute,
             onClick = {
                 when (currentRoute) {
                     Screen.MyOutfit.route -> bottomSheetType = BottomSheetType.AddOutfit
@@ -100,7 +105,8 @@ fun BeFitOutfitApp(
                     val viewModel: MyOutfitViewModel = koinViewModel()
                     MyOutfitScreen(state = viewModel.state.collectAsState(initial = State.Idle).value,
                         getOutfit = viewModel::getOutfit,
-                        detailOutfit = {
+                        detailOutfit = { outfit ->
+                            selectedOutfit = outfit
                             bottomSheetType = BottomSheetType.DetailOutfit
                             showBottomSheet = true
                         })
@@ -125,11 +131,14 @@ fun BeFitOutfitApp(
             onDismissRequest = { showBottomSheet = false },
             sheetState = sheetState,
             session = session,
+            outfit = selectedOutfit,
             onClickDismiss = {
                 scope.launch { sheetState.hide() }
                     .invokeOnCompletion { if (!sheetState.isVisible) showBottomSheet = false }
             },
-            onClickProfile = setSession
+            onClickProfile = setSession,
+            onClickAddOutfit = addOutfit,
+            onClickUpdateOutfit = { _ -> },
         )
     }
 }

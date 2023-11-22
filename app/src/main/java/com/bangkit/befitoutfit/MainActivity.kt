@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
                             session = viewModel.getSession()
                                 .collectAsState(initial = Session(name = "", email = "")).value,
                             setSession = viewModel::setSession,
-                            logout = viewModel::clearSession
+                            clearSession = viewModel::clearSession,
                         )
                     }
                 }

@@ -9,9 +9,8 @@ import kotlinx.coroutines.launch
 class MainViewModel(private val sessionRepository: SessionRepository) : ViewModel() {
     fun getSession() = sessionRepository.getSession()
 
-    fun setSession(session: Session) = viewModelScope.launch {
-        sessionRepository.setSession(session)
-    }
+    fun setSession(session: Session) =
+        viewModelScope.launch { sessionRepository.setSession(session) }
 
     fun clearSession() = viewModelScope.launch { sessionRepository.clearSession() }
 }

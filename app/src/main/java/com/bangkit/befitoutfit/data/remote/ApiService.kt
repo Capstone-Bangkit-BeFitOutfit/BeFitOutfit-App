@@ -4,10 +4,14 @@ import com.bangkit.befitoutfit.data.model.Info
 import com.bangkit.befitoutfit.data.model.Login
 import com.bangkit.befitoutfit.data.model.Outfits
 import com.bangkit.befitoutfit.data.model.Recommend
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface ApiService {
@@ -28,6 +32,14 @@ interface ApiService {
 
     @GET("outfit")
     suspend fun getOutfit(): Outfits
+
+    @Multipart
+    @POST("outfit/add")
+    suspend fun addOutfit(
+        @Part("name") name: RequestBody,
+        @Part("type") type: RequestBody,
+        @Part photo: MultipartBody.Part,
+    ): Info
 
     @GET("recommend")
     suspend fun getRecommend(

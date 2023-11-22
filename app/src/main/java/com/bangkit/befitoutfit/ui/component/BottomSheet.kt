@@ -23,8 +23,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.helper.BottomSheetType
 import com.bangkit.befitoutfit.helper.InputChecker.emailChecker
@@ -39,14 +41,13 @@ fun BottomSheet(
     onDismissRequest: () -> Unit = {},
     sheetState: SheetState = rememberModalBottomSheetState(),
     session: Session = Session(email = "", name = ""),
+    outfit: Outfit = Outfit(name = "", type = "", imageUrl = ""),
     onClickDismiss: () -> Unit = {},
     onClickProfile: (Session) -> Unit = {},
-    onClickUpdateOutfit: () -> Unit = {},
-    onClickAddOutfit: () -> Unit = {},
+    onClickAddOutfit: (String, String, String) -> Unit = { _, _, _ -> },
+    onClickUpdateOutfit: (Outfit) -> Unit = {},
     onClickSettingRecommend: () -> Unit = {},
 ) {
-    val focusManager = LocalFocusManager.current
-
     if (showBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = onDismissRequest,
@@ -67,6 +68,8 @@ fun BottomSheet(
             Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                 when (bottomSheetType) {
                     BottomSheetType.Profile -> {
+                        val focusManager = LocalFocusManager.current
+
                         var nameValue by remember { mutableStateOf(session.name) }
                         var nameValid by remember { mutableStateOf(true) }
 
@@ -82,7 +85,7 @@ fun BottomSheet(
                                 nameValue = it
                             },
                             onClick = { nameValue = "" },
-                            focusManager = focusManager
+                            focusManager = focusManager,
                         )
 
                         TextField(
@@ -94,7 +97,8 @@ fun BottomSheet(
                                 emailValid = it.emailChecker().isEmpty()
                             },
                             onClick = { emailValue = "" },
-                            focusManager = focusManager
+                            focusManager = focusManager,
+                            imeAction = ImeAction.Done
                         )
 
                         OutlinedButton(
@@ -109,7 +113,23 @@ fun BottomSheet(
                     }
 
                     BottomSheetType.DetailOutfit -> {
-                        TextField(textFieldType = TextFieldType.OutfitName)
+                        val focusManager = LocalFocusManager.current
+
+                        var nameOutfitValue by remember { mutableStateOf(outfit.name) }
+                        var nameOutfitValid by remember { mutableStateOf(true) }
+
+                        TextField(
+                            textFieldType = TextFieldType.OutfitName,
+                            value = nameOutfitValue,
+                            isValid = nameOutfitValid,
+                            onValueChange = {
+                                nameOutfitValid = it.isNotEmpty()
+                                nameOutfitValue = it
+                            },
+                            onClick = { nameOutfitValue = "" },
+                            focusManager = focusManager,
+                            imeAction = ImeAction.Done
+                        )
 
                         Card(
                             modifier = Modifier
@@ -134,15 +154,36 @@ fun BottomSheet(
 
                         OutlinedButton(
                             onClick = {
-                                /*TODO: feature add outfit*/
-                                onClickUpdateOutfit()
+                                onClickUpdateOutfit(
+                                    Outfit(
+                                        name = nameOutfitValue,
+                                        type = outfit.type,
+                                        imageUrl = outfit.imageUrl
+                                    )
+                                )
                                 onClickDismiss()
                             }, modifier = Modifier.fillMaxWidth(), enabled = true
                         ) { Text(text = "Update") }
                     }
 
                     BottomSheetType.AddOutfit -> {
-                        TextField(textFieldType = TextFieldType.OutfitName)
+                        val focusManager = LocalFocusManager.current
+
+                        var nameOutfitValue by remember { mutableStateOf("") }
+                        var nameOutfitValid by remember { mutableStateOf(true) }
+
+                        TextField(
+                            textFieldType = TextFieldType.OutfitName,
+                            value = nameOutfitValue,
+                            isValid = nameOutfitValid,
+                            onValueChange = {
+                                nameOutfitValid = it.isNotEmpty()
+                                nameOutfitValue = it
+                            },
+                            onClick = { nameOutfitValue = "" },
+                            focusManager = focusManager,
+                            imeAction = ImeAction.Done
+                        )
 
                         Card(
                             modifier = Modifier
@@ -168,7 +209,7 @@ fun BottomSheet(
                         OutlinedButton(
                             onClick = {
                                 /*TODO: feature add outfit*/
-                                onClickAddOutfit()
+                                onClickAddOutfit(nameOutfitValue, outfit.type, outfit.imageUrl)
                                 onClickDismiss()
                             }, modifier = Modifier.fillMaxWidth(), enabled = true
                         ) { Text(text = "Upload") }

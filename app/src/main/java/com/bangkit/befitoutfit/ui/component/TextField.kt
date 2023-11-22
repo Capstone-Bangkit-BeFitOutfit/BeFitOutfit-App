@@ -34,6 +34,7 @@ fun TextField(
     onValueChange: (String) -> Unit = {},
     onClick: () -> Unit = {},
     focusManager: FocusManager? = null,
+    imeAction: ImeAction = ImeAction.Next,
     isVisible: Boolean = false,
     isStrict: Boolean = true,
 ) {
@@ -79,10 +80,7 @@ fun TextField(
         visualTransformation = if (textFieldType == TextFieldType.Password && !isVisible) PasswordVisualTransformation()
         else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(
-            keyboardType = textFieldType.keyboardType, imeAction = when (textFieldType) {
-                TextFieldType.Password -> ImeAction.Done
-                else -> ImeAction.Next
-            }
+            keyboardType = textFieldType.keyboardType, imeAction = imeAction
         ),
         keyboardActions = KeyboardActions(onNext = { focusManager?.moveFocus(FocusDirection.Down) },
             onDone = { focusManager?.clearFocus() }),

@@ -65,7 +65,7 @@ class MainApplication : Application() {
 
             single { RecommendRepository(get(), get()) }
 
-            viewModel { MainViewModel(get()) }
+            viewModel { MainViewModel(get(), get()) }
 
             viewModel { AuthViewModel(get(), get()) }
 
