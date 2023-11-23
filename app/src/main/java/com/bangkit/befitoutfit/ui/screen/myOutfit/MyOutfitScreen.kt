@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.data.model.Outfits
 import com.bangkit.befitoutfit.helper.State
@@ -31,10 +30,4 @@ fun MyOutfitScreen(
             is State.Error -> {}
         }
     }
-}
-
-@Preview
-@Composable
-fun MyOutfitScreenPreview() {
-    MyOutfitScreen(state = State.Success(data = Outfits(message = "", data = listOf())))
 }

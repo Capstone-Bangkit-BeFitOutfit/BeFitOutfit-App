@@ -34,6 +34,7 @@ import com.bangkit.befitoutfit.helper.InputChecker.emailChecker
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.helper.TextFieldType
 import com.bangkit.befitoutfit.ui.screen.addOutfit.AddOutfitViewModel
+import com.bangkit.befitoutfit.ui.screen.detailOutfit.DetailOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.profile.ProfileViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -45,7 +46,7 @@ fun BottomSheet(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {},
     sheetState: SheetState = rememberModalBottomSheetState(),
-    outfit: Outfit = Outfit(name = "", type = "", imageUrl = ""),
+    outfit: Outfit = Outfit(),
     onClickDismiss: () -> Unit = {},
 ) {
     if (showBottomSheet) {
@@ -117,13 +118,32 @@ fun BottomSheet(
                     }
 
                     BottomSheetType.DetailOutfit -> {
+                        val viewModel: DetailOutfitViewModel = koinViewModel()
+
+                        val state = viewModel.state.collectAsState().value
+
+                        val enable = state is State.Idle
+
                         val focusManager = LocalFocusManager.current
 
                         var nameOutfitValue by remember { mutableStateOf(outfit.name) }
                         var nameOutfitValid by remember { mutableStateOf(true) }
 
+                        when (state) {/*TODO: update outfit state management*/
+                            is State.Idle -> {}
+                            is State.Loading -> {}
+                            is State.Success -> {
+                                nameOutfitValue = ""
+                                nameOutfitValid = true
+                                onClickDismiss()
+                            }
+
+                            is State.Error -> {}
+                        }
+
                         TextField(
                             textFieldType = TextFieldType.OutfitName,
+                            enable = enable,
                             value = nameOutfitValue,
                             isValid = nameOutfitValid,
                             onValueChange = {
@@ -145,22 +165,30 @@ fun BottomSheet(
                         Row(modifier = Modifier.padding(bottom = 16.dp)) {
                             Button(
                                 onClick = { /*TODO: feature add image from camera*/ },
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
+                                enabled = enable
                             ) { Text(text = "Camera") }
 
                             Spacer(modifier = Modifier.padding(8.dp))
 
                             Button(
                                 onClick = { /*TODO: feature add image from gallery*/ },
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
+                                enabled = enable
                             ) { Text(text = "Gallery") }
                         }
 
                         OutlinedButton(
                             onClick = {
-                                /*TODO: feature update outfit*/
-                                onClickDismiss()
-                            }, modifier = Modifier.fillMaxWidth(), enabled = true
+                                viewModel.updateOutfit(
+                                    id = outfit.id,
+                                    name = nameOutfitValue,
+                                    type = outfit.type,
+                                    imageUrl = outfit.imageUrl
+                                )
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = enable/*TODO: add another enable logic*/
                         ) { Text(text = "Update") }
                     }
 
@@ -176,8 +204,7 @@ fun BottomSheet(
                         var nameOutfitValue by remember { mutableStateOf("") }
                         var nameOutfitValid by remember { mutableStateOf(true) }
 
-                        when (state) {
-                            /*TODO: add outfit state management*/
+                        when (state) {/*TODO: add outfit state management*/
                             is State.Idle -> {}
                             is State.Loading -> {}
                             is State.Success -> {
@@ -233,7 +260,9 @@ fun BottomSheet(
                                     type = outfit.type,
                                     imageUrl = outfit.imageUrl
                                 )
-                            }, modifier = Modifier.fillMaxWidth(), enabled = enable
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = enable/*TODO: add another enable logic*/
                         ) { Text(text = "Upload") }
                     }
 

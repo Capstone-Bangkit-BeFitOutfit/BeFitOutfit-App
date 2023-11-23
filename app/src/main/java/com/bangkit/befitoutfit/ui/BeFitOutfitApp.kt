@@ -54,7 +54,7 @@ fun BeFitOutfitApp(
     var showBottomSheet by remember { mutableStateOf(false) }
     var bottomSheetType by remember { mutableStateOf<BottomSheetType>(BottomSheetType.Profile) }
 
-    var selectedOutfit by remember { mutableStateOf(Outfit(name = "", type = "", imageUrl = "")) }
+    var selectedOutfit by remember { mutableStateOf(Outfit()) }
 
     Scaffold(modifier = modifier, topBar = {
         if (currentRoute != Screen.Auth.route) TopBar(title = currentRoute, profile = {

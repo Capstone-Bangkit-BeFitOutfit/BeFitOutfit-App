@@ -18,4 +18,16 @@ class OutfitRepository(private val apiService: ApiService) {
             )
         )
     }
+
+    suspend fun updateOutfit(id: Int, name: String, type: String, imageUrl: String) = flow {
+        /*TODO: feature uri to photo*/
+        emit(
+            apiService.updateOutfit(
+                id = id,
+                name = name.toRequestBody("text/plain".toMediaType()),
+                type = type.toRequestBody("text/plain".toMediaType()),
+                imageUrl = imageUrl.toRequestBody("text/plain".toMediaType())
+            )
+        )
+    }
 }

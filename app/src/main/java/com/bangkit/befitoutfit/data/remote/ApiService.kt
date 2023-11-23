@@ -10,7 +10,9 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -40,6 +42,16 @@ interface ApiService {
         /*TODO: change to MultipartBody.Part*/
         @Part("imageUrl") imageUrl: RequestBody,
     ): Info
+
+    @Multipart
+    @PUT("outfit/{id}")
+    suspend fun updateOutfit(
+        @Path("id") id: Int,
+        @Part("name") name: RequestBody,
+        @Part("type") type: RequestBody,
+        /*TODO: change to MultipartBody.Part*/
+        @Part("imageUrl") imageUrl: RequestBody,
+    )
 
     @GET("recommend")
     suspend fun getRecommend(

@@ -17,6 +17,7 @@ import com.bangkit.befitoutfit.data.repository.RecommendRepository
 import com.bangkit.befitoutfit.data.repository.SessionRepository
 import com.bangkit.befitoutfit.ui.screen.addOutfit.AddOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.auth.AuthViewModel
+import com.bangkit.befitoutfit.ui.screen.detailOutfit.DetailOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.profile.ProfileViewModel
 import com.bangkit.befitoutfit.ui.screen.recommend.RecommendViewModel
@@ -78,6 +79,8 @@ class MainApplication : Application() {
             viewModel { ProfileViewModel(get()) }
 
             viewModel { AddOutfitViewModel(get()) }
+
+            viewModel { DetailOutfitViewModel(get()) }
         }
     }
 }
