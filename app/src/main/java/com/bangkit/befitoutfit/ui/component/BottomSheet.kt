@@ -46,6 +46,7 @@ fun BottomSheet(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {},
     sheetState: SheetState = rememberModalBottomSheetState(),
+    session: Session = Session(),
     outfit: Outfit = Outfit(),
     onClickDismiss: () -> Unit = {},
 ) {
@@ -70,8 +71,6 @@ fun BottomSheet(
                 when (bottomSheetType) {
                     BottomSheetType.Profile -> {
                         val viewModel: ProfileViewModel = koinViewModel()
-
-                        val session = viewModel.session
 
                         val focusManager = LocalFocusManager.current
 

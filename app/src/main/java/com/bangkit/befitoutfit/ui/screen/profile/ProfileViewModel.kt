@@ -8,8 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(private val sessionRepository: SessionRepository) : ViewModel() {
-    val session = sessionRepository.session
-
     fun setSession(session: Session) =
         viewModelScope.launch(context = Dispatchers.IO) { sessionRepository.setSession(session) }
 }

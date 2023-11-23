@@ -19,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.bangkit.befitoutfit.data.model.Outfit
+import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.helper.BottomSheetType
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.ui.component.BottomBar
@@ -39,6 +40,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun BeFitOutfitApp(
     isLoggedIn: Boolean,
+    session: Session,
     clearSession: () -> Unit,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
@@ -124,6 +126,7 @@ fun BeFitOutfitApp(
             bottomSheetType = bottomSheetType,
             onDismissRequest = { showBottomSheet = false },
             sheetState = sheetState,
+            session = session,
             outfit = selectedOutfit,
             onClickDismiss = {
                 scope.launch { sheetState.hide() }
