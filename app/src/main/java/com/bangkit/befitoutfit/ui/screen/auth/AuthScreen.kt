@@ -19,9 +19,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.bangkit.befitoutfit.data.model.Info
-import com.bangkit.befitoutfit.data.model.Session
+import com.bangkit.befitoutfit.data.model.Login
 import com.bangkit.befitoutfit.helper.InputChecker.emailChecker
 import com.bangkit.befitoutfit.helper.InputChecker.passwordChecker
 import com.bangkit.befitoutfit.helper.State
@@ -30,13 +31,14 @@ import com.bangkit.befitoutfit.ui.component.TextField
 
 @Composable
 fun AuthScreen(
-    stateLogin: State<Session>,
+    stateLogin: State<Login>,
     stateRegister: State<Info>,
     modifier: Modifier = Modifier,
     onClickLogin: (String, String) -> Unit = { _, _ -> },
     onClickRegister: (String, String, String) -> Unit = { _, _, _ -> },
     navigateToMain: () -> Unit = {},
-) {
+) {/*TODO: make AuthScreen stateless
+     TODO: separate AuthScreen*/
     var isLogin by remember { mutableStateOf(true) }
 
     val focusManager = LocalFocusManager.current
@@ -111,7 +113,8 @@ fun AuthScreen(
             onClick = { passwordVisible = !passwordVisible },
             focusManager = focusManager,
             isVisible = passwordVisible,
-            isStrict = !isLogin
+            isStrict = !isLogin,
+            imeAction = ImeAction.Done
         )
 
         OutlinedButton(

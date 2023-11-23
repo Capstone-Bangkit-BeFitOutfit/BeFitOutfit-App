@@ -17,6 +17,15 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
+
+        buildConfigField("Boolean", "DEBUG", "true")
+        buildConfigField("Boolean", "MOCK", "true")
+        buildConfigField("String", "BASE_URL", "\"\"")
+        buildConfigField(
+            "String",
+            "BASE_URL_MOCK",
+            "\"https://6f8fe1dd-8dc7-4a6e-b061-f6d8283bfef3.mock.pstmn.io\""
+        )
     }
 
     buildTypes {
@@ -69,13 +78,20 @@ dependencies {
     implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
     testImplementation("io.insert-koin:koin-test-junit4:$koinVersion")
 
+    // logging interceptor
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11")
+
     // material
+    implementation("androidx.compose.material:material")
     implementation("androidx.compose.material:material-icons-extended")
 
     // navigation
     val navigationVersion = "2.7.5"
     implementation("androidx.navigation:navigation-compose:$navigationVersion")
     androidTestImplementation("androidx.navigation:navigation-testing:$navigationVersion")
+
+    // retrofit
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // viewmodel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")

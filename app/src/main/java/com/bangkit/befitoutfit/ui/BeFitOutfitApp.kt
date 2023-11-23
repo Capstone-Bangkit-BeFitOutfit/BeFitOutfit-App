@@ -3,7 +3,6 @@ package com.bangkit.befitoutfit.ui
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -13,14 +12,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import com.bangkit.befitoutfit.data.model.Session
+import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.helper.BottomSheetType
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.ui.component.BottomBar
@@ -32,36 +30,38 @@ import com.bangkit.befitoutfit.ui.screen.auth.AuthScreen
 import com.bangkit.befitoutfit.ui.screen.auth.AuthViewModel
 import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitScreen
 import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitViewModel
-import com.bangkit.befitoutfit.ui.theme.BeFitOutfitTheme
+import com.bangkit.befitoutfit.ui.screen.recommend.RecommendScreen
+import com.bangkit.befitoutfit.ui.screen.recommend.RecommendViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BeFitOutfitApp(
+    isLoggedIn: Boolean,
+    clearSession: () -> Unit,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    isLoggedIn: Boolean = false,
-    session: Session = Session(email = "", name = ""),
-    setSession: (Session) -> Unit = {},
-    logout: () -> Unit = {},
-) {
+) {/*TODO: make BeFitOutfitApp stateless*/
     val scope = rememberCoroutineScope()
 
     val startDestination = if (isLoggedIn) Screen.Main.route else Screen.Auth.route
     val currentRoute =
         navController.currentBackStackEntryAsState().value?.destination?.route ?: startDestination
 
+    /*TODO: make skip partially expanded*/
     val sheetState = rememberModalBottomSheetState()
     var showBottomSheet by remember { mutableStateOf(false) }
     var bottomSheetType by remember { mutableStateOf<BottomSheetType>(BottomSheetType.Profile) }
+
+    var selectedOutfit by remember { mutableStateOf(Outfit()) }
 
     Scaffold(modifier = modifier, topBar = {
         if (currentRoute != Screen.Auth.route) TopBar(title = currentRoute, profile = {
             bottomSheetType = BottomSheetType.Profile
             showBottomSheet = true
         }, logout = {
-            logout()
+            clearSession()
             navController.navigate(Screen.Auth.route) { navController.popBackStack() }
         })
     }, bottomBar = {
@@ -99,14 +99,22 @@ fun BeFitOutfitApp(
                     val viewModel: MyOutfitViewModel = koinViewModel()
                     MyOutfitScreen(state = viewModel.state.collectAsState(initial = State.Idle).value,
                         getOutfit = viewModel::getOutfit,
-                        detailOutfit = {
+                        detailOutfit = { outfit ->
+                            selectedOutfit = outfit
                             bottomSheetType = BottomSheetType.DetailOutfit
                             showBottomSheet = true
                         })
                 }
                 composable(route = Screen.Recommend.route) {
-                    /*TODO: feature recommend*/
-                    Text(text = Screen.Recommend.route)
+                    val viewModel: RecommendViewModel = koinViewModel()
+                    RecommendScreen(
+                        state = viewModel.state.collectAsState(initial = State.Idle).value,
+                        getRecommend = viewModel::getRecommend,
+                        detailRecommend = {
+                            bottomSheetType = BottomSheetType.DetailOutfit
+                            showBottomSheet = true
+                        },
+                    )
                 }
             }
         }
@@ -116,18 +124,11 @@ fun BeFitOutfitApp(
             bottomSheetType = bottomSheetType,
             onDismissRequest = { showBottomSheet = false },
             sheetState = sheetState,
-            session = session,
+            outfit = selectedOutfit,
             onClickDismiss = {
                 scope.launch { sheetState.hide() }
                     .invokeOnCompletion { if (!sheetState.isVisible) showBottomSheet = false }
             },
-            onClickProfile = setSession
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BeFitOutfitAppPreview() {
-    BeFitOutfitTheme { BeFitOutfitApp() }
 }

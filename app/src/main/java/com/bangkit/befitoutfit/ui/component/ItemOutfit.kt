@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -50,16 +49,4 @@ fun ItemOutfit(outfit: Outfit, modifier: Modifier = Modifier, onClick: (Outfit) 
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun ItemOutfitPreview() {
-    ItemOutfit(
-        outfit = Outfit(
-            name = "Outfit Name #1",
-            type = "Top",
-            imageUrl = "https://i.pinimg.com/564x/1a/0a/9e/1a0a9e0b2b0b6b0b0b0b0b0b0b0b0b0b.jpg"
-        )
-    )
 }

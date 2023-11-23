@@ -3,7 +3,7 @@ package com.bangkit.befitoutfit.ui.screen.auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bangkit.befitoutfit.data.model.Info
-import com.bangkit.befitoutfit.data.model.Session
+import com.bangkit.befitoutfit.data.model.Login
 import com.bangkit.befitoutfit.data.repository.AuthRepository
 import com.bangkit.befitoutfit.data.repository.SessionRepository
 import com.bangkit.befitoutfit.helper.State
@@ -16,7 +16,8 @@ class AuthViewModel(
     private val authRepository: AuthRepository,
     private val sessionRepository: SessionRepository,
 ) : ViewModel() {
-    var stateLogin = MutableStateFlow<State<Session>>(State.Idle)
+    /*TODO: separate between login and register*/
+    var stateLogin = MutableStateFlow<State<Login>>(State.Idle)
         private set
 
     var stateRegister = MutableStateFlow<State<Info>>(State.Idle)
@@ -24,21 +25,19 @@ class AuthViewModel(
 
     fun login(email: String, password: String) = viewModelScope.launch {
         stateLogin.value = State.Loading
-        delay(5000L)
-        authRepository.login(email, password)
+        authRepository.login(email = email, password = password)
             .catch { stateLogin.value = State.Error(it.message ?: "Unknown error") }.collect {
-                sessionRepository.setSession(it)
+                sessionRepository.setSession(it.data)
                 stateLogin.value = State.Success(it)
             }
     }
 
     fun register(name: String, email: String, password: String) = viewModelScope.launch {
         stateRegister.value = State.Loading
-        delay(5000L)
-        authRepository.register(name, email, password)
+        authRepository.register(name = name, email = email, password = password)
             .catch { stateRegister.value = State.Error(it.message ?: "Unknown error") }.collect {
                 stateRegister.value = State.Success(it)
-                delay(1L)
+                delay(1000L)
                 stateRegister.value = State.Idle
             }
     }

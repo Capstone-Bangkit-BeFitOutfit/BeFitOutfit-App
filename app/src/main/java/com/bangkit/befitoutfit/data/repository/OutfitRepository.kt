@@ -1,25 +1,33 @@
 package com.bangkit.befitoutfit.data.repository
 
-import com.bangkit.befitoutfit.data.model.Outfit
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
+import com.bangkit.befitoutfit.data.remote.ApiService
 import kotlinx.coroutines.flow.flow
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 
-class OutfitRepository {
-    fun getOutfit(): Flow<List<Outfit>> = flow {
-        /*TODO: feature get outfit*/
-        emit(listOf())
-        delay(1000L)
-        emit((1..3).map {
-            Outfit(
-                name = "Outfit Name #$it",
-                type = when (it % 3) {
-                    0 -> "Extra"
-                    1 -> "Top"
-                    else -> "Bottom"
-                },
-                imageUrl = "https://github.com/material-components/material-components-android/blob/master/catalog/java/io/material/catalog/assets/res/drawable-xxxhdpi/ic_placeholder.png?raw=true"
+class OutfitRepository(private val apiService: ApiService) {
+    fun getOutfit() = flow { emit(apiService.getOutfit()) }
+
+    suspend fun addOutfit(name: String, type: String, imageUrl: String) = flow {
+        /*TODO: feature uri to photo*/
+        emit(
+            apiService.addOutfit(
+                name = name.toRequestBody("text/plain".toMediaType()),
+                type = type.toRequestBody("text/plain".toMediaType()),
+                imageUrl = imageUrl.toRequestBody("text/plain".toMediaType())
             )
-        })
+        )
+    }
+
+    suspend fun updateOutfit(id: Int, name: String, type: String, imageUrl: String) = flow {
+        /*TODO: feature uri to photo*/
+        emit(
+            apiService.updateOutfit(
+                id = id,
+                name = name.toRequestBody("text/plain".toMediaType()),
+                type = type.toRequestBody("text/plain".toMediaType()),
+                imageUrl = imageUrl.toRequestBody("text/plain".toMediaType())
+            )
+        )
     }
 }
