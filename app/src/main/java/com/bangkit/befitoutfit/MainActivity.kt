@@ -6,9 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.ui.BeFitOutfitApp
 import com.bangkit.befitoutfit.ui.theme.BeFitOutfitTheme
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -24,8 +28,10 @@ class MainActivity : ComponentActivity() {
                 ) {
                     KoinAndroidContext {
                         val viewModel: MainViewModel = koinViewModel()
+                        val flowSession = viewModel.getSession()
                         BeFitOutfitApp(
-                            isLoggedIn = viewModel.isLoggedIn,
+                            isLoggedIn = runBlocking { flowSession.first().email.isNotEmpty() },
+                            session = flowSession.collectAsState(initial = Session()).value,
                             clearSession = viewModel::clearSession,
                         )
                     }
