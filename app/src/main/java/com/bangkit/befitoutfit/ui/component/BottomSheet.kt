@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
@@ -13,6 +15,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -22,13 +25,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.data.model.Session
+import com.bangkit.befitoutfit.data.model.SettingRecommend
 import com.bangkit.befitoutfit.helper.BottomSheetType
 import com.bangkit.befitoutfit.helper.InputChecker.emailChecker
 import com.bangkit.befitoutfit.helper.State
@@ -36,6 +42,9 @@ import com.bangkit.befitoutfit.helper.TextFieldType
 import com.bangkit.befitoutfit.ui.screen.addOutfit.AddOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.detailOutfit.DetailOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.profile.ProfileViewModel
+import com.bangkit.befitoutfit.ui.screen.settingRecommend.SettingRecommendViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -266,13 +275,59 @@ fun BottomSheet(
                     }
 
                     BottomSheetType.SettingRecommend -> {
-                        OutlinedButton(
-                            onClick = {
-                                /*TODO: feature recommend setting*/
-                                onClickDismiss()
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                        ) { Text(text = "Save") }
+                        val viewModel: SettingRecommendViewModel = koinViewModel()
+
+                        val listEvent = listOf("Casual", "Formal")
+
+                        val (event, onEventSelected) = remember {
+                            mutableStateOf(
+                                when (runBlocking {
+                                    viewModel.getSettingRecommend().first().event
+                                }) {
+                                    "Casual" -> listEvent[0]
+                                    "Formal" -> listEvent[1]
+                                    else -> listEvent[0]
+                                }
+                            )
+                        }
+
+                        Text(
+                            text = "Event",
+                            modifier = Modifier.padding(bottom = 16.dp),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+
+                        Column(modifier = Modifier.selectableGroup()) {
+                            listEvent.forEach {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(56.dp)
+                                        .selectable(
+                                            selected = it == event,
+                                            role = Role.RadioButton,
+                                            onClick = {
+                                                onEventSelected(it)
+                                                viewModel.setSettingRecommend(
+                                                    settingRecommend = SettingRecommend(event = it)
+                                                )
+                                            },
+                                        )
+                                        .padding(horizontal = 16.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    RadioButton(
+                                        selected = it == event,
+                                        onClick = null,
+                                    )
+                                    Text(
+                                        text = it,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        modifier = Modifier.padding(start = 16.dp)
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }

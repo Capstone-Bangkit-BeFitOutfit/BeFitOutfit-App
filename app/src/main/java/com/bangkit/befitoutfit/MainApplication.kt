@@ -8,17 +8,20 @@ import com.bangkit.befitoutfit.BuildConfig.BASE_URL_MOCK
 import com.bangkit.befitoutfit.BuildConfig.DEBUG
 import com.bangkit.befitoutfit.BuildConfig.MOCK
 import com.bangkit.befitoutfit.data.local.preferences.SessionPreferences
+import com.bangkit.befitoutfit.data.local.preferences.SettingPreferences
 import com.bangkit.befitoutfit.data.remote.ApiService
 import com.bangkit.befitoutfit.data.repository.AuthRepository
 import com.bangkit.befitoutfit.data.repository.OutfitRepository
 import com.bangkit.befitoutfit.data.repository.RecommendRepository
 import com.bangkit.befitoutfit.data.repository.SessionRepository
+import com.bangkit.befitoutfit.data.repository.SettingRepository
 import com.bangkit.befitoutfit.ui.screen.addOutfit.AddOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.auth.AuthViewModel
 import com.bangkit.befitoutfit.ui.screen.detailOutfit.DetailOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.profile.ProfileViewModel
 import com.bangkit.befitoutfit.ui.screen.recommend.RecommendViewModel
+import com.bangkit.befitoutfit.ui.screen.settingRecommend.SettingRecommendViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
@@ -45,11 +48,15 @@ class MainApplication : Application() {
     companion object {
         private val Context.session by preferencesDataStore(name = "session")
 
+        private val Context.setting by preferencesDataStore(name = "setting")
+
         private val client = OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(if (DEBUG) BODY else NONE)).build()
 
         val app = module {
             single { SessionPreferences(androidContext().session) }
+
+            single { SettingPreferences(androidContext().setting) }
 
             single {
                 Retrofit.Builder().baseUrl(if (MOCK) BASE_URL_MOCK else BASE_URL)
@@ -63,7 +70,9 @@ class MainApplication : Application() {
 
             single { OutfitRepository(get()) }
 
-            single { RecommendRepository(get(), get()) }
+            single { RecommendRepository(get(), get(), get()) }
+
+            single { SettingRepository(get()) }
 
             viewModel { MainViewModel(get()) }
 
@@ -78,6 +87,8 @@ class MainApplication : Application() {
             viewModel { AddOutfitViewModel(get()) }
 
             viewModel { DetailOutfitViewModel(get()) }
+
+            viewModel { SettingRecommendViewModel(get()) }
         }
     }
 }
