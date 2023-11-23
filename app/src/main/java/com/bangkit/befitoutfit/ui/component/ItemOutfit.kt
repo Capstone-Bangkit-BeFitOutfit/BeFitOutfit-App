@@ -1,6 +1,5 @@
 package com.bangkit.befitoutfit.ui.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,10 +23,11 @@ import coil.request.ImageRequest
 import com.bangkit.befitoutfit.R
 import com.bangkit.befitoutfit.data.model.Outfit
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemOutfit(outfit: Outfit, modifier: Modifier = Modifier, onClick: (Outfit) -> Unit = {}) {
-    Card(modifier = modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.clickable { onClick(outfit) }) {
+    Card(modifier = modifier.fillMaxWidth(), onClick = { onClick(outfit) }) {
+        Row {
             Column(
                 modifier = Modifier
                     .weight(1f)
