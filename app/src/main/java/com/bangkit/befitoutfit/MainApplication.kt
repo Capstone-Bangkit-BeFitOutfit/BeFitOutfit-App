@@ -2,8 +2,6 @@ package com.bangkit.befitoutfit
 
 import android.app.Application
 import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.bangkit.befitoutfit.BuildConfig.BASE_URL
 import com.bangkit.befitoutfit.BuildConfig.BASE_URL_MOCK
@@ -45,8 +43,7 @@ class MainApplication : Application() {
     }
 
     companion object {
-        /*TODO: remove Context.session type*/
-        private val Context.session: DataStore<Preferences> by preferencesDataStore(name = "session")
+        private val Context.session by preferencesDataStore(name = "session")
 
         private val client = OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(if (DEBUG) BODY else NONE)).build()
