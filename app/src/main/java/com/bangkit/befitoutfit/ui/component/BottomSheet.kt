@@ -76,256 +76,237 @@ fun BottomSheet(
 
             Divider(modifier = Modifier.padding(bottom = 16.dp))
 
-            Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                when (bottomSheetType) {
-                    BottomSheetType.Profile -> {
-                        val viewModel: ProfileViewModel = koinViewModel()
+            when (bottomSheetType) {
+                BottomSheetType.Profile -> {
+                    val viewModel: ProfileViewModel = koinViewModel()
 
-                        val focusManager = LocalFocusManager.current
+                    var nameValue by remember { mutableStateOf(session.name) }
+                    var nameValid by remember { mutableStateOf(true) }
 
-                        var nameValue by remember { mutableStateOf(session.name) }
-                        var nameValid by remember { mutableStateOf(true) }
+                    var emailValue by remember { mutableStateOf(session.email) }
+                    var emailValid by remember { mutableStateOf(true) }
 
-                        var emailValue by remember { mutableStateOf(session.email) }
-                        var emailValid by remember { mutableStateOf(true) }
+                    ContentProfile(session = session,
+                        nameValue = nameValue,
+                        nameValid = nameValid,
+                        onNameValueChange = {
+                            nameValid = it.isNotEmpty()
+                            nameValue = it
+                        },
+                        onNameClick = { nameValue = "" },
+                        emailValue = emailValue,
+                        emailValid = emailValid,
+                        onEmailValueChange = {
+                            emailValue = it
+                            emailValid = it.emailChecker().isEmpty()
+                        },
+                        onEmailClick = { emailValue = "" },
+                        onUpdateClick = {
+                            onClickDismiss()
+                            viewModel.setSession(Session(name = nameValue, email = emailValue))
+                        })
+                }
 
-                        TextField(
-                            textFieldType = TextFieldType.Name,
-                            value = nameValue,
-                            isValid = nameValid,
-                            onValueChange = {
-                                nameValid = it.isNotEmpty()
-                                nameValue = it
-                            },
-                            onClick = { nameValue = "" },
-                            focusManager = focusManager,
-                        )
+                BottomSheetType.DetailOutfit -> {
+                    val viewModel: DetailOutfitViewModel = koinViewModel()
 
-                        TextField(
-                            textFieldType = TextFieldType.Email,
-                            value = emailValue,
-                            isValid = emailValid,
-                            onValueChange = {
-                                emailValue = it
-                                emailValid = it.emailChecker().isEmpty()
-                            },
-                            onClick = { emailValue = "" },
-                            focusManager = focusManager,
-                            imeAction = ImeAction.Done
-                        )
+                    val state = viewModel.state.collectAsState().value
 
-                        OutlinedButton(
-                            onClick = {
-                                focusManager.clearFocus()
-                                viewModel.setSession(Session(name = nameValue, email = emailValue))
-                                onClickDismiss()
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            enabled = (session.name != nameValue || session.email != emailValue) && nameValid && emailValid && nameValue.isNotEmpty() && emailValue.isNotEmpty()
-                        ) { Text(text = "Update") }
+                    val enable = state is State.Idle
+
+                    val focusManager = LocalFocusManager.current
+
+                    var nameOutfitValue by remember { mutableStateOf(outfit.name) }
+                    var nameOutfitValid by remember { mutableStateOf(true) }
+
+                    when (state) {/*TODO: update outfit state management*/
+                        is State.Idle -> {}
+                        is State.Loading -> {}
+                        is State.Success -> {
+                            nameOutfitValue = ""
+                            nameOutfitValid = true
+                            onClickDismiss()
+                        }
+
+                        is State.Error -> {}
                     }
 
-                    BottomSheetType.DetailOutfit -> {
-                        val viewModel: DetailOutfitViewModel = koinViewModel()
+                    TextField(
+                        textFieldType = TextFieldType.OutfitName,
+                        enable = enable,
+                        value = nameOutfitValue,
+                        isValid = nameOutfitValid,
+                        onValueChange = {
+                            nameOutfitValid = it.isNotEmpty()
+                            nameOutfitValue = it
+                        },
+                        onClick = { nameOutfitValue = "" },
+                        focusManager = focusManager,
+                        imeAction = ImeAction.Done
+                    )
 
-                        val state = viewModel.state.collectAsState().value
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .padding(bottom = 16.dp)
+                    ) {}
 
-                        val enable = state is State.Idle
+                    Row(modifier = Modifier.padding(bottom = 16.dp)) {
+                        Button(
+                            onClick = { /*TODO: feature add image from camera*/ },
+                            modifier = Modifier.weight(1f),
+                            enabled = enable
+                        ) { Text(text = "Camera") }
 
-                        val focusManager = LocalFocusManager.current
+                        Spacer(modifier = Modifier.padding(8.dp))
 
-                        var nameOutfitValue by remember { mutableStateOf(outfit.name) }
-                        var nameOutfitValid by remember { mutableStateOf(true) }
-
-                        when (state) {/*TODO: update outfit state management*/
-                            is State.Idle -> {}
-                            is State.Loading -> {}
-                            is State.Success -> {
-                                nameOutfitValue = ""
-                                nameOutfitValid = true
-                                onClickDismiss()
-                            }
-
-                            is State.Error -> {}
-                        }
-
-                        TextField(
-                            textFieldType = TextFieldType.OutfitName,
-                            enable = enable,
-                            value = nameOutfitValue,
-                            isValid = nameOutfitValid,
-                            onValueChange = {
-                                nameOutfitValid = it.isNotEmpty()
-                                nameOutfitValue = it
-                            },
-                            onClick = { nameOutfitValue = "" },
-                            focusManager = focusManager,
-                            imeAction = ImeAction.Done
-                        )
-
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                                .padding(bottom = 16.dp)
-                        ) {}
-
-                        Row(modifier = Modifier.padding(bottom = 16.dp)) {
-                            Button(
-                                onClick = { /*TODO: feature add image from camera*/ },
-                                modifier = Modifier.weight(1f),
-                                enabled = enable
-                            ) { Text(text = "Camera") }
-
-                            Spacer(modifier = Modifier.padding(8.dp))
-
-                            Button(
-                                onClick = { /*TODO: feature add image from gallery*/ },
-                                modifier = Modifier.weight(1f),
-                                enabled = enable
-                            ) { Text(text = "Gallery") }
-                        }
-
-                        OutlinedButton(
-                            onClick = {
-                                viewModel.updateOutfit(
-                                    id = outfit.id,
-                                    name = nameOutfitValue,
-                                    type = outfit.type,
-                                    imageUrl = outfit.imageUrl
-                                )
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            enabled = enable/*TODO: add another enable logic*/
-                        ) { Text(text = "Update") }
+                        Button(
+                            onClick = { /*TODO: feature add image from gallery*/ },
+                            modifier = Modifier.weight(1f),
+                            enabled = enable
+                        ) { Text(text = "Gallery") }
                     }
 
-                    BottomSheetType.AddOutfit -> {
-                        val viewModel: AddOutfitViewModel = koinViewModel()
-
-                        val state = viewModel.state.collectAsState().value
-
-                        val enable = state is State.Idle
-
-                        val focusManager = LocalFocusManager.current
-
-                        var nameOutfitValue by remember { mutableStateOf("") }
-                        var nameOutfitValid by remember { mutableStateOf(true) }
-
-                        when (state) {/*TODO: add outfit state management*/
-                            is State.Idle -> {}
-                            is State.Loading -> {}
-                            is State.Success -> {
-                                nameOutfitValue = ""
-                                nameOutfitValid = true
-                                onClickDismiss()
-                            }
-
-                            is State.Error -> {}
-                        }
-
-                        TextField(
-                            textFieldType = TextFieldType.OutfitName,
-                            enable = enable,
-                            value = nameOutfitValue,
-                            isValid = nameOutfitValid,
-                            onValueChange = {
-                                nameOutfitValid = it.isNotEmpty()
-                                nameOutfitValue = it
-                            },
-                            onClick = { nameOutfitValue = "" },
-                            focusManager = focusManager,
-                            imeAction = ImeAction.Done
-                        )
-
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                                .padding(bottom = 16.dp)
-                        ) {}
-
-                        Row(modifier = Modifier.padding(bottom = 16.dp)) {
-                            Button(
-                                onClick = { /*TODO: feature add image from camera*/ },
-                                modifier = Modifier.weight(1f),
-                                enabled = enable
-                            ) { Text(text = "Camera") }
-
-                            Spacer(modifier = Modifier.padding(8.dp))
-
-                            Button(
-                                onClick = { /*TODO: feature add image from gallery*/ },
-                                modifier = Modifier.weight(1f),
-                                enabled = enable
-                            ) { Text(text = "Gallery") }
-                        }
-
-                        OutlinedButton(
-                            onClick = {
-                                viewModel.addOutfit(
-                                    name = nameOutfitValue,
-                                    type = outfit.type,
-                                    imageUrl = outfit.imageUrl
-                                )
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            enabled = enable/*TODO: add another enable logic*/
-                        ) { Text(text = "Upload") }
-                    }
-
-                    BottomSheetType.SettingRecommend -> {
-                        val viewModel: SettingRecommendViewModel = koinViewModel()
-
-                        val listEvent = listOf("Casual", "Formal")
-
-                        val (event, onEventSelected) = remember {
-                            mutableStateOf(
-                                when (runBlocking {
-                                    viewModel.getSettingRecommend().first().event
-                                }) {
-                                    "Casual" -> listEvent[0]
-                                    "Formal" -> listEvent[1]
-                                    else -> listEvent[0]
-                                }
+                    OutlinedButton(
+                        onClick = {
+                            viewModel.updateOutfit(
+                                id = outfit.id,
+                                name = nameOutfitValue,
+                                type = outfit.type,
+                                imageUrl = outfit.imageUrl
                             )
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = enable/*TODO: add another enable logic*/
+                    ) { Text(text = "Update") }
+                }
+
+                BottomSheetType.AddOutfit -> {
+                    val viewModel: AddOutfitViewModel = koinViewModel()
+
+                    val state = viewModel.state.collectAsState().value
+
+                    val enable = state is State.Idle
+
+                    val focusManager = LocalFocusManager.current
+
+                    var nameOutfitValue by remember { mutableStateOf("") }
+                    var nameOutfitValid by remember { mutableStateOf(true) }
+
+                    when (state) {/*TODO: add outfit state management*/
+                        is State.Idle -> {}
+                        is State.Loading -> {}
+                        is State.Success -> {
+                            nameOutfitValue = ""
+                            nameOutfitValid = true
+                            onClickDismiss()
                         }
 
-                        Text(
-                            text = "Event",
-                            modifier = Modifier.padding(bottom = 16.dp),
-                            style = MaterialTheme.typography.titleMedium,
-                        )
+                        is State.Error -> {}
+                    }
 
-                        Column(modifier = Modifier.selectableGroup()) {
-                            listEvent.forEach {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(56.dp)
-                                        .selectable(
-                                            selected = it == event,
-                                            role = Role.RadioButton,
-                                            onClick = {
-                                                onEventSelected(it)
-                                                viewModel.setSettingRecommend(
-                                                    settingRecommend = SettingRecommend(event = it)
-                                                )
-                                            },
-                                        )
-                                        .padding(horizontal = 16.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    RadioButton(
+                    TextField(
+                        textFieldType = TextFieldType.OutfitName,
+                        enable = enable,
+                        value = nameOutfitValue,
+                        isValid = nameOutfitValid,
+                        onValueChange = {
+                            nameOutfitValid = it.isNotEmpty()
+                            nameOutfitValue = it
+                        },
+                        onClick = { nameOutfitValue = "" },
+                        focusManager = focusManager,
+                        imeAction = ImeAction.Done
+                    )
+
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .padding(bottom = 16.dp)
+                    ) {}
+
+                    Row(modifier = Modifier.padding(bottom = 16.dp)) {
+                        Button(
+                            onClick = { /*TODO: feature add image from camera*/ },
+                            modifier = Modifier.weight(1f),
+                            enabled = enable
+                        ) { Text(text = "Camera") }
+
+                        Spacer(modifier = Modifier.padding(8.dp))
+
+                        Button(
+                            onClick = { /*TODO: feature add image from gallery*/ },
+                            modifier = Modifier.weight(1f),
+                            enabled = enable
+                        ) { Text(text = "Gallery") }
+                    }
+
+                    OutlinedButton(
+                        onClick = {
+                            viewModel.addOutfit(
+                                name = nameOutfitValue,
+                                type = outfit.type,
+                                imageUrl = outfit.imageUrl
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = enable/*TODO: add another enable logic*/
+                    ) { Text(text = "Upload") }
+                }
+
+                BottomSheetType.SettingRecommend -> {
+                    val viewModel: SettingRecommendViewModel = koinViewModel()
+
+                    val listEvent = listOf("Casual", "Formal")
+
+                    val (event, onEventSelected) = remember {
+                        mutableStateOf(
+                            when (runBlocking {
+                                viewModel.getSettingRecommend().first().event
+                            }) {
+                                "Casual" -> listEvent[0]
+                                "Formal" -> listEvent[1]
+                                else -> listEvent[0]
+                            }
+                        )
+                    }
+
+                    Text(
+                        text = "Event",
+                        modifier = Modifier.padding(bottom = 16.dp),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+
+                    Column(modifier = Modifier.selectableGroup()) {
+                        listEvent.forEach {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(56.dp)
+                                    .selectable(
                                         selected = it == event,
-                                        onClick = null,
+                                        role = Role.RadioButton,
+                                        onClick = {
+                                            onEventSelected(it)
+                                            viewModel.setSettingRecommend(
+                                                settingRecommend = SettingRecommend(event = it)
+                                            )
+                                        },
                                     )
-                                    Text(
-                                        text = it,
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        modifier = Modifier.padding(start = 16.dp)
-                                    )
-                                }
+                                    .padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                RadioButton(
+                                    selected = it == event,
+                                    onClick = null,
+                                )
+                                Text(
+                                    text = it,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    modifier = Modifier.padding(start = 16.dp)
+                                )
                             }
                         }
                     }
