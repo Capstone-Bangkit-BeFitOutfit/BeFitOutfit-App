@@ -21,6 +21,7 @@ import com.bangkit.befitoutfit.ui.screen.login.LoginViewModel
 import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.profile.ProfileViewModel
 import com.bangkit.befitoutfit.ui.screen.recommend.RecommendViewModel
+import com.bangkit.befitoutfit.ui.screen.register.RegisterViewModel
 import com.bangkit.befitoutfit.ui.screen.settingRecommend.SettingRecommendViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -75,6 +76,7 @@ class MainApplication : Application() {
             viewModel { MyOutfitViewModel(get()) }
             viewModel { ProfileViewModel(get()) }
             viewModel { RecommendViewModel(get()) }
+            viewModel { RegisterViewModel(get()) }
             viewModel { SettingRecommendViewModel(get()) }
         }
     }

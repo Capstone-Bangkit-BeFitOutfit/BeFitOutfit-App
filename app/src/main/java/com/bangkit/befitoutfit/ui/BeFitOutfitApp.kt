@@ -34,6 +34,8 @@ import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitScreen
 import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.recommend.RecommendScreen
 import com.bangkit.befitoutfit.ui.screen.recommend.RecommendViewModel
+import com.bangkit.befitoutfit.ui.screen.register.RegisterScreen
+import com.bangkit.befitoutfit.ui.screen.register.RegisterViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -96,13 +98,17 @@ fun BeFitOutfitApp(
                         navigateToRegister = { navController.navigate(Screen.Register.route) },
                     )
                 }
-                composable(route = Screen.Register.route) {}
+                composable(route = Screen.Register.route) {
+                    val viewModel: RegisterViewModel = koinViewModel()
+                    RegisterScreen(state = viewModel.state.collectAsState(initial = State.Idle).value,
+                        register = viewModel::register,
+                        navigateToLogin = { navController.navigateUp() })
+                }
             }
             navigation(startDestination = Screen.MyOutfit.route, route = Screen.Main.route) {
                 composable(route = Screen.MyOutfit.route) {
                     val viewModel: MyOutfitViewModel = koinViewModel()
-                    MyOutfitScreen(
-                        state = viewModel.state.collectAsState(initial = State.Idle).value,
+                    MyOutfitScreen(state = viewModel.state.collectAsState(initial = State.Idle).value,
                         getOutfit = viewModel::getOutfit,
                         detailOutfit = { outfit ->
                             selectedOutfit = outfit
