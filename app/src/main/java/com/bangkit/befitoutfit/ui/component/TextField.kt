@@ -43,7 +43,7 @@ fun TextField(
         onValueChange = onValueChange,
         modifier = modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp),
+            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
         enabled = enable,
         label = { Text(text = textFieldType.type) },
         placeholder = { Text(text = "Enter your ${textFieldType.type}") },
