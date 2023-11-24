@@ -29,7 +29,9 @@ fun ContentProfile(
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+    ) {
         TextField(
             textFieldType = TextFieldType.Name,
             value = nameValue,
@@ -46,15 +48,21 @@ fun ContentProfile(
             onValueChange = onEmailValueChange,
             onClick = onEmailClick,
             focusManager = focusManager,
-            imeAction = ImeAction.Done
+            imeAction = ImeAction.Done,
         )
 
         OutlinedButton(
             onClick = onUpdateClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            enabled = (session.name != nameValue || session.email != emailValue) && nameValid && emailValid && nameValue.isNotEmpty() && emailValue.isNotEmpty()
-        ) { Text(text = "Update") }
+                .padding(
+                    horizontal = 16.dp,
+                ),
+            enabled = (session.name != nameValue || session.email != emailValue) && nameValid && emailValid && nameValue.isNotEmpty() && emailValue.isNotEmpty(),
+        ) {
+            Text(
+                text = "Update",
+            )
+        }
     }
 }

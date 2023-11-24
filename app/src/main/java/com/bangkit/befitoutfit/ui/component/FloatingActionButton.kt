@@ -18,8 +18,17 @@ fun FloatingActionButton(
         else -> Screen.Recommend
     }.apply {
         ExtendedFloatingActionButton(
-            text = { Text(text = fabTitle) },
-            icon = { Icon(imageVector = fabIcon, contentDescription = fabTitle) },
+            text = {
+                Text(
+                    text = fabTitle,
+                )
+            },
+            icon = {
+                Icon(
+                    imageVector = fabIcon,
+                    contentDescription = fabTitle,
+                )
+            },
             onClick = onClick,
             modifier = modifier,
         )

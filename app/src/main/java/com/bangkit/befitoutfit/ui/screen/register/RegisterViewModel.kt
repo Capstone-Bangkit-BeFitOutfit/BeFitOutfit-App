@@ -13,17 +13,38 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel() {
+class RegisterViewModel(
+    private val authRepository: AuthRepository,
+) : ViewModel() {
     var state = MutableStateFlow<State<Info>>(State.Idle)
         private set
 
-    fun register(name: String, email: String, password: String) =
-        viewModelScope.launch(context = Dispatchers.IO) {
-            authRepository.register(name = name, email = email, password = password)
-                .onStart { state.value = State.Loading }
-                .catch { state.value = State.Error(it.message ?: "Unknown error") }.onCompletion {
-                    delay(timeMillis = 50L)
-                    state.value = State.Idle
-                }.collect { state.value = State.Success(it) }
+    fun register(
+        name: String,
+        email: String,
+        password: String,
+    ) = viewModelScope.launch(
+        context = Dispatchers.IO,
+    ) {
+        authRepository.register(
+            name = name,
+            email = email,
+            password = password,
+        ).onStart {
+            state.value = State.Loading
+        }.catch {
+            state.value = State.Error(
+                message = it.message ?: "Unknown error"
+            )
+        }.onCompletion {
+            delay(
+                timeMillis = 50L,
+            )
+            state.value = State.Idle
+        }.collect {
+            state.value = State.Success(
+                data = it,
+            )
         }
+    }
 }

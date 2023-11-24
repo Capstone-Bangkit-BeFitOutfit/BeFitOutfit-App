@@ -21,15 +21,33 @@ class LoginViewModel(
     var state = MutableStateFlow<State<Login>>(State.Idle)
         private set
 
-    fun login(email: String, password: String) = viewModelScope.launch(context = Dispatchers.IO) {
-        authRepository.login(email = email, password = password)
-            .onStart { state.value = State.Loading }
-            .catch { state.value = State.Error(it.message ?: "Unknown error") }.onCompletion {
-                delay(timeMillis = 50L)
-                state.value = State.Idle
-            }.collect {
-                sessionRepository.setSession(session = it.data)
-                state.value = State.Success(data = it)
-            }
+    fun login(
+        email: String,
+        password: String,
+    ) = viewModelScope.launch(
+        context = Dispatchers.IO,
+    ) {
+        authRepository.login(
+            email = email,
+            password = password,
+        ).onStart {
+            state.value = State.Loading
+        }.catch {
+            state.value = State.Error(
+                message = it.message ?: "Unknown error",
+            )
+        }.onCompletion {
+            delay(
+                timeMillis = 50L,
+            )
+            state.value = State.Idle
+        }.collect {
+            sessionRepository.setSession(
+                session = it.data,
+            )
+            state.value = State.Success(
+                data = it,
+            )
+        }
     }
 }

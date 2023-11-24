@@ -17,9 +17,12 @@ fun BottomBar(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
-    NavigationBar(modifier = modifier) {
+    NavigationBar(
+        modifier = modifier,
+    ) {
         screens.forEach {
-            NavigationBarItem(selected = currentRoute == it.route,
+            NavigationBarItem(
+                selected = currentRoute == it.route,
                 onClick = {
                     navController.apply {
                         navigate(it.route) {
@@ -29,8 +32,18 @@ fun BottomBar(
                         }
                     }
                 },
-                icon = { Icon(imageVector = it.icon, contentDescription = it.route) },
-                label = { Text(text = it.route) })
+                icon = {
+                    Icon(
+                        imageVector = it.icon,
+                        contentDescription = it.route,
+                    )
+                },
+                label = {
+                    Text(
+                        text = it.route,
+                    )
+                },
+            )
         }
     }
 }

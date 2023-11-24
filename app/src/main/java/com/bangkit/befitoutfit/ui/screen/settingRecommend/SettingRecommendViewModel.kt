@@ -7,11 +7,18 @@ import com.bangkit.befitoutfit.data.repository.SettingRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SettingRecommendViewModel(private val settingRepository: SettingRepository) : ViewModel() {
+class SettingRecommendViewModel(
+    private val settingRepository: SettingRepository,
+) : ViewModel() {
     fun getSettingRecommend() = settingRepository.getSettingRecommend()
 
-    fun setSettingRecommend(settingRecommend: SettingRecommend) =
-        viewModelScope.launch(context = Dispatchers.IO) {
-            settingRepository.setSettingRecommend(settingRecommend = settingRecommend)
-        }
+    fun setSettingRecommend(
+        settingRecommend: SettingRecommend,
+    ) = viewModelScope.launch(
+        context = Dispatchers.IO,
+    ) {
+        settingRepository.setSettingRecommend(
+            settingRecommend = settingRecommend,
+        )
+    }
 }

@@ -6,9 +6,14 @@ import com.bangkit.befitoutfit.data.repository.SessionRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val sessionRepository: SessionRepository) : ViewModel() {
+class MainViewModel(
+    private val sessionRepository: SessionRepository,
+) : ViewModel() {
     fun getSession() = sessionRepository.getSession()
 
-    fun clearSession() =
-        viewModelScope.launch(context = Dispatchers.IO) { sessionRepository.clearSession() }
+    fun clearSession() = viewModelScope.launch(
+        context = Dispatchers.IO,
+    ) {
+        sessionRepository.clearSession()
+    }
 }

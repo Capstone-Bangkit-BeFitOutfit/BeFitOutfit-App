@@ -69,42 +69,75 @@ fun BottomSheet(
                 text = bottomSheetType.title,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(
+                        bottom = 16.dp,
+                    ),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.labelLarge
+                style = MaterialTheme.typography.labelLarge,
             )
 
-            Divider(modifier = Modifier.padding(bottom = 16.dp))
+            Divider(
+                modifier = Modifier.padding(
+                    bottom = 16.dp,
+                ),
+            )
 
             when (bottomSheetType) {
                 BottomSheetType.Profile -> {
                     val viewModel: ProfileViewModel = koinViewModel()
 
-                    var nameValue by remember { mutableStateOf(session.name) }
-                    var nameValid by remember { mutableStateOf(true) }
+                    var nameValue by remember {
+                        mutableStateOf(
+                            value = session.name,
+                        )
+                    }
+                    var nameValid by remember {
+                        mutableStateOf(
+                            value = true,
+                        )
+                    }
 
-                    var emailValue by remember { mutableStateOf(session.email) }
-                    var emailValid by remember { mutableStateOf(true) }
+                    var emailValue by remember {
+                        mutableStateOf(
+                            value = session.email,
+                        )
+                    }
+                    var emailValid by remember {
+                        mutableStateOf(
+                            value = true,
+                        )
+                    }
 
-                    ContentProfile(session = session,
+                    ContentProfile(
+                        session = session,
                         nameValue = nameValue,
                         nameValid = nameValid,
                         onNameValueChange = {
                             nameValid = it.isNotEmpty()
                             nameValue = it
                         },
-                        onNameClick = { nameValue = "" },
+                        onNameClick = {
+                            nameValue = ""
+                        },
                         emailValue = emailValue,
                         emailValid = emailValid,
                         onEmailValueChange = {
                             emailValue = it
                             emailValid = it.emailChecker().isEmpty()
                         },
-                        onEmailClick = { emailValue = "" },
+                        onEmailClick = {
+                            emailValue = ""
+                        },
                         onUpdateClick = {
                             onClickDismiss()
-                            viewModel.setSession(Session(name = nameValue, email = emailValue))
-                        })
+                            viewModel.setSession(
+                                Session(
+                                    name = nameValue,
+                                    email = emailValue,
+                                )
+                            )
+                        },
+                    )
                 }
 
                 BottomSheetType.DetailOutfit -> {
@@ -191,8 +224,16 @@ fun BottomSheet(
 
                     val focusManager = LocalFocusManager.current
 
-                    var nameOutfitValue by remember { mutableStateOf("") }
-                    var nameOutfitValid by remember { mutableStateOf(true) }
+                    var nameOutfitValue by remember {
+                        mutableStateOf(
+                            value = "",
+                        )
+                    }
+                    var nameOutfitValid by remember {
+                        mutableStateOf(
+                            value = true,
+                        )
+                    }
 
                     when (state) {/*TODO: add outfit state management*/
                         is State.Idle -> {}
@@ -217,30 +258,54 @@ fun BottomSheet(
                         },
                         onClick = { nameOutfitValue = "" },
                         focusManager = focusManager,
-                        imeAction = ImeAction.Done
+                        imeAction = ImeAction.Done,
                     )
 
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(200.dp)
-                            .padding(bottom = 16.dp)
+                            .height(
+                                height = 200.dp,
+                            )
+                            .padding(
+                                bottom = 16.dp,
+                            )
                     ) {}
 
-                    Row(modifier = Modifier.padding(bottom = 16.dp)) {
+                    Row(
+                        modifier = Modifier.padding(
+                            bottom = 16.dp,
+                        )
+                    ) {
                         Button(
-                            onClick = { /*TODO: feature add image from camera*/ },
-                            modifier = Modifier.weight(1f),
-                            enabled = enable
-                        ) { Text(text = "Camera") }
+                            onClick = {
+                                /*TODO: feature add image from camera*/
+                            }, modifier = Modifier.weight(
+                                weight = 1f,
+                            ), enabled = enable
+                        ) {
+                            Text(
+                                text = "Camera",
+                            )
+                        }
 
-                        Spacer(modifier = Modifier.padding(8.dp))
+                        Spacer(
+                            modifier = Modifier.padding(
+                                all = 8.dp,
+                            )
+                        )
 
                         Button(
-                            onClick = { /*TODO: feature add image from gallery*/ },
-                            modifier = Modifier.weight(1f),
-                            enabled = enable
-                        ) { Text(text = "Gallery") }
+                            onClick = {
+                                /*TODO: feature add image from gallery*/
+                            }, modifier = Modifier.weight(
+                                weight = 1f,
+                            ), enabled = enable
+                        ) {
+                            Text(
+                                text = "Gallery",
+                            )
+                        }
                     }
 
                     OutlinedButton(
@@ -253,7 +318,11 @@ fun BottomSheet(
                         },
                         modifier = Modifier.fillMaxWidth(),
                         enabled = enable/*TODO: add another enable logic*/
-                    ) { Text(text = "Upload") }
+                    ) {
+                        Text(
+                            text = "Upload",
+                        )
+                    }
                 }
 
                 BottomSheetType.SettingRecommend -> {
@@ -263,40 +332,50 @@ fun BottomSheet(
 
                     val (event, onEventSelected) = remember {
                         mutableStateOf(
-                            when (runBlocking {
+                            value = when (runBlocking {
                                 viewModel.getSettingRecommend().first().event
                             }) {
                                 "Casual" -> listEvent[0]
                                 "Formal" -> listEvent[1]
                                 else -> listEvent[0]
-                            }
+                            },
                         )
                     }
 
                     Text(
                         text = "Event",
-                        modifier = Modifier.padding(bottom = 16.dp),
+                        modifier = Modifier.padding(
+                            bottom = 16.dp,
+                        ),
                         style = MaterialTheme.typography.titleMedium,
                     )
 
-                    Column(modifier = Modifier.selectableGroup()) {
+                    Column(
+                        modifier = Modifier.selectableGroup(),
+                    ) {
                         listEvent.forEach {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(56.dp)
+                                    .height(
+                                        height = 56.dp,
+                                    )
                                     .selectable(
                                         selected = it == event,
                                         role = Role.RadioButton,
                                         onClick = {
                                             onEventSelected(it)
                                             viewModel.setSettingRecommend(
-                                                settingRecommend = SettingRecommend(event = it)
+                                                settingRecommend = SettingRecommend(
+                                                    event = it,
+                                                )
                                             )
                                         },
                                     )
-                                    .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                    .padding(
+                                        horizontal = 16.dp,
+                                    ),
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 RadioButton(
                                     selected = it == event,
@@ -305,7 +384,9 @@ fun BottomSheet(
                                 Text(
                                     text = it,
                                     style = MaterialTheme.typography.bodyLarge,
-                                    modifier = Modifier.padding(start = 16.dp)
+                                    modifier = Modifier.padding(
+                                        start = 16.dp,
+                                    )
                                 )
                             }
                         }
@@ -313,7 +394,11 @@ fun BottomSheet(
                 }
             }
 
-            Spacer(modifier = Modifier.padding(32.dp))
+            Spacer(
+                modifier = Modifier.padding(
+                    all = 32.dp,
+                ),
+            )
         }
     }
 }

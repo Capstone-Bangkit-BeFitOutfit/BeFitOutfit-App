@@ -24,15 +24,43 @@ fun RegisterScreen(
     navigateToLogin: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var nameValue by remember { mutableStateOf("") }
-    var nameValid by remember { mutableStateOf(true) }
+    var nameValue by remember {
+        mutableStateOf(
+            value = "",
+        )
+    }
+    var nameValid by remember {
+        mutableStateOf(
+            value = true,
+        )
+    }
 
-    var emailValue by remember { mutableStateOf("") }
-    var emailValid by remember { mutableStateOf(true) }
+    var emailValue by remember {
+        mutableStateOf(
+            value = "",
+        )
+    }
+    var emailValid by remember {
+        mutableStateOf(
+            value = true,
+        )
+    }
 
-    var passwordValue by remember { mutableStateOf("") }
-    var passwordValid by remember { mutableStateOf(true) }
-    var passwordVisible by remember { mutableStateOf(false) }
+    var passwordValue by remember {
+        mutableStateOf(
+            value = "",
+        )
+    }
+    var passwordValid by remember {
+        mutableStateOf(
+            value = true,
+        )
+    }
+    var passwordVisible by remember {
+        mutableStateOf(
+            value = false,
+        )
+    }
 
     when (state) {
         is State.Success -> navigateToLogin()
@@ -42,7 +70,10 @@ fun RegisterScreen(
         else -> {}
     }
 
-    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
         ContentRegister(
             nameValue = nameValue,
             nameValid = nameValid,
@@ -50,27 +81,43 @@ fun RegisterScreen(
                 nameValid = it.isNotEmpty()
                 nameValue = it
             },
-            onNameClick = { nameValue = "" },
+            onNameClick = {
+                nameValue = ""
+            },
             emailValue = emailValue,
             emailValid = emailValid,
             onEmailValueChange = {
                 emailValue = it
                 emailValid = emailValue.emailChecker().isEmpty()
             },
-            onEmailClick = { emailValue = "" },
+            onEmailClick = {
+                emailValue = ""
+            },
             passwordValue = passwordValue,
             passwordValid = passwordValid,
             onPasswordValueChange = {
                 passwordValue = it
-                passwordValid = passwordValue.passwordChecker(isStrict = true).isEmpty()
+                passwordValid = passwordValue.passwordChecker(
+                    isStrict = true,
+                ).isEmpty()
             },
-            onPasswordClick = { passwordVisible = !passwordVisible },
+            onPasswordClick = {
+                passwordVisible = !passwordVisible
+            },
             isPasswordVisible = passwordVisible,
-            onRegisterClick = { register(nameValue, emailValue, passwordValue) },
-            onLoginClick = { navigateToLogin() },
+            onRegisterClick = {
+                register(nameValue, emailValue, passwordValue)
+            },
+            onLoginClick = {
+                navigateToLogin()
+            },
             enable = state is State.Idle,
         )
 
-        AnimatedVisibility(visible = state is State.Loading) { CircularProgressIndicator() }
+        AnimatedVisibility(
+            visible = state is State.Loading,
+        ) {
+            CircularProgressIndicator()
+        }
     }
 }

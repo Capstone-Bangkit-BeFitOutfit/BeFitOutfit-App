@@ -7,7 +7,16 @@ import com.bangkit.befitoutfit.data.repository.SessionRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(private val sessionRepository: SessionRepository) : ViewModel() {
-    fun setSession(session: Session) =
-        viewModelScope.launch(context = Dispatchers.IO) { sessionRepository.setSession(session) }
+class ProfileViewModel(
+    private val sessionRepository: SessionRepository,
+) : ViewModel() {
+    fun setSession(
+        session: Session,
+    ) = viewModelScope.launch(
+        context = Dispatchers.IO,
+    ) {
+        sessionRepository.setSession(
+            session = session,
+        )
+    }
 }

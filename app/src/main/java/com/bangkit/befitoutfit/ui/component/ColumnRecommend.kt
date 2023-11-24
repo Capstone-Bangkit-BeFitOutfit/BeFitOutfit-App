@@ -20,22 +20,35 @@ fun ColumnRecommend(
     onClick: (Outfit) -> Unit = {},
 ) {
     if (recommend.message != "success") Text(
-        text = "No outfit recommendation found", modifier = modifier
+        text = "No outfit recommendation found",
+        modifier = modifier,
     )
     else LazyColumn(
-        modifier = modifier.padding(horizontal = 16.dp),
-        contentPadding = PaddingValues(top = 16.dp, bottom = 88.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = modifier.padding(
+            horizontal = 16.dp,
+        ),
+        contentPadding = PaddingValues(
+            top = 16.dp,
+            bottom = 88.dp,
+        ),
+        verticalArrangement = Arrangement.spacedBy(
+            space = 16.dp,
+        ),
     ) {
         if (recommend.data.top.isNotEmpty()) {
             item {
                 Text(
                     text = recommend.data.top.first().type,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
             }
-            items(items = recommend.data.top, key = { it.toString() }) { outfit ->
-                ItemOutfit(outfit = outfit, onClick = { onClick(outfit) })
+            items(
+                items = recommend.data.top,
+                key = { it.toString() },
+            ) { outfit ->
+                ItemOutfit(
+                    outfit = outfit,
+                ) { onClick(outfit) }
             }
         }
 
@@ -43,11 +56,16 @@ fun ColumnRecommend(
             item {
                 Text(
                     text = recommend.data.bottom.first().type,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
             }
-            items(items = recommend.data.bottom, key = { it.toString() }) { outfit ->
-                ItemOutfit(outfit = outfit, onClick = { onClick(outfit) })
+            items(
+                items = recommend.data.bottom,
+                key = { it.toString() },
+            ) { outfit ->
+                ItemOutfit(
+                    outfit = outfit,
+                ) { onClick(outfit) }
             }
         }
 
@@ -55,11 +73,16 @@ fun ColumnRecommend(
             item {
                 Text(
                     text = recommend.data.extra.first().type,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
             }
-            items(items = recommend.data.extra, key = { it.toString() }) { outfit ->
-                ItemOutfit(outfit = outfit, onClick = { onClick(outfit) })
+            items(
+                items = recommend.data.extra,
+                key = { it.toString() },
+            ) { outfit ->
+                ItemOutfit(
+                    outfit = outfit,
+                ) { onClick(outfit) }
             }
         }
     }

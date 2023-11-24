@@ -17,14 +17,29 @@ fun ColumnOutfit(
     modifier: Modifier = Modifier,
     onClick: (Outfit) -> Unit = {},
 ) {
-    if (outfits.isEmpty()) Text(text = "No outfit found", modifier = modifier)
+    if (outfits.isEmpty()) Text(
+        text = "No outfit found",
+        modifier = modifier,
+    )
     else LazyColumn(
-        modifier = modifier.padding(horizontal = 16.dp),
-        contentPadding = PaddingValues(top = 16.dp, bottom = 88.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = modifier.padding(
+            horizontal = 16.dp,
+        ),
+        contentPadding = PaddingValues(
+            top = 16.dp,
+            bottom = 88.dp,
+        ),
+        verticalArrangement = Arrangement.spacedBy(
+            space = 16.dp,
+        ),
     ) {
-        items(items = outfits, key = { it.toString() }) { outfit ->
-            ItemOutfit(outfit = outfit, onClick = { onClick(outfit) })
+        items(
+            items = outfits,
+            key = { it.toString() },
+        ) { outfit ->
+            ItemOutfit(
+                outfit = outfit,
+            ) { onClick(outfit) }
         }
     }
 }

@@ -22,7 +22,6 @@ import androidx.navigation.navigation
 import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.helper.BottomSheetType
-import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.ui.component.BottomBar
 import com.bangkit.befitoutfit.ui.component.BottomSheet
 import com.bangkit.befitoutfit.ui.component.FloatingActionButton
@@ -55,71 +54,111 @@ fun BeFitOutfitApp(
         navController.currentBackStackEntryAsState().value?.destination?.route ?: startDestination
     val isAuthScreens = listOf(Screen.Login.route, Screen.Register.route).contains(currentRoute)
 
-    var showBottomSheet by remember { mutableStateOf(false) }
+    var showBottomSheet by remember {
+        mutableStateOf(
+            value = false,
+        )
+    }
     var bottomSheetType by remember { mutableStateOf<BottomSheetType>(BottomSheetType.Profile) }
 
-    var selectedOutfit by remember { mutableStateOf(Outfit()) }
-
-    Scaffold(modifier = modifier, topBar = {
-        if (isAuthScreens.not()) TopBar(title = currentRoute, profile = {
-            bottomSheetType = BottomSheetType.Profile
-            showBottomSheet = true
-        }, logout = {
-            clearSession()
-            navController.navigate(Screen.Auth.route) { navController.popBackStack() }
-        })
-    }, bottomBar = {
-        if (isAuthScreens.not()) BottomBar(
-            screens = listOf(Screen.MyOutfit, Screen.Recommend),
-            currentRoute = currentRoute,
-            navController = navController
+    var selectedOutfit by remember {
+        mutableStateOf(
+            value = Outfit(),
         )
-    }, floatingActionButton = {
-        if (isAuthScreens.not()) FloatingActionButton(currentRoute = currentRoute, onClick = {
-            when (currentRoute) {
-                Screen.MyOutfit.route -> bottomSheetType = BottomSheetType.AddOutfit
-                Screen.Recommend.route -> bottomSheetType = BottomSheetType.SettingRecommend
-            }
-            showBottomSheet = true
-        })
-    }) {
+    }
+
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            if (isAuthScreens.not()) TopBar(
+                title = currentRoute,
+                profile = {
+                    bottomSheetType = BottomSheetType.Profile
+                    showBottomSheet = true
+                },
+                logout = {
+                    clearSession()
+                    navController.navigate(Screen.Auth.route) { navController.popBackStack() }
+                },
+            )
+        },
+        bottomBar = {
+            if (isAuthScreens.not()) BottomBar(
+                screens = listOf(Screen.MyOutfit, Screen.Recommend),
+                currentRoute = currentRoute,
+                navController = navController,
+            )
+        },
+        floatingActionButton = {
+            if (isAuthScreens.not()) FloatingActionButton(
+                currentRoute = currentRoute,
+                onClick = {
+                    when (currentRoute) {
+                        Screen.MyOutfit.route -> bottomSheetType = BottomSheetType.AddOutfit
+                        Screen.Recommend.route -> bottomSheetType = BottomSheetType.SettingRecommend
+                    }
+                    showBottomSheet = true
+                },
+            )
+        },
+    ) {
         NavHost(
             navController = navController,
             startDestination = startDestination,
-            modifier = Modifier.padding(it),
+            modifier = Modifier.padding(
+                paddingValues = it,
+            ),
         ) {
-            navigation(startDestination = Screen.Login.route, route = Screen.Auth.route) {
-                composable(route = Screen.Login.route) {
+            navigation(
+                startDestination = Screen.Login.route,
+                route = Screen.Auth.route,
+            ) {
+                composable(
+                    route = Screen.Login.route,
+                ) {
                     val viewModel: LoginViewModel = koinViewModel()
                     LoginScreen(
-                        state = viewModel.state.collectAsState(initial = State.Idle).value,
+                        state = viewModel.state.collectAsState().value,
                         login = viewModel::login,
                         navigateToMain = { navController.navigate(Screen.Main.route) { navController.popBackStack() } },
                         navigateToRegister = { navController.navigate(Screen.Register.route) },
                     )
                 }
-                composable(route = Screen.Register.route) {
+                composable(
+                    route = Screen.Register.route,
+                ) {
                     val viewModel: RegisterViewModel = koinViewModel()
-                    RegisterScreen(state = viewModel.state.collectAsState(initial = State.Idle).value,
+                    RegisterScreen(
+                        state = viewModel.state.collectAsState().value,
                         register = viewModel::register,
-                        navigateToLogin = { navController.navigateUp() })
+                        navigateToLogin = { navController.navigateUp() },
+                    )
                 }
             }
-            navigation(startDestination = Screen.MyOutfit.route, route = Screen.Main.route) {
-                composable(route = Screen.MyOutfit.route) {
+            navigation(
+                startDestination = Screen.MyOutfit.route,
+                route = Screen.Main.route,
+            ) {
+                composable(
+                    route = Screen.MyOutfit.route,
+                ) {
                     val viewModel: MyOutfitViewModel = koinViewModel()
-                    MyOutfitScreen(state = viewModel.state.collectAsState(initial = State.Idle).value,
+                    MyOutfitScreen(
+                        state = viewModel.state.collectAsState().value,
                         getOutfit = viewModel::getOutfit,
                         detailOutfit = { outfit ->
                             selectedOutfit = outfit
                             bottomSheetType = BottomSheetType.DetailOutfit
                             showBottomSheet = true
-                        })
+                        },
+                    )
                 }
-                composable(route = Screen.Recommend.route) {
+                composable(
+                    route = Screen.Recommend.route,
+                ) {
                     val viewModel: RecommendViewModel = koinViewModel()
                     RecommendScreen(
-                        state = viewModel.state.collectAsState(initial = State.Idle).value,
+                        state = viewModel.state.collectAsState().value,
                         getRecommend = viewModel::getRecommend,
                         detailRecommend = {
                             bottomSheetType = BottomSheetType.DetailOutfit
