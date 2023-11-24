@@ -13,7 +13,7 @@ object InputChecker {
         else -> ""
     }
 
-    fun String.passwordChecker(isStrict: Boolean = true): String = when {
+    fun String.passwordChecker(isStrict: Boolean = false): String = when {
         this.length < 8 -> "Password must contain at least 8 characters"
         isStrict -> this.passwordCheckerStrict()
         else -> ""

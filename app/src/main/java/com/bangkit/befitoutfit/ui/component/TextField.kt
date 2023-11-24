@@ -36,7 +36,7 @@ fun TextField(
     focusManager: FocusManager? = null,
     imeAction: ImeAction = ImeAction.Next,
     isVisible: Boolean = false,
-    isStrict: Boolean = true,
+    isStrict: Boolean = false,
 ) {
     OutlinedTextField(
         value = value,
