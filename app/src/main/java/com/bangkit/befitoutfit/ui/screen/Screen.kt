@@ -15,6 +15,8 @@ sealed class Screen(
     val fabIcon: ImageVector = Icons.Outlined.Circle,
 ) {
     data object Auth : Screen(route = "Auth")
+    data object Login : Screen(route = "Login")
+    data object Register : Screen(route = "Register")
     data object Main : Screen(route = "Main")
     data object MyOutfit : Screen(
         route = "My Outfit",

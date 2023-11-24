@@ -28,30 +28,30 @@ import com.bangkit.befitoutfit.ui.component.BottomSheet
 import com.bangkit.befitoutfit.ui.component.FloatingActionButton
 import com.bangkit.befitoutfit.ui.component.TopBar
 import com.bangkit.befitoutfit.ui.screen.Screen
-import com.bangkit.befitoutfit.ui.screen.auth.AuthScreen
-import com.bangkit.befitoutfit.ui.screen.auth.AuthViewModel
+import com.bangkit.befitoutfit.ui.screen.login.LoginScreen
+import com.bangkit.befitoutfit.ui.screen.login.LoginViewModel
 import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitScreen
 import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.recommend.RecommendScreen
 import com.bangkit.befitoutfit.ui.screen.recommend.RecommendViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BeFitOutfitApp(
-    isLoggedIn: Boolean,
+    startDestination: String,
     session: Session,
     clearSession: () -> Unit,
     modifier: Modifier = Modifier,
+    scope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-) {/*TODO: make BeFitOutfitApp stateless*/
-    val scope = rememberCoroutineScope()
-
-    val startDestination = if (isLoggedIn) Screen.Main.route else Screen.Auth.route
+) {
     val currentRoute =
         navController.currentBackStackEntryAsState().value?.destination?.route ?: startDestination
+    val isAuthScreens = listOf(Screen.Login.route, Screen.Register.route).contains(currentRoute)
 
     var showBottomSheet by remember { mutableStateOf(false) }
     var bottomSheetType by remember { mutableStateOf<BottomSheetType>(BottomSheetType.Profile) }
@@ -59,7 +59,7 @@ fun BeFitOutfitApp(
     var selectedOutfit by remember { mutableStateOf(Outfit()) }
 
     Scaffold(modifier = modifier, topBar = {
-        if (currentRoute != Screen.Auth.route) TopBar(title = currentRoute, profile = {
+        if (isAuthScreens.not()) TopBar(title = currentRoute, profile = {
             bottomSheetType = BottomSheetType.Profile
             showBottomSheet = true
         }, logout = {
@@ -67,39 +67,42 @@ fun BeFitOutfitApp(
             navController.navigate(Screen.Auth.route) { navController.popBackStack() }
         })
     }, bottomBar = {
-        if (currentRoute != Screen.Auth.route) BottomBar(
+        if (isAuthScreens.not()) BottomBar(
             screens = listOf(Screen.MyOutfit, Screen.Recommend),
             currentRoute = currentRoute,
             navController = navController
         )
     }, floatingActionButton = {
-        if (currentRoute != Screen.Auth.route) FloatingActionButton(
-            currentRoute = currentRoute,
-            onClick = {
-                when (currentRoute) {
-                    Screen.MyOutfit.route -> bottomSheetType = BottomSheetType.AddOutfit
-                    Screen.Recommend.route -> bottomSheetType = BottomSheetType.SettingRecommend
-                }
-                showBottomSheet = true
-            })
+        if (isAuthScreens.not()) FloatingActionButton(currentRoute = currentRoute, onClick = {
+            when (currentRoute) {
+                Screen.MyOutfit.route -> bottomSheetType = BottomSheetType.AddOutfit
+                Screen.Recommend.route -> bottomSheetType = BottomSheetType.SettingRecommend
+            }
+            showBottomSheet = true
+        })
     }) {
         NavHost(
             navController = navController,
             startDestination = startDestination,
             modifier = Modifier.padding(it),
         ) {
-            composable(route = Screen.Auth.route) {
-                val viewModel: AuthViewModel = koinViewModel()
-                AuthScreen(stateLogin = viewModel.stateLogin.collectAsState(initial = State.Idle).value,
-                    stateRegister = viewModel.stateRegister.collectAsState(initial = State.Idle).value,
-                    onClickLogin = viewModel::login,
-                    onClickRegister = viewModel::register,
-                    navigateToMain = { navController.navigate(Screen.Main.route) { navController.popBackStack() } })
+            navigation(startDestination = Screen.Login.route, route = Screen.Auth.route) {
+                composable(route = Screen.Login.route) {
+                    val viewModel: LoginViewModel = koinViewModel()
+                    LoginScreen(
+                        state = viewModel.state.collectAsState(initial = State.Idle).value,
+                        login = viewModel::login,
+                        navigateToMain = { navController.navigate(Screen.Main.route) { navController.popBackStack() } },
+                        navigateToRegister = { navController.navigate(Screen.Register.route) },
+                    )
+                }
+                composable(route = Screen.Register.route) {}
             }
             navigation(startDestination = Screen.MyOutfit.route, route = Screen.Main.route) {
                 composable(route = Screen.MyOutfit.route) {
                     val viewModel: MyOutfitViewModel = koinViewModel()
-                    MyOutfitScreen(state = viewModel.state.collectAsState(initial = State.Idle).value,
+                    MyOutfitScreen(
+                        state = viewModel.state.collectAsState(initial = State.Idle).value,
                         getOutfit = viewModel::getOutfit,
                         detailOutfit = { outfit ->
                             selectedOutfit = outfit

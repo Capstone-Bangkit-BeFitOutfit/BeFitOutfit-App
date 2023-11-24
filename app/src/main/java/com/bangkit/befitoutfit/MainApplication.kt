@@ -16,8 +16,8 @@ import com.bangkit.befitoutfit.data.repository.RecommendRepository
 import com.bangkit.befitoutfit.data.repository.SessionRepository
 import com.bangkit.befitoutfit.data.repository.SettingRepository
 import com.bangkit.befitoutfit.ui.screen.addOutfit.AddOutfitViewModel
-import com.bangkit.befitoutfit.ui.screen.auth.AuthViewModel
 import com.bangkit.befitoutfit.ui.screen.detailOutfit.DetailOutfitViewModel
+import com.bangkit.befitoutfit.ui.screen.login.LoginViewModel
 import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.profile.ProfileViewModel
 import com.bangkit.befitoutfit.ui.screen.recommend.RecommendViewModel
@@ -69,12 +69,12 @@ class MainApplication : Application() {
             single { SettingRepository(get()) }
 
             viewModel { AddOutfitViewModel(get()) }
-            viewModel { AuthViewModel(get(), get()) }
             viewModel { DetailOutfitViewModel(get()) }
+            viewModel { LoginViewModel(get(), get()) }
             viewModel { MainViewModel(get()) }
             viewModel { MyOutfitViewModel(get()) }
-            viewModel { RecommendViewModel(get()) }
             viewModel { ProfileViewModel(get()) }
+            viewModel { RecommendViewModel(get()) }
             viewModel { SettingRecommendViewModel(get()) }
         }
     }
