@@ -47,47 +47,34 @@ class MainApplication : Application() {
 
     companion object {
         private val Context.session by preferencesDataStore(name = "session")
-
         private val Context.setting by preferencesDataStore(name = "setting")
-
-        private val client = OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().setLevel(if (DEBUG) BODY else NONE)).build()
 
         val app = module {
             single { SessionPreferences(androidContext().session) }
-
             single { SettingPreferences(androidContext().setting) }
 
             single {
                 Retrofit.Builder().baseUrl(if (MOCK) BASE_URL_MOCK else BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create()).client(client).build()
-                    .create(ApiService::class.java)
+                    .addConverterFactory(GsonConverterFactory.create()).client(
+                        OkHttpClient.Builder()
+                            .addInterceptor(HttpLoggingInterceptor().setLevel(if (DEBUG) BODY else NONE))
+                            .build()
+                    ).build().create(ApiService::class.java)
             }
 
-            single { SessionRepository(get()) }
-
             single { AuthRepository(get()) }
-
             single { OutfitRepository(get()) }
-
             single { RecommendRepository(get(), get(), get()) }
-
+            single { SessionRepository(get()) }
             single { SettingRepository(get()) }
 
-            viewModel { MainViewModel(get()) }
-
-            viewModel { AuthViewModel(get(), get()) }
-
-            viewModel { MyOutfitViewModel(get()) }
-
-            viewModel { RecommendViewModel(get()) }
-
-            viewModel { ProfileViewModel(get()) }
-
             viewModel { AddOutfitViewModel(get()) }
-
+            viewModel { AuthViewModel(get(), get()) }
             viewModel { DetailOutfitViewModel(get()) }
-
+            viewModel { MainViewModel(get()) }
+            viewModel { MyOutfitViewModel(get()) }
+            viewModel { RecommendViewModel(get()) }
+            viewModel { ProfileViewModel(get()) }
             viewModel { SettingRecommendViewModel(get()) }
         }
     }
