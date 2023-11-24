@@ -36,14 +36,14 @@ fun TextField(
     focusManager: FocusManager? = null,
     imeAction: ImeAction = ImeAction.Next,
     isVisible: Boolean = false,
-    isStrict: Boolean = true,
+    isStrict: Boolean = false,
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp),
+            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
         enabled = enable,
         label = { Text(text = textFieldType.type) },
         placeholder = { Text(text = "Enter your ${textFieldType.type}") },

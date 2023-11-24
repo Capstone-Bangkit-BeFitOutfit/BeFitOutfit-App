@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.ui.BeFitOutfitApp
+import com.bangkit.befitoutfit.ui.screen.Screen
 import com.bangkit.befitoutfit.ui.theme.BeFitOutfitTheme
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -31,7 +32,7 @@ class MainActivity : ComponentActivity() {
                         val viewModel: MainViewModel = koinViewModel()
                         val flowSession = viewModel.getSession()
                         BeFitOutfitApp(
-                            isLoggedIn = runBlocking { flowSession.first().email.isNotEmpty() },
+                            startDestination = if (runBlocking { flowSession.first().email.isNotEmpty() }) Screen.Main.route else Screen.Auth.route,
                             session = flowSession.collectAsState(initial = Session()).value,
                             clearSession = viewModel::clearSession,
                         )

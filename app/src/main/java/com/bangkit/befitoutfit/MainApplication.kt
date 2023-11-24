@@ -16,11 +16,12 @@ import com.bangkit.befitoutfit.data.repository.RecommendRepository
 import com.bangkit.befitoutfit.data.repository.SessionRepository
 import com.bangkit.befitoutfit.data.repository.SettingRepository
 import com.bangkit.befitoutfit.ui.screen.addOutfit.AddOutfitViewModel
-import com.bangkit.befitoutfit.ui.screen.auth.AuthViewModel
 import com.bangkit.befitoutfit.ui.screen.detailOutfit.DetailOutfitViewModel
+import com.bangkit.befitoutfit.ui.screen.login.LoginViewModel
 import com.bangkit.befitoutfit.ui.screen.myOutfit.MyOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.profile.ProfileViewModel
 import com.bangkit.befitoutfit.ui.screen.recommend.RecommendViewModel
+import com.bangkit.befitoutfit.ui.screen.register.RegisterViewModel
 import com.bangkit.befitoutfit.ui.screen.settingRecommend.SettingRecommendViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -47,47 +48,35 @@ class MainApplication : Application() {
 
     companion object {
         private val Context.session by preferencesDataStore(name = "session")
-
         private val Context.setting by preferencesDataStore(name = "setting")
-
-        private val client = OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().setLevel(if (DEBUG) BODY else NONE)).build()
 
         val app = module {
             single { SessionPreferences(androidContext().session) }
-
             single { SettingPreferences(androidContext().setting) }
 
             single {
                 Retrofit.Builder().baseUrl(if (MOCK) BASE_URL_MOCK else BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create()).client(client).build()
-                    .create(ApiService::class.java)
+                    .addConverterFactory(GsonConverterFactory.create()).client(
+                        OkHttpClient.Builder()
+                            .addInterceptor(HttpLoggingInterceptor().setLevel(if (DEBUG) BODY else NONE))
+                            .build()
+                    ).build().create(ApiService::class.java)
             }
 
-            single { SessionRepository(get()) }
-
             single { AuthRepository(get()) }
-
             single { OutfitRepository(get()) }
-
             single { RecommendRepository(get(), get(), get()) }
-
+            single { SessionRepository(get()) }
             single { SettingRepository(get()) }
 
-            viewModel { MainViewModel(get()) }
-
-            viewModel { AuthViewModel(get(), get()) }
-
-            viewModel { MyOutfitViewModel(get()) }
-
-            viewModel { RecommendViewModel(get()) }
-
-            viewModel { ProfileViewModel(get()) }
-
             viewModel { AddOutfitViewModel(get()) }
-
             viewModel { DetailOutfitViewModel(get()) }
-
+            viewModel { LoginViewModel(get(), get()) }
+            viewModel { MainViewModel(get()) }
+            viewModel { MyOutfitViewModel(get()) }
+            viewModel { ProfileViewModel(get()) }
+            viewModel { RecommendViewModel(get()) }
+            viewModel { RegisterViewModel(get()) }
             viewModel { SettingRecommendViewModel(get()) }
         }
     }
