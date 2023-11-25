@@ -6,6 +6,11 @@ import com.bangkit.befitoutfit.data.model.SettingRecommend
 class SettingRepository(private val settingPreferences: SettingPreferences) {
     fun getSettingRecommend() = settingPreferences.getRecommend()
 
-    suspend fun setSettingRecommend(settingRecommend: SettingRecommend) =
-        settingPreferences.setRecommend(settingRecommend = settingRecommend)
+    suspend fun setSettingRecommend(
+        event: String,
+    ) = settingPreferences.setRecommend(
+        settingRecommend = SettingRecommend(
+            event = event,
+        )
+    )
 }
