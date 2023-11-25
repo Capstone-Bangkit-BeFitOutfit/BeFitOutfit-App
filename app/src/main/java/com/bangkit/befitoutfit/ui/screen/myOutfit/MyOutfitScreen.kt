@@ -17,14 +17,18 @@ fun MyOutfitScreen(
     getOutfit: () -> Unit = {},
     detailOutfit: (Outfit) -> Unit = {},
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+    ) {
         when (state) {
             is State.Idle -> getOutfit()
             is State.Loading -> {}
             is State.Success -> ColumnOutfit(
                 outfits = state.data.data,
-                modifier = Modifier.align(alignment = if (state.data.data.isEmpty()) Alignment.Center else Alignment.TopCenter),
-                onClick = detailOutfit
+                modifier = Modifier.align(
+                    alignment = if (state.data.data.isEmpty()) Alignment.Center else Alignment.TopCenter,
+                ),
+                onClick = detailOutfit,
             )
 
             is State.Error -> {}

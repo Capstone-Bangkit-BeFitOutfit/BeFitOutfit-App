@@ -43,26 +43,46 @@ fun TextField(
         onValueChange = onValueChange,
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            .padding(
+                start = 16.dp,
+                end = 16.dp,
+                bottom = 16.dp,
+            ),
         enabled = enable,
-        label = { Text(text = textFieldType.type) },
-        placeholder = { Text(text = "Enter your ${textFieldType.type}") },
+        label = {
+            Text(
+                text = textFieldType.type,
+            )
+        },
+        placeholder = {
+            Text(
+                text = "Enter your ${textFieldType.type}",
+            )
+        },
         leadingIcon = {
             Icon(
-                imageVector = textFieldType.leadingIcon, contentDescription = textFieldType.type
+                imageVector = textFieldType.leadingIcon,
+                contentDescription = textFieldType.type,
             )
         },
         trailingIcon = {
             when (textFieldType) {
-                TextFieldType.Password -> IconButton(onClick = onClick) {
+                TextFieldType.Password -> IconButton(
+                    onClick = onClick,
+                ) {
                     Icon(
                         imageVector = if (isVisible) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
-                        contentDescription = "${if (isVisible) " Hide " else " Show "} ${textFieldType.type}"
+                        contentDescription = "${if (isVisible) " Hide " else " Show "} ${textFieldType.type}",
                     )
                 }
 
-                else -> if (value.isNotEmpty()) IconButton(onClick = onClick) {
-                    Icon(imageVector = Icons.Outlined.Cancel, contentDescription = "Cancel")
+                else -> if (value.isNotEmpty()) IconButton(
+                    onClick = onClick,
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Cancel,
+                        contentDescription = "Cancel",
+                    )
                 }
             }
         },
@@ -71,19 +91,24 @@ fun TextField(
                 text = when {
                     value.isEmpty() -> "${textFieldType.type} is required"
                     textFieldType == TextFieldType.Email -> value.emailChecker()
-                    textFieldType == TextFieldType.Password -> value.passwordChecker(isStrict = isStrict)
+                    textFieldType == TextFieldType.Password -> value.passwordChecker(
+                        isStrict = isStrict,
+                    )
+
                     else -> ""
                 }
             )
         },
         isError = !isValid,
-        visualTransformation = if (textFieldType == TextFieldType.Password && !isVisible) PasswordVisualTransformation()
-        else VisualTransformation.None,
+        visualTransformation = if (textFieldType == TextFieldType.Password && !isVisible) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(
-            keyboardType = textFieldType.keyboardType, imeAction = imeAction
+            keyboardType = textFieldType.keyboardType,
+            imeAction = imeAction,
         ),
-        keyboardActions = KeyboardActions(onNext = { focusManager?.moveFocus(FocusDirection.Down) },
-            onDone = { focusManager?.clearFocus() }),
-        singleLine = true
+        keyboardActions = KeyboardActions(
+            onDone = { focusManager?.clearFocus() },
+            onNext = { focusManager?.moveFocus(FocusDirection.Down) },
+        ),
+        singleLine = true,
     )
 }

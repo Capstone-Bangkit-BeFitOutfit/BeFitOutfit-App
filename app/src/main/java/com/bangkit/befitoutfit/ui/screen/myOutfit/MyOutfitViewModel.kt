@@ -5,18 +5,31 @@ import androidx.lifecycle.viewModelScope
 import com.bangkit.befitoutfit.data.model.Outfits
 import com.bangkit.befitoutfit.data.repository.OutfitRepository
 import com.bangkit.befitoutfit.helper.State
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-class MyOutfitViewModel(private val outfitRepository: OutfitRepository) : ViewModel() {
+class MyOutfitViewModel(
+    private val outfitRepository: OutfitRepository,
+) : ViewModel() {
     var state = MutableStateFlow<State<Outfits>>(State.Idle)
         private set
 
-    fun getOutfit() = viewModelScope.launch {
-        state.value = State.Loading
-        outfitRepository.getOutfit()
-            .catch { state.value = State.Error(it.message ?: "Unknown error") }
-            .collect { state.value = State.Success(it) }
+    fun getOutfit() = viewModelScope.launch(
+        context = Dispatchers.IO,
+    ) {
+        outfitRepository.getOutfit().onStart {
+            state.value = State.Loading
+        }.catch {
+            state.value = State.Error(
+                message = it.message ?: "Unknown error",
+            )
+        }.collect {
+            state.value = State.Success(
+                data = it,
+            )
+        }
     }
 }

@@ -39,7 +39,7 @@ fun ContentLogin(
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         TextField(
             textFieldType = TextFieldType.Email,
@@ -60,7 +60,7 @@ fun ContentLogin(
             onClick = onPasswordClick,
             focusManager = focusManager,
             isVisible = isPasswordVisible,
-            imeAction = ImeAction.Done
+            imeAction = ImeAction.Done,
         )
 
         OutlinedButton(
@@ -70,17 +70,29 @@ fun ContentLogin(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-            enabled = enable && emailValue.isNotEmpty() && passwordValue.isNotEmpty() && emailValid && passwordValid
-        ) { Text(text = "Login") }
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = 16.dp,
+                ),
+            enabled = enable && emailValue.isNotEmpty() && passwordValue.isNotEmpty() && emailValid && passwordValid,
+        ) {
+            Text(
+                text = "Login",
+            )
+        }
 
         Row {
-            Text(text = "Don't have an account? ")
             Text(
-                text = "Register", modifier = Modifier.clickable {
+                text = "Don't have an account? ",
+            )
+            Text(
+                text = "Register",
+                modifier = Modifier.clickable {
                     focusManager.clearFocus()
                     onRegisterClick()
-                }, color = MaterialTheme.colorScheme.primary
+                },
+                color = MaterialTheme.colorScheme.primary,
             )
         }
     }

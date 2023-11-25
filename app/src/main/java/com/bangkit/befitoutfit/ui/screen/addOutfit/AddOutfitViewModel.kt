@@ -10,20 +10,41 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-class AddOutfitViewModel(private val outfitRepository: OutfitRepository) : ViewModel() {
+class AddOutfitViewModel(
+    private val outfitRepository: OutfitRepository,
+) : ViewModel() {
     var state = MutableStateFlow<State<Info>>(State.Idle)
         private set
 
-    fun addOutfit(name: String, type: String, imageUrl: String) =
-        viewModelScope.launch(context = Dispatchers.IO) {
+    fun addOutfit(
+        name: String,
+        type: String,
+        imageUrl: String,
+    ) = viewModelScope.launch(
+        context = Dispatchers.IO,
+    ) {
+        outfitRepository.addOutfit(
+            name = name,
+            type = type,
+            imageUrl = imageUrl,
+        ).onStart {
             state.value = State.Loading
-            outfitRepository.addOutfit(name = name, type = type, imageUrl = imageUrl)
-                .catch { state.value = State.Error(message = it.message ?: "Unknown error") }
-                .onCompletion {
-                    delay(timeMillis = 50L)
-                    state.value = State.Idle
-                }.collect { state.value = State.Success(data = it) }
+        }.catch {
+            state.value = State.Error(
+                message = it.message ?: "Unknown error",
+            )
+        }.onCompletion {
+            delay(
+                timeMillis = 50L,
+            )
+            state.value = State.Idle
+        }.collect {
+            state.value = State.Success(
+                data = it,
+            )
         }
+    }
 }

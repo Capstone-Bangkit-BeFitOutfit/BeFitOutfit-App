@@ -43,7 +43,7 @@ fun ContentRegister(
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         TextField(
             textFieldType = TextFieldType.Name,
@@ -85,17 +85,29 @@ fun ContentRegister(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = 16.dp,
+                ),
             enabled = enable && nameValue.isNotEmpty() && emailValue.isNotEmpty() && passwordValue.isNotEmpty() && nameValid && emailValid && passwordValid,
-        ) { Text(text = "Register") }
+        ) {
+            Text(
+                text = "Register",
+            )
+        }
 
         Row {
-            Text(text = "Already have an account? ")
             Text(
-                text = "Login", modifier = Modifier.clickable {
+                text = "Already have an account? ",
+            )
+            Text(
+                text = "Login",
+                modifier = Modifier.clickable {
                     focusManager.clearFocus()
                     onLoginClick()
-                }, color = MaterialTheme.colorScheme.primary
+                },
+                color = MaterialTheme.colorScheme.primary,
             )
         }
     }

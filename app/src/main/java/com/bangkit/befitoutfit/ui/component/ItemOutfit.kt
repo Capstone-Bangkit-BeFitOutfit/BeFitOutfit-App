@@ -25,28 +25,60 @@ import com.bangkit.befitoutfit.data.model.Outfit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ItemOutfit(outfit: Outfit, modifier: Modifier = Modifier, onClick: (Outfit) -> Unit = {}) {
-    Card(modifier = modifier.fillMaxWidth(), onClick = { onClick(outfit) }) {
+fun ItemOutfit(
+    outfit: Outfit,
+    modifier: Modifier = Modifier,
+    onClick: (Outfit) -> Unit = {},
+) {
+    Card(
+        onClick = { onClick(outfit) },
+        modifier = modifier.fillMaxWidth(),
+    ) {
         Row {
             Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(16.dp)
+                    .weight(
+                        weight = 1f,
+                    )
+                    .padding(
+                        all = 16.dp,
+                    ),
             ) {
-                Text(text = outfit.name, style = MaterialTheme.typography.titleLarge)
+                Text(
+                    text = outfit.name,
+                    style = MaterialTheme.typography.titleLarge,
+                )
 
-                Spacer(modifier = Modifier.padding(4.dp))
+                Spacer(
+                    modifier = Modifier.padding(
+                        all = 4.dp,
+                    )
+                )
 
-                Text(text = "Type: ${outfit.type}", style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = "Type: ${outfit.type}",
+                    style = MaterialTheme.typography.bodyMedium,
+                )
             }
 
             AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current).data(outfit.imageUrl)
-                    .crossfade(true).build(),
+                model = ImageRequest.Builder(
+                    context = LocalContext.current,
+                ).data(
+                    data = outfit.imageUrl,
+                ).crossfade(
+                    enable = true,
+                ).build(),
                 contentDescription = "${outfit.name}'s outfit image",
-                modifier = Modifier.size(100.dp),
-                placeholder = painterResource(R.drawable.image_placeholder),
-                error = rememberVectorPainter(Icons.Outlined.ErrorOutline)
+                modifier = Modifier.size(
+                    size = 100.dp,
+                ),
+                placeholder = painterResource(
+                    id = R.drawable.image_placeholder,
+                ),
+                error = rememberVectorPainter(
+                    image = Icons.Outlined.ErrorOutline,
+                ),
             )
         }
     }

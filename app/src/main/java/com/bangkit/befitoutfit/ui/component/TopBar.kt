@@ -19,13 +19,32 @@ fun TopBar(
     profile: () -> Unit = {},
     logout: () -> Unit = {},
 ) {
-    CenterAlignedTopAppBar(title = { Text(text = title) }, modifier = modifier, navigationIcon = {
-        IconButton(onClick = profile) {
-            Icon(imageVector = Icons.Outlined.AccountCircle, contentDescription = "Profile")
-        }
-    }, actions = {
-        IconButton(onClick = logout) {
-            Icon(imageVector = Icons.Outlined.Logout, contentDescription = "Logout")
-        }
-    })
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = title,
+            )
+        },
+        modifier = modifier,
+        navigationIcon = {
+            IconButton(
+                onClick = profile,
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.AccountCircle,
+                    contentDescription = "Profile",
+                )
+            }
+        },
+        actions = {
+            IconButton(
+                onClick = logout,
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Logout,
+                    contentDescription = "Logout",
+                )
+            }
+        },
+    )
 }
