@@ -13,7 +13,7 @@ class RecommendRepository(
 ) {
     fun getRecommend() = flow {
         emit(
-            apiService.getRecommend(
+            value = apiService.getRecommend(
                 email = sessionPreferences.getSession().first().email,
                 event = settingPreferences.getRecommend().first().event
             )
