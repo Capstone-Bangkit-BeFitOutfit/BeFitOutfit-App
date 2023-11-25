@@ -143,66 +143,29 @@ fun BottomSheet(
                 BottomSheetType.DetailOutfit -> {
                     val viewModel: DetailOutfitViewModel = koinViewModel()
 
-                    val state = viewModel.state.collectAsState().value
-
-                    val enable = state is State.Idle
-
-                    val focusManager = LocalFocusManager.current
-
-                    var nameOutfitValue by remember { mutableStateOf(outfit.name) }
-                    var nameOutfitValid by remember { mutableStateOf(true) }
-
-                    when (state) {/*TODO: update outfit state management*/
-                        is State.Idle -> {}
-                        is State.Loading -> {}
-                        is State.Success -> {
-                            nameOutfitValue = ""
-                            nameOutfitValid = true
-                            onClickDismiss()
-                        }
-
-                        is State.Error -> {}
+                    var nameOutfitValue by remember {
+                        mutableStateOf(
+                            value = outfit.name,
+                        )
+                    }
+                    var nameOutfitValid by remember {
+                        mutableStateOf(
+                            value = true,
+                        )
                     }
 
-                    TextField(
-                        textFieldType = TextFieldType.OutfitName,
-                        enable = enable,
-                        value = nameOutfitValue,
-                        isValid = nameOutfitValid,
-                        onValueChange = {
+                    ContentDetailOutfit(
+                        state = viewModel.state.collectAsState().value,
+                        nameOutfitValue = nameOutfitValue,
+                        nameOutfitValid = nameOutfitValid,
+                        onNameOutfitValueChange = {
                             nameOutfitValid = it.isNotEmpty()
                             nameOutfitValue = it
                         },
-                        onClick = { nameOutfitValue = "" },
-                        focusManager = focusManager,
-                        imeAction = ImeAction.Done
-                    )
-
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                            .padding(bottom = 16.dp)
-                    ) {}
-
-                    Row(modifier = Modifier.padding(bottom = 16.dp)) {
-                        Button(
-                            onClick = { /*TODO: feature add image from camera*/ },
-                            modifier = Modifier.weight(1f),
-                            enabled = enable
-                        ) { Text(text = "Camera") }
-
-                        Spacer(modifier = Modifier.padding(8.dp))
-
-                        Button(
-                            onClick = { /*TODO: feature add image from gallery*/ },
-                            modifier = Modifier.weight(1f),
-                            enabled = enable
-                        ) { Text(text = "Gallery") }
-                    }
-
-                    OutlinedButton(
-                        onClick = {
+                        onNameOutfitClick = {
+                            nameOutfitValue = ""
+                        },
+                        onUpdateClick = {
                             viewModel.updateOutfit(
                                 id = outfit.id,
                                 name = nameOutfitValue,
@@ -210,9 +173,8 @@ fun BottomSheet(
                                 imageUrl = outfit.imageUrl
                             )
                         },
-                        modifier = Modifier.fillMaxWidth(),
-                        enabled = enable/*TODO: add another enable logic*/
-                    ) { Text(text = "Update") }
+                        onClickDismiss = onClickDismiss,
+                    )
                 }
 
                 BottomSheetType.AddOutfit -> {
