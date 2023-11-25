@@ -8,13 +8,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
@@ -27,9 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bangkit.befitoutfit.data.model.Outfit
@@ -37,8 +32,6 @@ import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.data.model.SettingRecommend
 import com.bangkit.befitoutfit.helper.BottomSheetType
 import com.bangkit.befitoutfit.helper.InputChecker.emailChecker
-import com.bangkit.befitoutfit.helper.State
-import com.bangkit.befitoutfit.helper.TextFieldType
 import com.bangkit.befitoutfit.ui.screen.addOutfit.AddOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.detailOutfit.DetailOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.profile.ProfileViewModel
@@ -180,12 +173,6 @@ fun BottomSheet(
                 BottomSheetType.AddOutfit -> {
                     val viewModel: AddOutfitViewModel = koinViewModel()
 
-                    val state = viewModel.state.collectAsState().value
-
-                    val enable = state is State.Idle
-
-                    val focusManager = LocalFocusManager.current
-
                     var nameOutfitValue by remember {
                         mutableStateOf(
                             value = "",
@@ -197,94 +184,26 @@ fun BottomSheet(
                         )
                     }
 
-                    when (state) {/*TODO: add outfit state management*/
-                        is State.Idle -> {}
-                        is State.Loading -> {}
-                        is State.Success -> {
-                            nameOutfitValue = ""
-                            nameOutfitValid = true
-                            onClickDismiss()
-                        }
-
-                        is State.Error -> {}
-                    }
-
-                    TextField(
-                        textFieldType = TextFieldType.OutfitName,
-                        enable = enable,
-                        value = nameOutfitValue,
-                        isValid = nameOutfitValid,
-                        onValueChange = {
+                    ContentAddOutfit(
+                        state = viewModel.state.collectAsState().value,
+                        nameOutfitValue = nameOutfitValue,
+                        nameOutfitValid = nameOutfitValid,
+                        onNameOutfitValueChange = {
                             nameOutfitValid = it.isNotEmpty()
                             nameOutfitValue = it
                         },
-                        onClick = { nameOutfitValue = "" },
-                        focusManager = focusManager,
-                        imeAction = ImeAction.Done,
-                    )
-
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(
-                                height = 200.dp,
-                            )
-                            .padding(
-                                bottom = 16.dp,
-                            )
-                    ) {}
-
-                    Row(
-                        modifier = Modifier.padding(
-                            bottom = 16.dp,
-                        )
-                    ) {
-                        Button(
-                            onClick = {
-                                /*TODO: feature add image from camera*/
-                            }, modifier = Modifier.weight(
-                                weight = 1f,
-                            ), enabled = enable
-                        ) {
-                            Text(
-                                text = "Camera",
-                            )
-                        }
-
-                        Spacer(
-                            modifier = Modifier.padding(
-                                all = 8.dp,
-                            )
-                        )
-
-                        Button(
-                            onClick = {
-                                /*TODO: feature add image from gallery*/
-                            }, modifier = Modifier.weight(
-                                weight = 1f,
-                            ), enabled = enable
-                        ) {
-                            Text(
-                                text = "Gallery",
-                            )
-                        }
-                    }
-
-                    OutlinedButton(
-                        onClick = {
+                        onNameOutfitClick = {
+                            nameOutfitValue = ""
+                        },
+                        onAddClick = {
                             viewModel.addOutfit(
                                 name = nameOutfitValue,
                                 type = outfit.type,
                                 imageUrl = outfit.imageUrl
                             )
                         },
-                        modifier = Modifier.fillMaxWidth(),
-                        enabled = enable/*TODO: add another enable logic*/
-                    ) {
-                        Text(
-                            text = "Upload",
-                        )
-                    }
+                        onClickDismiss = onClickDismiss,
+                    )
                 }
 
                 BottomSheetType.SettingRecommend -> {
