@@ -2,6 +2,11 @@ package com.bangkit.befitoutfit.ui.screen.myOutfit
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -10,28 +15,43 @@ import com.bangkit.befitoutfit.data.model.Outfits
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.ui.component.ColumnOutfit
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MyOutfitScreen(
     state: State<Outfits>,
+    outfits: List<Outfit>,
     modifier: Modifier = Modifier,
     getOutfit: () -> Unit = {},
     detailOutfit: (Outfit) -> Unit = {},
+    pullRefreshState: PullRefreshState = rememberPullRefreshState(
+        refreshing = state is State.Loading,
+        onRefresh = getOutfit,
+    ),
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .pullRefresh(
+                state = pullRefreshState,
+            ),
     ) {
         when (state) {
-            is State.Idle -> getOutfit()
-            is State.Loading -> {}
-            is State.Success -> ColumnOutfit(
-                outfits = state.data.data,
-                modifier = Modifier.align(
-                    alignment = if (state.data.data.isEmpty()) Alignment.Center else Alignment.TopCenter,
-                ),
-                onClick = detailOutfit,
-            )
-
+            is State.Success -> {}
             is State.Error -> {}
+            else -> {}
         }
+
+        ColumnOutfit(
+            outfits = outfits,
+            onClick = detailOutfit,
+        )
+
+        PullRefreshIndicator(
+            refreshing = state is State.Loading,
+            state = pullRefreshState,
+            modifier = Modifier.align(
+                alignment = Alignment.TopCenter,
+            ),
+        )
     }
 }

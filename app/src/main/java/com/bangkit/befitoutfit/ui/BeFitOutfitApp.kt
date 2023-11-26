@@ -149,6 +149,7 @@ fun BeFitOutfitApp(
                     val viewModel: MyOutfitViewModel = koinViewModel()
                     MyOutfitScreen(
                         state = viewModel.state.collectAsState().value,
+                        outfits = viewModel.outfits,
                         getOutfit = viewModel::getOutfit,
                         detailOutfit = { outfit ->
                             selectedOutfit = outfit
