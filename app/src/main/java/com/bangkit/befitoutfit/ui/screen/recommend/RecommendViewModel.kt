@@ -6,8 +6,10 @@ import com.bangkit.befitoutfit.data.model.Recommend
 import com.bangkit.befitoutfit.data.repository.RecommendRepository
 import com.bangkit.befitoutfit.helper.State
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
@@ -16,6 +18,13 @@ class RecommendViewModel(
 ) : ViewModel() {
     var state = MutableStateFlow<State<Recommend>>(State.Idle)
         private set
+
+    var recommend = Recommend()
+        private set
+
+    init {
+        getRecommend()
+    }
 
     fun getRecommend() = viewModelScope.launch(
         context = Dispatchers.IO,
@@ -26,10 +35,17 @@ class RecommendViewModel(
             state.value = State.Error(
                 message = it.message ?: "Unknown error",
             )
+            recommend = Recommend()
+        }.onCompletion {
+            delay(
+                timeMillis = 50L,
+            )
+            state.value = State.Idle
         }.collect {
             state.value = State.Success(
                 data = it,
             )
+            recommend = (state.value as State.Success<Recommend>).data
         }
     }
 }

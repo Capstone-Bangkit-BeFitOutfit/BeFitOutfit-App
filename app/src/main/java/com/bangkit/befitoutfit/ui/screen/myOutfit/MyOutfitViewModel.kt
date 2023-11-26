@@ -2,6 +2,7 @@ package com.bangkit.befitoutfit.ui.screen.myOutfit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.data.model.Outfits
 import com.bangkit.befitoutfit.data.repository.OutfitRepository
 import com.bangkit.befitoutfit.helper.State
@@ -17,6 +18,13 @@ class MyOutfitViewModel(
     var state = MutableStateFlow<State<Outfits>>(State.Idle)
         private set
 
+    var outfits = listOf<Outfit>()
+        private set
+
+    init {
+        getOutfit()
+    }
+
     fun getOutfit() = viewModelScope.launch(
         context = Dispatchers.IO,
     ) {
@@ -30,6 +38,7 @@ class MyOutfitViewModel(
             state.value = State.Success(
                 data = it,
             )
+            outfits = (state.value as State.Success<Outfits>).data.data
         }
     }
 }
