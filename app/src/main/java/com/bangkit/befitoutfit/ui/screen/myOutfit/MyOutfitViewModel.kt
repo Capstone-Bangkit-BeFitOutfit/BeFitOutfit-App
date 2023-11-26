@@ -7,8 +7,10 @@ import com.bangkit.befitoutfit.data.model.Outfits
 import com.bangkit.befitoutfit.data.repository.OutfitRepository
 import com.bangkit.befitoutfit.helper.State
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
@@ -34,6 +36,12 @@ class MyOutfitViewModel(
             state.value = State.Error(
                 message = it.message ?: "Unknown error",
             )
+            outfits = listOf()
+        }.onCompletion {
+            delay(
+                timeMillis = 50L,
+            )
+            state.value = State.Idle
         }.collect {
             state.value = State.Success(
                 data = it,
