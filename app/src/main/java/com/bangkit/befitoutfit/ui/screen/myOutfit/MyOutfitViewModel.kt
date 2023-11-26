@@ -34,6 +34,7 @@ class MyOutfitViewModel(
             state.value = State.Error(
                 message = it.message ?: "Unknown error",
             )
+            outfits = listOf()
         }.collect {
             state.value = State.Success(
                 data = it,
