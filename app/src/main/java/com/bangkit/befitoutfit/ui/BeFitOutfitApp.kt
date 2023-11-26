@@ -1,6 +1,7 @@
 package com.bangkit.befitoutfit.ui
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
@@ -39,7 +40,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterialApi::class,
+)
 @Composable
 fun BeFitOutfitApp(
     startDestination: String,
@@ -159,7 +163,8 @@ fun BeFitOutfitApp(
                     val viewModel: RecommendViewModel = koinViewModel()
                     RecommendScreen(
                         state = viewModel.state.collectAsState().value,
-                        getRecommend = viewModel::getRecommend,
+                        recommend = viewModel.recommend,
+                        onRefresh = viewModel::getRecommend,
                         detailRecommend = {
                             bottomSheetType = BottomSheetType.DetailOutfit
                             showBottomSheet = true

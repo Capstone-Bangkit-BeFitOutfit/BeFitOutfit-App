@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
@@ -18,32 +19,39 @@ import com.bangkit.befitoutfit.ui.component.ColumnRecommend
 @Composable
 fun RecommendScreen(
     state: State<Recommend>,
+    recommend: Recommend,
     modifier: Modifier = Modifier,
-    getRecommend: () -> Unit = {},
+    onRefresh: () -> Unit = {},
     detailRecommend: (Outfit) -> Unit = {},
+    pullRefreshState: PullRefreshState = rememberPullRefreshState(
+        refreshing = state is State.Loading,
+        onRefresh = onRefresh,
+    ),
 ) {
-    val pullRefreshState =
-        rememberPullRefreshState(refreshing = state is State.Loading, onRefresh = getRecommend)
-
     Box(
         modifier = modifier
             .fillMaxSize()
-            .pullRefresh(state = pullRefreshState)
+            .pullRefresh(
+                state = pullRefreshState,
+            )
     ) {
         when (state) {
-            is State.Idle -> getRecommend()
-            is State.Loading -> {}
-            is State.Success -> ColumnRecommend(
-                recommend = state.data, modifier = Modifier, onClick = detailRecommend
-            )
-
+            is State.Success -> {}
             is State.Error -> {}
+            else -> {}
         }
+
+        ColumnRecommend(
+            recommend = recommend,
+            onClick = detailRecommend,
+        )
 
         PullRefreshIndicator(
             refreshing = state is State.Loading,
             state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter)
+            modifier = Modifier.align(
+                alignment = Alignment.TopCenter,
+            ),
         )
     }
 }
