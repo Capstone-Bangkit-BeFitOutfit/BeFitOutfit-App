@@ -22,8 +22,7 @@ fun ColumnRecommend(
     if (recommend.message != "success") Text(
         text = "No outfit recommendation found",
         modifier = modifier,
-    )
-    else LazyColumn(
+    ) else LazyColumn(
         modifier = modifier.padding(
             horizontal = 16.dp,
         ),
@@ -44,11 +43,15 @@ fun ColumnRecommend(
             }
             items(
                 items = recommend.data.top,
-                key = { it.toString() },
+                key = {
+                    it.toString()
+                },
             ) { outfit ->
                 ItemOutfit(
                     outfit = outfit,
-                ) { onClick(outfit) }
+                ) {
+                    onClick(outfit)
+                }
             }
         }
 
@@ -61,11 +64,15 @@ fun ColumnRecommend(
             }
             items(
                 items = recommend.data.bottom,
-                key = { it.toString() },
+                key = {
+                    it.toString()
+                },
             ) { outfit ->
                 ItemOutfit(
                     outfit = outfit,
-                ) { onClick(outfit) }
+                ) {
+                    onClick(outfit)
+                }
             }
         }
 
@@ -78,11 +85,15 @@ fun ColumnRecommend(
             }
             items(
                 items = recommend.data.extra,
-                key = { it.toString() },
+                key = {
+                    it.toString()
+                },
             ) { outfit ->
                 ItemOutfit(
                     outfit = outfit,
-                ) { onClick(outfit) }
+                ) {
+                    onClick(outfit)
+                }
             }
         }
     }

@@ -35,11 +35,15 @@ fun ColumnOutfit(
     ) {
         items(
             items = outfits,
-            key = { it.toString() },
+            key = {
+                it.toString()
+            },
         ) { outfit ->
             ItemOutfit(
                 outfit = outfit,
-            ) { onClick(outfit) }
+            ) {
+                onClick(outfit)
+            }
         }
     }
 }
