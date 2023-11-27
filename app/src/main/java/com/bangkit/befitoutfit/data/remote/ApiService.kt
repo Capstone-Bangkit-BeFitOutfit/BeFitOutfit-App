@@ -31,6 +31,14 @@ interface ApiService {
         @Field("password") password: String,
     ): Info
 
+    @FormUrlEncoded
+    @PUT("user/{id}")
+    suspend fun updateUser(
+        @Path("id") id: Int,
+        @Field("name") name: String,
+        @Field("email") email: String,
+    )
+
     @GET("outfit")
     suspend fun getOutfit(): Outfits
 
