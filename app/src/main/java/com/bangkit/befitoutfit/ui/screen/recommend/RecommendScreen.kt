@@ -15,7 +15,9 @@ import com.bangkit.befitoutfit.data.model.Recommend
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.ui.component.ColumnRecommend
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(
+    ExperimentalMaterialApi::class,
+)
 @Composable
 fun RecommendScreen(
     state: State<Recommend>,

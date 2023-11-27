@@ -23,7 +23,9 @@ import coil.request.ImageRequest
 import com.bangkit.befitoutfit.R
 import com.bangkit.befitoutfit.data.model.Outfit
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+)
 @Composable
 fun ItemOutfit(
     outfit: Outfit,
@@ -31,7 +33,9 @@ fun ItemOutfit(
     onClick: (Outfit) -> Unit = {},
 ) {
     Card(
-        onClick = { onClick(outfit) },
+        onClick = {
+            onClick(outfit)
+        },
         modifier = modifier.fillMaxWidth(),
     ) {
         Row {

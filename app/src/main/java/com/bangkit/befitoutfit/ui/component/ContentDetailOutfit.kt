@@ -22,17 +22,17 @@ import com.bangkit.befitoutfit.helper.TextFieldType
 @Composable
 fun ContentDetailOutfit(
     state: State<Unit>,
-    nameOutfitValue: String,
-    nameOutfitValid: Boolean,
-    onNameOutfitValueChange: (String) -> Unit,
-    onNameOutfitClick: () -> Unit,
-    onUpdateClick: () -> Unit,
-    onClickDismiss: () -> Unit,
+    valueOutfitName: String,
+    isValidOutfitName: Boolean,
+    onValueChangeOutfitName: (String) -> Unit,
+    onClickOutfitName: () -> Unit,
+    onClickUpdate: () -> Unit,
+    dismiss: () -> Unit,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
 ) {
     when (state) {
-        is State.Success -> onClickDismiss()
+        is State.Success -> dismiss()
         is State.Error -> {/*TODO: ContentDetailOutfit error handling*/
         }
 
@@ -44,11 +44,11 @@ fun ContentDetailOutfit(
     ) {
         TextField(
             textFieldType = TextFieldType.OutfitName,
-            enable = state is State.Idle,
-            value = nameOutfitValue,
-            isValid = nameOutfitValid,
-            onValueChange = onNameOutfitValueChange,
-            onClick = onNameOutfitClick,
+            enabled = state is State.Idle,
+            value = valueOutfitName,
+            isValid = isValidOutfitName,
+            onValueChange = onValueChangeOutfitName,
+            onClick = onClickOutfitName,
             focusManager = focusManager,
             imeAction = ImeAction.Done,
         )
@@ -109,13 +109,13 @@ fun ContentDetailOutfit(
         }
 
         OutlinedButton(
-            onClick = onUpdateClick,
+            onClick = onClickUpdate,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
                     horizontal = 16.dp,
                 ),
-            enabled = state is State.Idle && nameOutfitValue.isNotEmpty() && nameOutfitValid,
+            enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName,
         ) {
             Text(
                 text = "Update",

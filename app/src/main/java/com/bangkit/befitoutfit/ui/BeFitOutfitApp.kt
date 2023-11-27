@@ -53,17 +53,23 @@ fun BeFitOutfitApp(
     scope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    currentRoute: String = navController.currentBackStackEntryAsState().value?.destination?.route
+        ?: startDestination,
+    isAuthScreens: Boolean = listOf(
+        Screen.Login.route, Screen.Register.route
+    ).contains(currentRoute),
 ) {
-    val currentRoute =
-        navController.currentBackStackEntryAsState().value?.destination?.route ?: startDestination
-    val isAuthScreens = listOf(Screen.Login.route, Screen.Register.route).contains(currentRoute)
-
     var showBottomSheet by remember {
         mutableStateOf(
             value = false,
         )
     }
-    var bottomSheetType by remember { mutableStateOf<BottomSheetType>(BottomSheetType.Profile) }
+
+    var bottomSheetType by remember {
+        mutableStateOf<BottomSheetType>(
+            value = BottomSheetType.Profile
+        )
+    }
 
     var selectedOutfit by remember {
         mutableStateOf(
@@ -76,13 +82,13 @@ fun BeFitOutfitApp(
         topBar = {
             if (isAuthScreens.not()) TopBar(
                 title = currentRoute,
-                profile = {
+                onClickProfile = {
                     bottomSheetType = BottomSheetType.Profile
                     showBottomSheet = true
                 },
-                logout = {
+                onClickLogout = {
                     clearSession()
-                    navController.navigate(Screen.Auth.route) { navController.popBackStack() }
+                    navController.navigate(Screen.Login.route) { navController.popBackStack() }
                 },
             )
         },
@@ -124,8 +130,14 @@ fun BeFitOutfitApp(
                     LoginScreen(
                         state = viewModel.state.collectAsState().value,
                         login = viewModel::login,
-                        navigateToMain = { navController.navigate(Screen.Main.route) { navController.popBackStack() } },
-                        navigateToRegister = { navController.navigate(Screen.Register.route) },
+                        navigateToMain = {
+                            navController.navigate(Screen.Main.route) {
+                                navController.popBackStack()
+                            }
+                        },
+                        navigateToRegister = {
+                            navController.navigate(Screen.Register.route)
+                        },
                     )
                 }
                 composable(
@@ -135,7 +147,9 @@ fun BeFitOutfitApp(
                     RegisterScreen(
                         state = viewModel.state.collectAsState().value,
                         register = viewModel::register,
-                        navigateToLogin = { navController.navigateUp() },
+                        navigateToLogin = {
+                            navController.navigateUp()
+                        },
                     )
                 }
             }
@@ -150,7 +164,7 @@ fun BeFitOutfitApp(
                     MyOutfitScreen(
                         state = viewModel.state.collectAsState().value,
                         outfits = viewModel.outfits,
-                        getOutfit = viewModel::getOutfit,
+                        onRefresh = viewModel::getOutfit,
                         detailOutfit = { outfit ->
                             selectedOutfit = outfit
                             bottomSheetType = BottomSheetType.DetailOutfit
@@ -179,13 +193,18 @@ fun BeFitOutfitApp(
         BottomSheet(
             showBottomSheet = showBottomSheet,
             bottomSheetType = bottomSheetType,
-            onDismissRequest = { showBottomSheet = false },
+            onDismissRequest = {
+                showBottomSheet = false
+            },
             sheetState = sheetState,
             session = session,
             outfit = selectedOutfit,
-            onClickDismiss = {
-                scope.launch { sheetState.hide() }
-                    .invokeOnCompletion { if (!sheetState.isVisible) showBottomSheet = false }
+            dismiss = {
+                scope.launch {
+                    sheetState.hide()
+                }.invokeOnCompletion {
+                    if (!sheetState.isVisible) showBottomSheet = false
+                }
             },
         )
     }

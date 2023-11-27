@@ -38,7 +38,7 @@ class RecommendViewModel(
             recommend = Recommend()
         }.onCompletion {
             delay(
-                timeMillis = 50L,
+                timeMillis = 100L,
             )
             state.value = State.Idle
         }.collect {

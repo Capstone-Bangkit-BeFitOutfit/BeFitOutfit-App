@@ -21,18 +21,18 @@ import com.bangkit.befitoutfit.helper.TextFieldType
 
 @Composable
 fun ContentLogin(
-    emailValue: String,
-    emailValid: Boolean,
-    onEmailValueChange: (String) -> Unit,
-    onEmailClick: () -> Unit,
-    passwordValue: String,
-    passwordValid: Boolean,
-    onPasswordValueChange: (String) -> Unit,
-    onPasswordClick: () -> Unit,
-    isPasswordVisible: Boolean,
-    onLoginClick: () -> Unit,
-    onRegisterClick: () -> Unit,
-    enable: Boolean,
+    valueEmail: String,
+    isValidEmail: Boolean,
+    onValueChangeEmail: (String) -> Unit,
+    onClickEmail: () -> Unit,
+    valuePassword: String,
+    isValidPassword: Boolean,
+    onValueChangePassword: (String) -> Unit,
+    onClickPassword: () -> Unit,
+    isVisiblePassword: Boolean,
+    onClickLogin: () -> Unit,
+    onClickRegister: () -> Unit,
+    enabled: Boolean,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
 ) {
@@ -43,30 +43,30 @@ fun ContentLogin(
     ) {
         TextField(
             textFieldType = TextFieldType.Email,
-            enable = enable,
-            value = emailValue,
-            isValid = emailValid,
-            onValueChange = onEmailValueChange,
-            onClick = onEmailClick,
+            enabled = enabled,
+            value = valueEmail,
+            isValid = isValidEmail,
+            onValueChange = onValueChangeEmail,
+            onClick = onClickEmail,
             focusManager = focusManager,
         )
 
         TextField(
             textFieldType = TextFieldType.Password,
-            enable = enable,
-            value = passwordValue,
-            isValid = passwordValid,
-            onValueChange = onPasswordValueChange,
-            onClick = onPasswordClick,
+            enabled = enabled,
+            value = valuePassword,
+            isValid = isValidPassword,
+            onValueChange = onValueChangePassword,
+            onClick = onClickPassword,
             focusManager = focusManager,
-            isVisible = isPasswordVisible,
+            isVisible = isVisiblePassword,
             imeAction = ImeAction.Done,
         )
 
         OutlinedButton(
             onClick = {
                 focusManager.clearFocus()
-                onLoginClick()
+                onClickLogin()
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -75,7 +75,7 @@ fun ContentLogin(
                     end = 16.dp,
                     bottom = 16.dp,
                 ),
-            enabled = enable && emailValue.isNotEmpty() && passwordValue.isNotEmpty() && emailValid && passwordValid,
+            enabled = enabled && valueEmail.isNotEmpty() && valuePassword.isNotEmpty() && isValidEmail && isValidPassword,
         ) {
             Text(
                 text = "Login",
@@ -90,7 +90,7 @@ fun ContentLogin(
                 text = "Register",
                 modifier = Modifier.clickable {
                     focusManager.clearFocus()
-                    onRegisterClick()
+                    onClickRegister()
                 },
                 color = MaterialTheme.colorScheme.primary,
             )

@@ -25,28 +25,28 @@ fun LoginScreen(
     navigateToRegister: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var emailValue by remember {
+    var valueEmail by remember {
         mutableStateOf(
             value = "",
         )
     }
-    var emailValid by remember {
+    var isValidEmail by remember {
         mutableStateOf(
             value = true,
         )
     }
 
-    var passwordValue by remember {
+    var valuePassword by remember {
         mutableStateOf(
             value = "",
         )
     }
-    var passwordValid by remember {
+    var isValidPassword by remember {
         mutableStateOf(
             value = true,
         )
     }
-    var passwordVisible by remember {
+    var isVisiblePassword by remember {
         mutableStateOf(
             value = false,
         )
@@ -65,32 +65,32 @@ fun LoginScreen(
         contentAlignment = Alignment.Center,
     ) {
         ContentLogin(
-            emailValue = emailValue,
-            emailValid = emailValid,
-            onEmailValueChange = {
-                emailValue = it
-                emailValid = emailValue.emailChecker().isEmpty()
+            valueEmail = valueEmail,
+            isValidEmail = isValidEmail,
+            onValueChangeEmail = {
+                valueEmail = it
+                isValidEmail = valueEmail.emailChecker().isEmpty()
             },
-            onEmailClick = {
-                emailValue = ""
+            onClickEmail = {
+                valueEmail = ""
             },
-            passwordValue = passwordValue,
-            passwordValid = passwordValid,
-            onPasswordValueChange = {
-                passwordValue = it
-                passwordValid = passwordValue.passwordChecker().isEmpty()
+            valuePassword = valuePassword,
+            isValidPassword = isValidPassword,
+            onValueChangePassword = {
+                valuePassword = it
+                isValidPassword = valuePassword.passwordChecker().isEmpty()
             },
-            onPasswordClick = {
-                passwordVisible = !passwordVisible
+            onClickPassword = {
+                isVisiblePassword = !isVisiblePassword
             },
-            isPasswordVisible = passwordVisible,
-            onLoginClick = {
-                login(emailValue, passwordValue)
+            isVisiblePassword = isVisiblePassword,
+            onClickLogin = {
+                login(valueEmail, valuePassword)
             },
-            onRegisterClick = {
+            onClickRegister = {
                 navigateToRegister()
             },
-            enable = state is State.Idle,
+            enabled = state is State.Idle,
         )
 
         AnimatedVisibility(
