@@ -166,7 +166,8 @@ fun BeFitOutfitApp(
                         state = viewModel.state.collectAsState().value,
                         recommend = viewModel.recommend,
                         onRefresh = viewModel::getRecommend,
-                        detailRecommend = {
+                        onClickDetailOutfit = { outfit ->
+                            selectedOutfit = outfit
                             bottomSheetType = BottomSheetType.DetailOutfit
                             showBottomSheet = true
                         },
