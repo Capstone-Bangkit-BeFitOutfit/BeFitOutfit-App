@@ -88,7 +88,7 @@ fun BeFitOutfitApp(
                 },
                 onClickLogout = {
                     clearSession()
-                    navController.navigate(Screen.Auth.route) { navController.popBackStack() }
+                    navController.navigate(Screen.Login.route) { navController.popBackStack() }
                 },
             )
         },
