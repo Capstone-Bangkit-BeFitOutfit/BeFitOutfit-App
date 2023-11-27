@@ -12,10 +12,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.bangkit.befitoutfit.data.model.Session
+import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.helper.TextFieldType
 
 @Composable
 fun ContentProfile(
+    state: State<Unit>,
     session: Session,
     nameValue: String,
     nameValid: Boolean,
@@ -26,14 +28,24 @@ fun ContentProfile(
     onEmailValueChange: (String) -> Unit,
     onEmailClick: () -> Unit,
     onUpdateClick: () -> Unit,
+    onClickDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
 ) {
+    when (state) {
+        is State.Success -> onClickDismiss()
+        is State.Error -> {/*TODO: ContentProfile error handling*/
+        }
+
+        else -> {}
+    }
+
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
         TextField(
             textFieldType = TextFieldType.Name,
+            enable = state is State.Idle,
             value = nameValue,
             isValid = nameValid,
             onValueChange = onNameValueChange,
@@ -43,6 +55,7 @@ fun ContentProfile(
 
         TextField(
             textFieldType = TextFieldType.Email,
+            enable = state is State.Idle,
             value = emailValue,
             isValid = emailValid,
             onValueChange = onEmailValueChange,
@@ -58,7 +71,7 @@ fun ContentProfile(
                 .padding(
                     horizontal = 16.dp,
                 ),
-            enabled = (session.name != nameValue || session.email != emailValue) && nameValid && emailValid && nameValue.isNotEmpty() && emailValue.isNotEmpty(),
+            enabled = (session.name != nameValue || session.email != emailValue) && nameValid && emailValid && nameValue.isNotEmpty() && emailValue.isNotEmpty() && state is State.Idle,
         ) {
             Text(
                 text = "Update",

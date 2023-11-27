@@ -93,6 +93,7 @@ fun BottomSheet(
                     }
 
                     ContentProfile(
+                        state = viewModel.state.collectAsState().value,
                         session = session,
                         nameValue = nameValue,
                         nameValid = nameValid,
@@ -113,14 +114,12 @@ fun BottomSheet(
                             emailValue = ""
                         },
                         onUpdateClick = {
-                            onClickDismiss()
-                            viewModel.setSession(
-                                Session(
-                                    name = nameValue,
-                                    email = emailValue,
-                                )
+                            viewModel.updateProfile(
+                                name = nameValue,
+                                email = emailValue,
                             )
                         },
+                        onClickDismiss = onClickDismiss,
                     )
                 }
 
