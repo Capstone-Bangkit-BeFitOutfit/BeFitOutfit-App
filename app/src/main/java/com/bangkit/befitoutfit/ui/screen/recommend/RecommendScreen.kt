@@ -22,7 +22,7 @@ fun RecommendScreen(
     recommend: Recommend,
     modifier: Modifier = Modifier,
     onRefresh: () -> Unit = {},
-    detailRecommend: (Outfit) -> Unit = {},
+    onClickDetailOutfit: (Outfit) -> Unit = {},
     pullRefreshState: PullRefreshState = rememberPullRefreshState(
         refreshing = state is State.Loading,
         onRefresh = onRefresh,
@@ -43,7 +43,7 @@ fun RecommendScreen(
 
         ColumnRecommend(
             recommend = recommend,
-            onClick = detailRecommend,
+            onClick = onClickDetailOutfit,
         )
 
         PullRefreshIndicator(
