@@ -76,11 +76,11 @@ fun BeFitOutfitApp(
         topBar = {
             if (isAuthScreens.not()) TopBar(
                 title = currentRoute,
-                profile = {
+                onClickProfile = {
                     bottomSheetType = BottomSheetType.Profile
                     showBottomSheet = true
                 },
-                logout = {
+                onClickLogout = {
                     clearSession()
                     navController.navigate(Screen.Auth.route) { navController.popBackStack() }
                 },
@@ -124,8 +124,14 @@ fun BeFitOutfitApp(
                     LoginScreen(
                         state = viewModel.state.collectAsState().value,
                         login = viewModel::login,
-                        navigateToMain = { navController.navigate(Screen.Main.route) { navController.popBackStack() } },
-                        navigateToRegister = { navController.navigate(Screen.Register.route) },
+                        navigateToMain = {
+                            navController.navigate(Screen.Main.route) {
+                                navController.popBackStack()
+                            }
+                        },
+                        navigateToRegister = {
+                            navController.navigate(Screen.Register.route)
+                        },
                     )
                 }
                 composable(
@@ -135,7 +141,9 @@ fun BeFitOutfitApp(
                     RegisterScreen(
                         state = viewModel.state.collectAsState().value,
                         register = viewModel::register,
-                        navigateToLogin = { navController.navigateUp() },
+                        navigateToLogin = {
+                            navController.navigateUp()
+                        },
                     )
                 }
             }
@@ -150,7 +158,7 @@ fun BeFitOutfitApp(
                     MyOutfitScreen(
                         state = viewModel.state.collectAsState().value,
                         outfits = viewModel.outfits,
-                        getOutfit = viewModel::getOutfit,
+                        onRefresh = viewModel::getOutfit,
                         detailOutfit = { outfit ->
                             selectedOutfit = outfit
                             bottomSheetType = BottomSheetType.DetailOutfit
@@ -179,13 +187,18 @@ fun BeFitOutfitApp(
         BottomSheet(
             showBottomSheet = showBottomSheet,
             bottomSheetType = bottomSheetType,
-            onDismissRequest = { showBottomSheet = false },
+            onDismissRequest = {
+                showBottomSheet = false
+            },
             sheetState = sheetState,
             session = session,
             outfit = selectedOutfit,
-            onClickDismiss = {
-                scope.launch { sheetState.hide() }
-                    .invokeOnCompletion { if (!sheetState.isVisible) showBottomSheet = false }
+            dismiss = {
+                scope.launch {
+                    sheetState.hide()
+                }.invokeOnCompletion {
+                    if (!sheetState.isVisible) showBottomSheet = false
+                }
             },
         )
     }

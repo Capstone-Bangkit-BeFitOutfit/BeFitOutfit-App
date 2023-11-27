@@ -28,7 +28,7 @@ import com.bangkit.befitoutfit.helper.TextFieldType
 fun TextField(
     textFieldType: TextFieldType,
     modifier: Modifier = Modifier,
-    enable: Boolean = true,
+    enabled: Boolean = true,
     value: String = "",
     isValid: Boolean = true,
     onValueChange: (String) -> Unit = {},
@@ -48,7 +48,7 @@ fun TextField(
                 end = 16.dp,
                 bottom = 16.dp,
             ),
-        enabled = enable,
+        enabled = enabled,
         label = {
             Text(
                 text = textFieldType.type,
@@ -106,8 +106,12 @@ fun TextField(
             imeAction = imeAction,
         ),
         keyboardActions = KeyboardActions(
-            onDone = { focusManager?.clearFocus() },
-            onNext = { focusManager?.moveFocus(FocusDirection.Down) },
+            onDone = {
+                focusManager?.clearFocus()
+            },
+            onNext = {
+                focusManager?.moveFocus(FocusDirection.Down)
+            },
         ),
         singleLine = true,
     )

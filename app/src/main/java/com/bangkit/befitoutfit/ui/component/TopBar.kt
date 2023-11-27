@@ -11,13 +11,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+)
 @Composable
 fun TopBar(
     title: String,
     modifier: Modifier = Modifier,
-    profile: () -> Unit = {},
-    logout: () -> Unit = {},
+    onClickProfile: () -> Unit = {},
+    onClickLogout: () -> Unit = {},
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -28,7 +30,7 @@ fun TopBar(
         modifier = modifier,
         navigationIcon = {
             IconButton(
-                onClick = profile,
+                onClick = onClickProfile,
             ) {
                 Icon(
                     imageVector = Icons.Outlined.AccountCircle,
@@ -38,7 +40,7 @@ fun TopBar(
         },
         actions = {
             IconButton(
-                onClick = logout,
+                onClick = onClickLogout,
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Logout,

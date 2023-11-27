@@ -31,7 +31,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+)
 @Composable
 fun BottomSheet(
     showBottomSheet: Boolean,
@@ -41,7 +43,7 @@ fun BottomSheet(
     sheetState: SheetState = rememberModalBottomSheetState(),
     session: Session = Session(),
     outfit: Outfit = Outfit(),
-    onClickDismiss: () -> Unit = {},
+    dismiss: () -> Unit = {},
 ) {
     if (showBottomSheet) {
         ModalBottomSheet(
@@ -70,23 +72,23 @@ fun BottomSheet(
                 BottomSheetType.Profile -> {
                     val viewModel: ProfileViewModel = koinViewModel()
 
-                    var nameValue by remember {
+                    var valueName by remember {
                         mutableStateOf(
                             value = session.name,
                         )
                     }
-                    var nameValid by remember {
+                    var isValidName by remember {
                         mutableStateOf(
                             value = true,
                         )
                     }
 
-                    var emailValue by remember {
+                    var valueEmail by remember {
                         mutableStateOf(
                             value = session.email,
                         )
                     }
-                    var emailValid by remember {
+                    var isValidEmail by remember {
                         mutableStateOf(
                             value = true,
                         )
@@ -95,43 +97,43 @@ fun BottomSheet(
                     ContentProfile(
                         state = viewModel.state.collectAsState().value,
                         session = session,
-                        nameValue = nameValue,
-                        nameValid = nameValid,
-                        onNameValueChange = {
-                            nameValid = it.isNotEmpty()
-                            nameValue = it
+                        valueName = valueName,
+                        isValidName = isValidName,
+                        onValueChangeName = {
+                            isValidName = it.isNotEmpty()
+                            valueName = it
                         },
-                        onNameClick = {
-                            nameValue = ""
+                        onClickName = {
+                            valueName = ""
                         },
-                        emailValue = emailValue,
-                        emailValid = emailValid,
-                        onEmailValueChange = {
-                            emailValue = it
-                            emailValid = it.emailChecker().isEmpty()
+                        valueEmail = valueEmail,
+                        isValidEmail = isValidEmail,
+                        onValueChangeEmail = {
+                            valueEmail = it
+                            isValidEmail = it.emailChecker().isEmpty()
                         },
-                        onEmailClick = {
-                            emailValue = ""
+                        onClickEmail = {
+                            valueEmail = ""
                         },
-                        onUpdateClick = {
+                        onClickUpdate = {
                             viewModel.updateProfile(
-                                name = nameValue,
-                                email = emailValue,
+                                name = valueName,
+                                email = valueEmail,
                             )
                         },
-                        onClickDismiss = onClickDismiss,
+                        dismiss = dismiss,
                     )
                 }
 
                 BottomSheetType.DetailOutfit -> {
                     val viewModel: DetailOutfitViewModel = koinViewModel()
 
-                    var nameOutfitValue by remember {
+                    var valueOutfitName by remember {
                         mutableStateOf(
                             value = outfit.name,
                         )
                     }
-                    var nameOutfitValid by remember {
+                    var isValidOutfitName by remember {
                         mutableStateOf(
                             value = true,
                         )
@@ -139,36 +141,36 @@ fun BottomSheet(
 
                     ContentDetailOutfit(
                         state = viewModel.state.collectAsState().value,
-                        nameOutfitValue = nameOutfitValue,
-                        nameOutfitValid = nameOutfitValid,
-                        onNameOutfitValueChange = {
-                            nameOutfitValid = it.isNotEmpty()
-                            nameOutfitValue = it
+                        valueOutfitName = valueOutfitName,
+                        isValidOutfitName = isValidOutfitName,
+                        onValueChangeOutfitName = {
+                            isValidOutfitName = it.isNotEmpty()
+                            valueOutfitName = it
                         },
-                        onNameOutfitClick = {
-                            nameOutfitValue = ""
+                        onClickOutfitName = {
+                            valueOutfitName = ""
                         },
-                        onUpdateClick = {
+                        onClickUpdate = {
                             viewModel.updateOutfit(
                                 id = outfit.id,
-                                name = nameOutfitValue,
+                                name = valueOutfitName,
                                 type = outfit.type,
                                 imageUrl = outfit.imageUrl
                             )
                         },
-                        onClickDismiss = onClickDismiss,
+                        dismiss = dismiss,
                     )
                 }
 
                 BottomSheetType.AddOutfit -> {
                     val viewModel: AddOutfitViewModel = koinViewModel()
 
-                    var nameOutfitValue by remember {
+                    var valueOutfitName by remember {
                         mutableStateOf(
                             value = "",
                         )
                     }
-                    var nameOutfitValid by remember {
+                    var isValidOutfitName by remember {
                         mutableStateOf(
                             value = true,
                         )
@@ -176,23 +178,23 @@ fun BottomSheet(
 
                     ContentAddOutfit(
                         state = viewModel.state.collectAsState().value,
-                        nameOutfitValue = nameOutfitValue,
-                        nameOutfitValid = nameOutfitValid,
-                        onNameOutfitValueChange = {
-                            nameOutfitValid = it.isNotEmpty()
-                            nameOutfitValue = it
+                        valueOutfitName = valueOutfitName,
+                        isValidOutfitName = isValidOutfitName,
+                        onValueChangeOutfitName = {
+                            isValidOutfitName = it.isNotEmpty()
+                            valueOutfitName = it
                         },
-                        onNameOutfitClick = {
-                            nameOutfitValue = ""
+                        onClickOutfitName = {
+                            valueOutfitName = ""
                         },
-                        onAddClick = {
+                        onClickAdd = {
                             viewModel.addOutfit(
-                                name = nameOutfitValue,
+                                name = valueOutfitName,
                                 type = outfit.type,
                                 imageUrl = outfit.imageUrl
                             )
                         },
-                        onClickDismiss = onClickDismiss,
+                        dismiss = dismiss,
                     )
                 }
 

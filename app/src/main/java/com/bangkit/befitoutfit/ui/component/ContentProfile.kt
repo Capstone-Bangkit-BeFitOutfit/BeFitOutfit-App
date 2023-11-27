@@ -19,21 +19,21 @@ import com.bangkit.befitoutfit.helper.TextFieldType
 fun ContentProfile(
     state: State<Unit>,
     session: Session,
-    nameValue: String,
-    nameValid: Boolean,
-    onNameValueChange: (String) -> Unit,
-    onNameClick: () -> Unit,
-    emailValue: String,
-    emailValid: Boolean,
-    onEmailValueChange: (String) -> Unit,
-    onEmailClick: () -> Unit,
-    onUpdateClick: () -> Unit,
-    onClickDismiss: () -> Unit,
+    valueName: String,
+    isValidName: Boolean,
+    onValueChangeName: (String) -> Unit,
+    onClickName: () -> Unit,
+    valueEmail: String,
+    isValidEmail: Boolean,
+    onValueChangeEmail: (String) -> Unit,
+    onClickEmail: () -> Unit,
+    onClickUpdate: () -> Unit,
+    dismiss: () -> Unit,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
 ) {
     when (state) {
-        is State.Success -> onClickDismiss()
+        is State.Success -> dismiss()
         is State.Error -> {/*TODO: ContentProfile error handling*/
         }
 
@@ -45,33 +45,33 @@ fun ContentProfile(
     ) {
         TextField(
             textFieldType = TextFieldType.Name,
-            enable = state is State.Idle,
-            value = nameValue,
-            isValid = nameValid,
-            onValueChange = onNameValueChange,
-            onClick = onNameClick,
+            enabled = state is State.Idle,
+            value = valueName,
+            isValid = isValidName,
+            onValueChange = onValueChangeName,
+            onClick = onClickName,
             focusManager = focusManager,
         )
 
         TextField(
             textFieldType = TextFieldType.Email,
-            enable = state is State.Idle,
-            value = emailValue,
-            isValid = emailValid,
-            onValueChange = onEmailValueChange,
-            onClick = onEmailClick,
+            enabled = state is State.Idle,
+            value = valueEmail,
+            isValid = isValidEmail,
+            onValueChange = onValueChangeEmail,
+            onClick = onClickEmail,
             focusManager = focusManager,
             imeAction = ImeAction.Done,
         )
 
         OutlinedButton(
-            onClick = onUpdateClick,
+            onClick = onClickUpdate,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
                     horizontal = 16.dp,
                 ),
-            enabled = (session.name != nameValue || session.email != emailValue) && nameValid && emailValid && nameValue.isNotEmpty() && emailValue.isNotEmpty() && state is State.Idle,
+            enabled = (session.name != valueName || session.email != valueEmail) && isValidName && isValidEmail && valueName.isNotEmpty() && valueEmail.isNotEmpty() && state is State.Idle,
         ) {
             Text(
                 text = "Update",

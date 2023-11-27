@@ -15,17 +15,19 @@ import com.bangkit.befitoutfit.data.model.Outfits
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.ui.component.ColumnOutfit
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(
+    ExperimentalMaterialApi::class,
+)
 @Composable
 fun MyOutfitScreen(
     state: State<Outfits>,
     outfits: List<Outfit>,
     modifier: Modifier = Modifier,
-    getOutfit: () -> Unit = {},
+    onRefresh: () -> Unit = {},
     detailOutfit: (Outfit) -> Unit = {},
     pullRefreshState: PullRefreshState = rememberPullRefreshState(
         refreshing = state is State.Loading,
-        onRefresh = getOutfit,
+        onRefresh = onRefresh,
     ),
 ) {
     Box(

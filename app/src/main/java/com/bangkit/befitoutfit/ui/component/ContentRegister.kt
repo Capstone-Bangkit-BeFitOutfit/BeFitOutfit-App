@@ -21,22 +21,22 @@ import com.bangkit.befitoutfit.helper.TextFieldType
 
 @Composable
 fun ContentRegister(
-    nameValue: String,
-    nameValid: Boolean,
-    onNameValueChange: (String) -> Unit,
-    onNameClick: () -> Unit,
-    emailValue: String,
-    emailValid: Boolean,
-    onEmailValueChange: (String) -> Unit,
-    onEmailClick: () -> Unit,
-    passwordValue: String,
-    passwordValid: Boolean,
-    onPasswordValueChange: (String) -> Unit,
-    onPasswordClick: () -> Unit,
-    isPasswordVisible: Boolean,
-    onRegisterClick: () -> Unit,
-    onLoginClick: () -> Unit,
-    enable: Boolean,
+    valueName: String,
+    isValidName: Boolean,
+    onValueChangeName: (String) -> Unit,
+    onClickName: () -> Unit,
+    valueEmail: String,
+    isValidEmail: Boolean,
+    onValueChangeEmail: (String) -> Unit,
+    onClickEmail: () -> Unit,
+    valuePassword: String,
+    isValidPassword: Boolean,
+    onValueChangePassword: (String) -> Unit,
+    onClickPassword: () -> Unit,
+    isVisiblePassword: Boolean,
+    onClickRegister: () -> Unit,
+    onClickLogin: () -> Unit,
+    enabled: Boolean,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
 ) {
@@ -47,41 +47,41 @@ fun ContentRegister(
     ) {
         TextField(
             textFieldType = TextFieldType.Name,
-            enable = enable,
-            value = nameValue,
-            isValid = nameValid,
-            onValueChange = onNameValueChange,
-            onClick = onNameClick,
+            enabled = enabled,
+            value = valueName,
+            isValid = isValidName,
+            onValueChange = onValueChangeName,
+            onClick = onClickName,
             focusManager = focusManager,
         )
 
         TextField(
             textFieldType = TextFieldType.Email,
-            enable = enable,
-            value = emailValue,
-            isValid = emailValid,
-            onValueChange = onEmailValueChange,
-            onClick = onEmailClick,
+            enabled = enabled,
+            value = valueEmail,
+            isValid = isValidEmail,
+            onValueChange = onValueChangeEmail,
+            onClick = onClickEmail,
             focusManager = focusManager,
         )
 
         TextField(
             textFieldType = TextFieldType.Password,
-            enable = enable,
-            value = passwordValue,
-            isValid = passwordValid,
-            onValueChange = onPasswordValueChange,
-            onClick = onPasswordClick,
+            enabled = enabled,
+            value = valuePassword,
+            isValid = isValidPassword,
+            onValueChange = onValueChangePassword,
+            onClick = onClickPassword,
             focusManager = focusManager,
             imeAction = ImeAction.Done,
-            isVisible = isPasswordVisible,
+            isVisible = isVisiblePassword,
             isStrict = true,
         )
 
         OutlinedButton(
             onClick = {
                 focusManager.clearFocus()
-                onRegisterClick()
+                onClickRegister()
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -90,7 +90,7 @@ fun ContentRegister(
                     end = 16.dp,
                     bottom = 16.dp,
                 ),
-            enabled = enable && nameValue.isNotEmpty() && emailValue.isNotEmpty() && passwordValue.isNotEmpty() && nameValid && emailValid && passwordValid,
+            enabled = enabled && valueName.isNotEmpty() && valueEmail.isNotEmpty() && valuePassword.isNotEmpty() && isValidName && isValidEmail && isValidPassword,
         ) {
             Text(
                 text = "Register",
@@ -105,7 +105,7 @@ fun ContentRegister(
                 text = "Login",
                 modifier = Modifier.clickable {
                     focusManager.clearFocus()
-                    onLoginClick()
+                    onClickLogin()
                 },
                 color = MaterialTheme.colorScheme.primary,
             )
