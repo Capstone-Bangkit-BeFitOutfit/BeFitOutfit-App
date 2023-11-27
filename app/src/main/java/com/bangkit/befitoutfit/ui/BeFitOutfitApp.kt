@@ -53,17 +53,23 @@ fun BeFitOutfitApp(
     scope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    currentRoute: String = navController.currentBackStackEntryAsState().value?.destination?.route
+        ?: startDestination,
+    isAuthScreens: Boolean = listOf(
+        Screen.Login.route, Screen.Register.route
+    ).contains(currentRoute),
 ) {
-    val currentRoute =
-        navController.currentBackStackEntryAsState().value?.destination?.route ?: startDestination
-    val isAuthScreens = listOf(Screen.Login.route, Screen.Register.route).contains(currentRoute)
-
     var showBottomSheet by remember {
         mutableStateOf(
             value = false,
         )
     }
-    var bottomSheetType by remember { mutableStateOf<BottomSheetType>(BottomSheetType.Profile) }
+
+    var bottomSheetType by remember {
+        mutableStateOf<BottomSheetType>(
+            value = BottomSheetType.Profile
+        )
+    }
 
     var selectedOutfit by remember {
         mutableStateOf(
