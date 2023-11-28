@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.map
 
 class SettingPreferences(private val datastore: DataStore<Preferences>) {
     fun getRecommend() = datastore.data.map {
-        SettingRecommend(event = it[EVENT] ?: "")
+        SettingRecommend(event = it[EVENT] ?: "Casual")
     }
 
     suspend fun setRecommend(settingRecommend: SettingRecommend) {
