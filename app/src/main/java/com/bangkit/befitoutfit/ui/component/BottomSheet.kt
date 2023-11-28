@@ -201,22 +201,19 @@ fun BottomSheet(
                 BottomSheetType.SettingRecommend -> {
                     val viewModel: SettingRecommendViewModel = koinViewModel()
 
-                    val listEvent = listOf("Casual", "Formal")
-
                     val (event, onEventSelected) = remember {
                         mutableStateOf(
-                            value = when (runBlocking {
+                            value = runBlocking {
                                 viewModel.getSettingRecommend().first().event
-                            }) {
-                                "Casual" -> listEvent[0]
-                                "Formal" -> listEvent[1]
-                                else -> listEvent[0]
                             },
                         )
                     }
 
                     ContentSettingRecommend(
-                        listEvent = listEvent,
+                        listEvent = listOf(
+                            "Casual",
+                            "Formal",
+                        ),
                         event = event,
                         onSelected = onEventSelected,
                         setSettingRecommend = viewModel::setSettingRecommend,
