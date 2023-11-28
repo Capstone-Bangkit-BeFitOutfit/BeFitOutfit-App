@@ -88,7 +88,8 @@ fun BeFitOutfitApp(
                 },
                 onClickLogout = {
                     clearSession()
-                    navController.navigate(Screen.Login.route) { navController.popBackStack() }
+                    navController.popBackStack()
+                    navController.navigate(Screen.Auth.route)
                 },
             )
         },
@@ -131,9 +132,8 @@ fun BeFitOutfitApp(
                         state = viewModel.state.collectAsState().value,
                         login = viewModel::login,
                         navigateToMain = {
-                            navController.navigate(Screen.Main.route) {
-                                navController.popBackStack()
-                            }
+                            navController.popBackStack()
+                            navController.navigate(Screen.Main.route)
                         },
                         navigateToRegister = {
                             navController.navigate(Screen.Register.route)
