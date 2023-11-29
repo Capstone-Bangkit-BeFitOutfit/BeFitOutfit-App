@@ -135,6 +135,12 @@ fun BottomSheet(
                         )
                     }
 
+                    var valueInclude by remember {
+                        mutableStateOf(
+                            value = outfit.include,
+                        )
+                    }
+
                     ContentDetailOutfit(
                         state = viewModel.state.collectAsState().value,
                         valueOutfitName = valueOutfitName,
@@ -145,6 +151,10 @@ fun BottomSheet(
                         },
                         onClickOutfitName = {
                             valueOutfitName = ""
+                        },
+                        valueInclude = valueInclude,
+                        onValueChangeInclude = {
+                            valueInclude = it
                         },
                         onClickUpdate = {
                             viewModel.updateOutfit(

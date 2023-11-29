@@ -6,11 +6,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
@@ -26,6 +30,8 @@ fun ContentDetailOutfit(
     isValidOutfitName: Boolean,
     onValueChangeOutfitName: (String) -> Unit,
     onClickOutfitName: () -> Unit,
+    valueInclude: Boolean,
+    onValueChangeInclude: (Boolean) -> Unit,
     onClickUpdate: () -> Unit,
     dismiss: () -> Unit,
     modifier: Modifier = Modifier,
@@ -114,6 +120,39 @@ fun ContentDetailOutfit(
                         text = "Gallery",
                     )
                 }
+            }
+        }
+
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        bottom = 16.dp,
+                    )
+                    .height(
+                        height = 56.dp,
+                    )
+                    .toggleable(
+                        value = valueInclude,
+                        onValueChange = onValueChangeInclude,
+                    )
+                    .padding(
+                        horizontal = 16.dp,
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Checkbox(
+                    checked = valueInclude,
+                    onCheckedChange = null,
+                )
+                Text(
+                    text = "Include this outfit in recommendation",
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                    ),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
             }
         }
 

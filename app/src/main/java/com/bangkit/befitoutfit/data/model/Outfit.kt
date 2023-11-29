@@ -5,5 +5,5 @@ data class Outfit(
     val name: String = "",
     val type: String = "",
     val imageUrl: String = "",
-    val include: Boolean = true,
+    val include: Boolean = false,
 )
