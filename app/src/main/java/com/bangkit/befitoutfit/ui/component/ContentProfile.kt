@@ -1,8 +1,8 @@
 package com.bangkit.befitoutfit.ui.component
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,42 +40,51 @@ fun ContentProfile(
         else -> {}
     }
 
-    Column(
+    LazyColumn(
         modifier = modifier.fillMaxWidth(),
     ) {
-        TextField(
-            textFieldType = TextFieldType.Name,
-            enabled = state is State.Idle,
-            value = valueName,
-            isValid = isValidName,
-            onValueChange = onValueChangeName,
-            onClick = onClickName,
-            focusManager = focusManager,
-        )
-
-        TextField(
-            textFieldType = TextFieldType.Email,
-            enabled = state is State.Idle,
-            value = valueEmail,
-            isValid = isValidEmail,
-            onValueChange = onValueChangeEmail,
-            onClick = onClickEmail,
-            focusManager = focusManager,
-            imeAction = ImeAction.Done,
-        )
-
-        OutlinedButton(
-            onClick = onClickUpdate,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = 16.dp,
+        item {
+            TextField(
+                textFieldType = TextFieldType.Name,
+                modifier = Modifier.padding(
+                    top = 16.dp,
                 ),
-            enabled = (session.name != valueName || session.email != valueEmail) && isValidName && isValidEmail && valueName.isNotEmpty() && valueEmail.isNotEmpty() && state is State.Idle,
-        ) {
-            Text(
-                text = "Update",
+                enabled = state is State.Idle,
+                value = valueName,
+                isValid = isValidName,
+                onValueChange = onValueChangeName,
+                onClick = onClickName,
+                focusManager = focusManager,
             )
+        }
+
+        item {
+            TextField(
+                textFieldType = TextFieldType.Email,
+                enabled = state is State.Idle,
+                value = valueEmail,
+                isValid = isValidEmail,
+                onValueChange = onValueChangeEmail,
+                onClick = onClickEmail,
+                focusManager = focusManager,
+                imeAction = ImeAction.Done,
+            )
+        }
+
+        item {
+            OutlinedButton(
+                onClick = onClickUpdate,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = 16.dp,
+                    ),
+                enabled = (session.name != valueName || session.email != valueEmail) && isValidName && isValidEmail && valueName.isNotEmpty() && valueEmail.isNotEmpty() && state is State.Idle,
+            ) {
+                Text(
+                    text = "Update",
+                )
+            }
         }
     }
 }
