@@ -62,11 +62,7 @@ fun BottomSheet(
                 style = MaterialTheme.typography.labelLarge,
             )
 
-            Divider(
-                modifier = Modifier.padding(
-                    bottom = 16.dp,
-                ),
-            )
+            Divider()
 
             when (bottomSheetType) {
                 BottomSheetType.Profile -> {
@@ -139,6 +135,12 @@ fun BottomSheet(
                         )
                     }
 
+                    var valueInclude by remember {
+                        mutableStateOf(
+                            value = outfit.include,
+                        )
+                    }
+
                     ContentDetailOutfit(
                         state = viewModel.state.collectAsState().value,
                         valueOutfitName = valueOutfitName,
@@ -149,6 +151,10 @@ fun BottomSheet(
                         },
                         onClickOutfitName = {
                             valueOutfitName = ""
+                        },
+                        valueInclude = valueInclude,
+                        onValueChangeInclude = {
+                            valueInclude = it
                         },
                         onClickUpdate = {
                             viewModel.updateOutfit(
@@ -176,6 +182,12 @@ fun BottomSheet(
                         )
                     }
 
+                    var valueInclude by remember {
+                        mutableStateOf(
+                            value = true,
+                        )
+                    }
+
                     ContentAddOutfit(
                         state = viewModel.state.collectAsState().value,
                         valueOutfitName = valueOutfitName,
@@ -186,6 +198,10 @@ fun BottomSheet(
                         },
                         onClickOutfitName = {
                             valueOutfitName = ""
+                        },
+                        valueInclude = valueInclude,
+                        onValueChangeInclude = {
+                            valueInclude = it
                         },
                         onClickAdd = {
                             viewModel.addOutfit(
