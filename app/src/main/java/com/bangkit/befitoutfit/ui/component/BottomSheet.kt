@@ -62,11 +62,7 @@ fun BottomSheet(
                 style = MaterialTheme.typography.labelLarge,
             )
 
-            Divider(
-                modifier = Modifier.padding(
-                    bottom = 16.dp,
-                ),
-            )
+            Divider()
 
             when (bottomSheetType) {
                 BottomSheetType.Profile -> {
