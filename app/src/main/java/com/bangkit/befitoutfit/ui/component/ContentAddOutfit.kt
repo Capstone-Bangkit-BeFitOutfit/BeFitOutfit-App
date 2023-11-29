@@ -1,11 +1,11 @@
 package com.bangkit.befitoutfit.ui.component
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedButton
@@ -40,87 +40,98 @@ fun ContentAddOutfit(
         else -> {}
     }
 
-    Column(
+    LazyColumn(
         modifier = modifier.fillMaxWidth(),
     ) {
-        TextField(
-            textFieldType = TextFieldType.OutfitName,
-            enabled = state is State.Idle,
-            value = valueOutfitName,
-            isValid = isValidOutfitName,
-            onValueChange = onValueChangeOutfitName,
-            onClick = onClickOutfitName,
-            focusManager = focusManager,
-            imeAction = ImeAction.Done,
-        )
+        item {
+            TextField(
+                textFieldType = TextFieldType.OutfitName,
+                modifier = Modifier.padding(
+                    top = 16.dp,
+                ),
+                enabled = state is State.Idle,
+                value = valueOutfitName,
+                isValid = isValidOutfitName,
+                onValueChange = onValueChangeOutfitName,
+                onClick = onClickOutfitName,
+                focusManager = focusManager,
+                imeAction = ImeAction.Done,
+            )
+        }
 
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(
-                    height = 200.dp,
-                )
-                .padding(
+        item {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(
+                        height = 200.dp,
+                    )
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 16.dp,
+                    )
+            ) {}
+        }
+
+        item {
+            Row(
+                modifier = Modifier.padding(
                     start = 16.dp,
                     end = 16.dp,
                     bottom = 16.dp,
-                )
-        ) {}
-
-        Row(
-            modifier = Modifier.padding(
-                start = 16.dp,
-                end = 16.dp,
-                bottom = 16.dp,
-            ),
-        ) {
-            Button(
-                onClick = {
-                    /*TODO: feature add image from camera*/
-                },
-                modifier = Modifier.weight(
-                    weight = 1f,
                 ),
-                enabled = state is State.Idle,
             ) {
-                Text(
-                    text = "Camera",
-                )
-            }
+                Button(
+                    onClick = {
+                        /*TODO: feature add image from camera*/
+                    },
+                    modifier = Modifier.weight(
+                        weight = 1f,
+                    ),
+                    enabled = state is State.Idle,
+                ) {
+                    Text(
+                        text = "Camera",
+                    )
+                }
 
-            Spacer(
-                modifier = Modifier.padding(
-                    all = 8.dp,
+                Spacer(
+                    modifier = Modifier.padding(
+                        all = 8.dp,
+                    )
                 )
-            )
 
-            Button(
-                onClick = {
-                    /*TODO: feature add image from gallery*/
-                },
-                modifier = Modifier.weight(
-                    weight = 1f,
-                ),
-                enabled = state is State.Idle,
-            ) {
-                Text(
-                    text = "Gallery",
-                )
+                Button(
+                    onClick = {
+                        /*TODO: feature add image from gallery*/
+                    },
+                    modifier = Modifier.weight(
+                        weight = 1f,
+                    ),
+                    enabled = state is State.Idle,
+                ) {
+                    Text(
+                        text = "Gallery",
+                    )
+                }
             }
         }
 
-        OutlinedButton(
-            onClick = onClickAdd,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = 16.dp,
-                ),
-            enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName,
-        ) {
-            Text(
-                text = "Add",
-            )
+        item {
+            OutlinedButton(
+                onClick = onClickAdd,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = 16.dp,
+                    ),
+                enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName,
+            ) {
+                Text(
+                    text = "Add",
+                )
+            }
         }
     }
 }
