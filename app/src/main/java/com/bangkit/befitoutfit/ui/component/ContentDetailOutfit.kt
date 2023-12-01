@@ -10,9 +10,14 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +28,9 @@ import androidx.compose.ui.unit.dp
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.helper.TextFieldType
 
+@OptIn(
+    ExperimentalMaterial3Api::class,
+)
 @Composable
 fun ContentDetailOutfit(
     state: State<Unit>,
@@ -32,6 +40,10 @@ fun ContentDetailOutfit(
     onClickOutfitName: () -> Unit,
     valueInclude: Boolean,
     onValueChangeInclude: (Boolean) -> Unit,
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
+    valueOutfitType: String,
+    onValueChangeOutfitType: (String) -> Unit,
     onClickUpdate: () -> Unit,
     dismiss: () -> Unit,
     modifier: Modifier = Modifier,
@@ -119,6 +131,69 @@ fun ContentDetailOutfit(
                     Text(
                         text = "Gallery",
                     )
+                }
+            }
+        }
+
+        item {
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = onExpandedChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 16.dp,
+                    ),
+            ) {
+                TextField(
+                    value = valueOutfitType,
+                    onValueChange = onValueChangeOutfitType,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(),
+                    readOnly = true,
+                    label = {
+                        Text(
+                            text = "Outfit type",
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Select outfit type",
+                        )
+                    },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                    },
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = {
+                        onExpandedChange(false)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    listOf(
+                        "Top",
+                        "Bottom",
+                        "Extra",
+                    ).forEach {
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = it,
+                                )
+                            },
+                            onClick = {
+                                onValueChangeOutfitType(it)
+                                onExpandedChange(false)
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
                 }
             }
         }

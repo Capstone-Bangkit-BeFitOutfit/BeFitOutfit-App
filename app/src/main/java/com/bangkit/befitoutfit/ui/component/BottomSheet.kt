@@ -141,6 +141,17 @@ fun BottomSheet(
                         )
                     }
 
+                    var expanded by remember {
+                        mutableStateOf(
+                            value = false,
+                        )
+                    }
+                    var valueOutfitType by remember {
+                        mutableStateOf(
+                            value = outfit.type,
+                        )
+                    }
+
                     ContentDetailOutfit(
                         state = viewModel.state.collectAsState().value,
                         valueOutfitName = valueOutfitName,
@@ -155,6 +166,14 @@ fun BottomSheet(
                         valueInclude = valueInclude,
                         onValueChangeInclude = {
                             valueInclude = it
+                        },
+                        expanded = expanded,
+                        onExpandedChange = {
+                            expanded = it
+                        },
+                        valueOutfitType = valueOutfitType,
+                        onValueChangeOutfitType = {
+                            valueOutfitType = it
                         },
                         onClickUpdate = {
                             viewModel.updateOutfit(
@@ -188,6 +207,17 @@ fun BottomSheet(
                         )
                     }
 
+                    var expanded by remember {
+                        mutableStateOf(
+                            value = false,
+                        )
+                    }
+                    var valueOutfitType by remember {
+                        mutableStateOf(
+                            value = "",
+                        )
+                    }
+
                     ContentAddOutfit(
                         state = viewModel.state.collectAsState().value,
                         valueOutfitName = valueOutfitName,
@@ -202,6 +232,14 @@ fun BottomSheet(
                         valueInclude = valueInclude,
                         onValueChangeInclude = {
                             valueInclude = it
+                        },
+                        expanded = expanded,
+                        onExpandedChange = {
+                            expanded = it
+                        },
+                        valueOutfitType = valueOutfitType,
+                        onValueChangeOutfitType = {
+                            valueOutfitType = it
                         },
                         onClickAdd = {
                             viewModel.addOutfit(
