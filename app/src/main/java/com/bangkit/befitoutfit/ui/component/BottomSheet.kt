@@ -163,6 +163,7 @@ fun BottomSheet(
                         onClickOutfitName = {
                             valueOutfitName = ""
                         },
+                        valueOutfitImageUrl = outfit.imageUrl,
                         valueInclude = valueInclude,
                         onValueChangeInclude = {
                             valueInclude = it
