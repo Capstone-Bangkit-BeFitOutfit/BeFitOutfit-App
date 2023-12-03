@@ -1,5 +1,6 @@
 package com.bangkit.befitoutfit.ui.component
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -85,6 +86,12 @@ fun ContentProfile(
                     text = "Update",
                 )
             }
+
+            Spacer(
+                modifier = Modifier.padding(
+                    all = 32.dp,
+                ),
+            )
         }
     }
 }

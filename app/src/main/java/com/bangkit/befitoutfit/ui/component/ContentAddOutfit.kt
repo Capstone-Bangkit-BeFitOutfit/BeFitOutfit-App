@@ -246,6 +246,12 @@ fun ContentAddOutfit(
                     text = "Add",
                 )
             }
+
+            Spacer(
+                modifier = Modifier.padding(
+                    all = 32.dp,
+                ),
+            )
         }
     }
 }

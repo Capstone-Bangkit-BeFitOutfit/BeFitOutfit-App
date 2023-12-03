@@ -275,12 +275,6 @@ fun BottomSheet(
                     )
                 }
             }
-
-            Spacer(
-                modifier = Modifier.padding(
-                    all = 32.dp,
-                ),
-            )
         }
     }
 }
