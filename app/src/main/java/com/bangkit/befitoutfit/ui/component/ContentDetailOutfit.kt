@@ -70,27 +70,11 @@ fun ContentDetailOutfit(
         modifier = modifier.fillMaxWidth(),
     ) {
         item {
-            TextField(
-                textFieldType = TextFieldType.OutfitName,
-                modifier = Modifier.padding(
-                    top = 16.dp,
-                ),
-                enabled = state is State.Idle,
-                value = valueOutfitName,
-                isValid = isValidOutfitName,
-                onValueChange = onValueChangeOutfitName,
-                onClick = onClickOutfitName,
-                focusManager = focusManager,
-                imeAction = ImeAction.Done,
-            )
-        }
-
-        item {
             Card(
                 modifier = Modifier.padding(
                     start = 16.dp,
+                    top = 16.dp,
                     end = 16.dp,
-                    bottom = 16.dp,
                 ),
             ) {
                 AsyncImage(
@@ -112,6 +96,22 @@ fun ContentDetailOutfit(
                     contentScale = ContentScale.FillWidth,
                 )
             }
+        }
+
+        item {
+            TextField(
+                textFieldType = TextFieldType.OutfitName,
+                modifier = Modifier.padding(
+                    top = 16.dp,
+                ),
+                enabled = state is State.Idle,
+                value = valueOutfitName,
+                isValid = isValidOutfitName,
+                onValueChange = onValueChangeOutfitName,
+                onClick = onClickOutfitName,
+                focusManager = focusManager,
+                imeAction = ImeAction.Done,
+            )
         }
 
         item {
