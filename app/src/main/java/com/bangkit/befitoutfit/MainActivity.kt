@@ -29,14 +29,19 @@ class MainActivity : ComponentActivity() {
         setContent {
             BeFitOutfitTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background,
                 ) {
                     KoinAndroidContext {
                         val viewModel: MainViewModel = koinViewModel()
                         val flowSession = viewModel.getSession()
                         BeFitOutfitApp(
-                            startDestination = if (runBlocking { flowSession.first().email.isNotEmpty() }) Screen.Main.route else Screen.Auth.route,
-                            session = flowSession.collectAsState(initial = Session()).value,
+                            startDestination = if (runBlocking {
+                                    flowSession.first().email.isNotEmpty()
+                                }) Screen.Main.route else Screen.Auth.route,
+                            session = flowSession.collectAsState(
+                                initial = Session(),
+                            ).value,
                             clearSession = viewModel::clearSession,
                         )
                     }
