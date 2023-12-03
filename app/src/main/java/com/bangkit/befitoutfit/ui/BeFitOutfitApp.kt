@@ -1,5 +1,6 @@
 package com.bangkit.befitoutfit.ui
 
+import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,6 +47,7 @@ import org.koin.androidx.compose.koinViewModel
 )
 @Composable
 fun BeFitOutfitApp(
+    context: Context,
     startDestination: String,
     session: Session,
     clearSession: () -> Unit,
@@ -191,6 +193,7 @@ fun BeFitOutfitApp(
         }
 
         BottomSheet(
+            context = context,
             showBottomSheet = showBottomSheet,
             bottomSheetType = bottomSheetType,
             onDismissRequest = {

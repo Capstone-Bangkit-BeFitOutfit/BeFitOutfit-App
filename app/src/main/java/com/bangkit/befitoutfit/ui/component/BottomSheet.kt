@@ -1,6 +1,6 @@
 package com.bangkit.befitoutfit.ui.component
 
-import androidx.compose.foundation.layout.Spacer
+import android.content.Context
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
@@ -36,6 +36,7 @@ import org.koin.androidx.compose.koinViewModel
 )
 @Composable
 fun BottomSheet(
+    context: Context,
     showBottomSheet: Boolean,
     bottomSheetType: BottomSheetType,
     modifier: Modifier = Modifier,
@@ -221,6 +222,7 @@ fun BottomSheet(
 
                     ContentAddOutfit(
                         state = viewModel.state.collectAsState().value,
+                        context = context,
                         valueOutfitName = valueOutfitName,
                         isValidOutfitName = isValidOutfitName,
                         onValueChangeOutfitName = {
