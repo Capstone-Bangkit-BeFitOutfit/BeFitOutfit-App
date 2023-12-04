@@ -1,6 +1,7 @@
 package com.bangkit.befitoutfit.ui.component
 
-import androidx.compose.foundation.layout.Spacer
+import android.content.Context
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
@@ -36,6 +37,7 @@ import org.koin.androidx.compose.koinViewModel
 )
 @Composable
 fun BottomSheet(
+    context: Context,
     showBottomSheet: Boolean,
     bottomSheetType: BottomSheetType,
     modifier: Modifier = Modifier,
@@ -202,6 +204,12 @@ fun BottomSheet(
                         )
                     }
 
+                    var valueOutfitImage: Bitmap? by remember {
+                        mutableStateOf(
+                            value = null,
+                        )
+                    }
+
                     var valueInclude by remember {
                         mutableStateOf(
                             value = true,
@@ -221,6 +229,7 @@ fun BottomSheet(
 
                     ContentAddOutfit(
                         state = viewModel.state.collectAsState().value,
+                        context = context,
                         valueOutfitName = valueOutfitName,
                         isValidOutfitName = isValidOutfitName,
                         onValueChangeOutfitName = {
@@ -229,6 +238,10 @@ fun BottomSheet(
                         },
                         onClickOutfitName = {
                             valueOutfitName = ""
+                        },
+                        valueOutfitImage = valueOutfitImage,
+                        onValueChangeOutfitImage = {
+                            valueOutfitImage = it
                         },
                         valueInclude = valueInclude,
                         onValueChangeInclude = {
@@ -275,12 +288,6 @@ fun BottomSheet(
                     )
                 }
             }
-
-            Spacer(
-                modifier = Modifier.padding(
-                    all = 32.dp,
-                ),
-            )
         }
     }
 }

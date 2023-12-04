@@ -1,6 +1,7 @@
 package com.bangkit.befitoutfit.ui.component
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -69,27 +70,11 @@ fun ContentDetailOutfit(
         modifier = modifier.fillMaxWidth(),
     ) {
         item {
-            TextField(
-                textFieldType = TextFieldType.OutfitName,
-                modifier = Modifier.padding(
-                    top = 16.dp,
-                ),
-                enabled = state is State.Idle,
-                value = valueOutfitName,
-                isValid = isValidOutfitName,
-                onValueChange = onValueChangeOutfitName,
-                onClick = onClickOutfitName,
-                focusManager = focusManager,
-                imeAction = ImeAction.Done,
-            )
-        }
-
-        item {
             Card(
                 modifier = Modifier.padding(
                     start = 16.dp,
+                    top = 16.dp,
                     end = 16.dp,
-                    bottom = 16.dp,
                 ),
             ) {
                 AsyncImage(
@@ -111,6 +96,22 @@ fun ContentDetailOutfit(
                     contentScale = ContentScale.FillWidth,
                 )
             }
+        }
+
+        item {
+            TextField(
+                textFieldType = TextFieldType.OutfitName,
+                modifier = Modifier.padding(
+                    top = 16.dp,
+                ),
+                enabled = state is State.Idle,
+                value = valueOutfitName,
+                isValid = isValidOutfitName,
+                onValueChange = onValueChangeOutfitName,
+                onClick = onClickOutfitName,
+                focusManager = focusManager,
+                imeAction = ImeAction.Done,
+            )
         }
 
         item {
@@ -223,6 +224,12 @@ fun ContentDetailOutfit(
                     text = "Update",
                 )
             }
+
+            Spacer(
+                modifier = Modifier.padding(
+                    all = 32.dp,
+                ),
+            )
         }
     }
 }
