@@ -1,6 +1,7 @@
 package com.bangkit.befitoutfit.ui.component
 
 import android.content.Context
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
@@ -203,6 +204,12 @@ fun BottomSheet(
                         )
                     }
 
+                    var valueOutfitImage: Bitmap? by remember {
+                        mutableStateOf(
+                            value = null,
+                        )
+                    }
+
                     var valueInclude by remember {
                         mutableStateOf(
                             value = true,
@@ -231,6 +238,10 @@ fun BottomSheet(
                         },
                         onClickOutfitName = {
                             valueOutfitName = ""
+                        },
+                        valueOutfitImage = valueOutfitImage,
+                        onValueChangeOutfitImage = {
+                            valueOutfitImage = it
                         },
                         valueInclude = valueInclude,
                         onValueChangeInclude = {
