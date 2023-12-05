@@ -1,5 +1,6 @@
 package com.bangkit.befitoutfit.ui.screen.addOutfit
 
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bangkit.befitoutfit.data.model.Info
@@ -22,14 +23,16 @@ class AddOutfitViewModel(
     fun addOutfit(
         name: String,
         type: String,
-        imageUrl: String,
+        image: Bitmap?,
+        include: Boolean,
     ) = viewModelScope.launch(
         context = Dispatchers.IO,
     ) {
         outfitRepository.addOutfit(
             name = name,
             type = type,
-            imageUrl = imageUrl,
+            image = image,
+            include = include,
         ).onStart {
             state.value = State.Loading
         }.catch {
