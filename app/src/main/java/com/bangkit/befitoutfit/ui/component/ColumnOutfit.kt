@@ -37,7 +37,6 @@ fun ColumnOutfit(
     ) {
         if (isOutfitsEmpty) item {
             Text(
-                /*TODO: error handling message*/
                 text = "No outfit found",
             )
         } else items(

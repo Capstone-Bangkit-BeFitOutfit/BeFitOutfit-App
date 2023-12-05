@@ -3,6 +3,8 @@ package com.bangkit.befitoutfit.ui
 import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
@@ -54,6 +56,9 @@ fun BeFitOutfitApp(
     modifier: Modifier = Modifier,
     scope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
+    hostState: SnackbarHostState = remember {
+        SnackbarHostState()
+    },
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     currentRoute: String = navController.currentBackStackEntryAsState().value?.destination?.route
         ?: startDestination,
@@ -100,6 +105,11 @@ fun BeFitOutfitApp(
                 screens = listOf(Screen.MyOutfit, Screen.Recommend),
                 currentRoute = currentRoute,
                 navController = navController,
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = hostState,
             )
         },
         floatingActionButton = {
@@ -167,7 +177,12 @@ fun BeFitOutfitApp(
                         state = viewModel.state.collectAsState().value,
                         outfits = viewModel.outfits,
                         onRefresh = viewModel::getOutfit,
-                        detailOutfit = { outfit ->
+                        onError = {
+                            scope.launch {
+                                hostState.showSnackbar(it)
+                            }
+                        },
+                        onClickDetailOutfit = { outfit ->
                             selectedOutfit = outfit
                             bottomSheetType = BottomSheetType.DetailOutfit
                             showBottomSheet = true

@@ -105,7 +105,6 @@ fun ColumnRecommend(
             }
         } else item {
             Text(
-                /*TODO: error handling message*/
                 text = "No outfit recommendation found",
             )
         }

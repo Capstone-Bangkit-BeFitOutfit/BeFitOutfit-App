@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.data.model.Outfits
 import com.bangkit.befitoutfit.helper.State
+import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
 import com.bangkit.befitoutfit.ui.component.ColumnOutfit
 
 @OptIn(
@@ -24,7 +25,8 @@ fun MyOutfitScreen(
     outfits: List<Outfit>,
     modifier: Modifier = Modifier,
     onRefresh: () -> Unit = {},
-    detailOutfit: (Outfit) -> Unit = {},
+    onError: (String) -> Unit = {},
+    onClickDetailOutfit: (Outfit) -> Unit = {},
     pullRefreshState: PullRefreshState = rememberPullRefreshState(
         refreshing = state is State.Loading,
         onRefresh = onRefresh,
@@ -39,13 +41,13 @@ fun MyOutfitScreen(
     ) {
         when (state) {
             is State.Success -> {}
-            is State.Error -> {}
+            is State.Error -> onError(state.message.errorMessageHandler())
             else -> {}
         }
 
         ColumnOutfit(
             outfits = outfits,
-            onClick = detailOutfit,
+            onClick = onClickDetailOutfit,
         )
 
         PullRefreshIndicator(
