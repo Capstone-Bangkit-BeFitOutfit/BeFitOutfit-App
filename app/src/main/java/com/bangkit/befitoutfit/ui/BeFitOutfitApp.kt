@@ -3,6 +3,8 @@ package com.bangkit.befitoutfit.ui
 import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
@@ -54,6 +56,9 @@ fun BeFitOutfitApp(
     modifier: Modifier = Modifier,
     scope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
+    hostState: SnackbarHostState = remember {
+        SnackbarHostState()
+    },
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     currentRoute: String = navController.currentBackStackEntryAsState().value?.destination?.route
         ?: startDestination,
@@ -102,6 +107,11 @@ fun BeFitOutfitApp(
                 navController = navController,
             )
         },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = hostState,
+            )
+        },
         floatingActionButton = {
             if (isAuthScreens.not()) FloatingActionButton(
                 currentRoute = currentRoute,
@@ -140,6 +150,11 @@ fun BeFitOutfitApp(
                         navigateToRegister = {
                             navController.navigate(Screen.Register.route)
                         },
+                        onError = {
+                            scope.launch {
+                                hostState.showSnackbar(it)
+                            }
+                        },
                     )
                 }
                 composable(
@@ -151,6 +166,11 @@ fun BeFitOutfitApp(
                         register = viewModel::register,
                         navigateToLogin = {
                             navController.navigateUp()
+                        },
+                        onError = {
+                            scope.launch {
+                                hostState.showSnackbar(it)
+                            }
                         },
                     )
                 }
@@ -167,7 +187,12 @@ fun BeFitOutfitApp(
                         state = viewModel.state.collectAsState().value,
                         outfits = viewModel.outfits,
                         onRefresh = viewModel::getOutfit,
-                        detailOutfit = { outfit ->
+                        onError = {
+                            scope.launch {
+                                hostState.showSnackbar(it)
+                            }
+                        },
+                        onClickDetailOutfit = { outfit ->
                             selectedOutfit = outfit
                             bottomSheetType = BottomSheetType.DetailOutfit
                             showBottomSheet = true
@@ -182,6 +207,11 @@ fun BeFitOutfitApp(
                         state = viewModel.state.collectAsState().value,
                         recommend = viewModel.recommend,
                         onRefresh = viewModel::getRecommend,
+                        onError = {
+                            scope.launch {
+                                hostState.showSnackbar(it)
+                            }
+                        },
                         onClickDetailOutfit = { outfit ->
                             selectedOutfit = outfit
                             bottomSheetType = BottomSheetType.DetailOutfit
@@ -202,6 +232,11 @@ fun BeFitOutfitApp(
             sheetState = sheetState,
             session = session,
             outfit = selectedOutfit,
+            onError = {
+                scope.launch {
+                    hostState.showSnackbar(it)
+                }
+            },
             dismiss = {
                 scope.launch {
                     sheetState.hide()

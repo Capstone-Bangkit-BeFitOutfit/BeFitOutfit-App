@@ -12,9 +12,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.bangkit.befitoutfit.data.model.Info
-import com.bangkit.befitoutfit.helper.InputChecker.emailChecker
-import com.bangkit.befitoutfit.helper.InputChecker.passwordChecker
 import com.bangkit.befitoutfit.helper.State
+import com.bangkit.befitoutfit.helper.StringExtensions.emailChecker
+import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
+import com.bangkit.befitoutfit.helper.StringExtensions.passwordChecker
 import com.bangkit.befitoutfit.ui.component.ContentRegister
 
 @Composable
@@ -22,6 +23,7 @@ fun RegisterScreen(
     state: State<Info>,
     register: (String, String, String) -> Unit,
     navigateToLogin: () -> Unit,
+    onError: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var valueName by remember {
@@ -64,9 +66,7 @@ fun RegisterScreen(
 
     when (state) {
         is State.Success -> navigateToLogin()
-        is State.Error -> {/*TODO: register error handling*/
-        }
-
+        is State.Error -> onError(state.message.errorMessageHandler())
         else -> {}
     }
 

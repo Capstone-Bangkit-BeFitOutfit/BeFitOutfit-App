@@ -2,7 +2,7 @@ package com.bangkit.befitoutfit.helper
 
 import android.util.Patterns
 
-object InputChecker {
+object StringExtensions {
     private val LOWERCASE = Regex(".*[a-z].*")
     private val UPPERCASE = Regex(".*[A-Z].*")
     private val DIGIT = Regex(".*\\d.*")
@@ -25,5 +25,10 @@ object InputChecker {
         this.contains(DIGIT).not() -> "Password must contain at least 1 digit"
         this.contains(SPECIAL).not() -> "Password must contain at least 1 special character"
         else -> ""
+    }
+
+    fun String.errorMessageHandler(): String = when {
+        this.contains("Unable to resolve host") -> "No internet connection"
+        else -> "Error${if (this.isNotEmpty()) ": $this" else ""}"
     }
 }

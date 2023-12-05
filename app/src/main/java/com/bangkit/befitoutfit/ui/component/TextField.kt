@@ -20,8 +20,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.bangkit.befitoutfit.helper.InputChecker.emailChecker
-import com.bangkit.befitoutfit.helper.InputChecker.passwordChecker
+import com.bangkit.befitoutfit.helper.StringExtensions.emailChecker
+import com.bangkit.befitoutfit.helper.StringExtensions.passwordChecker
 import com.bangkit.befitoutfit.helper.TextFieldType
 
 @Composable

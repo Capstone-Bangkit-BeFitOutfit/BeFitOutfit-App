@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.data.model.Recommend
 import com.bangkit.befitoutfit.helper.State
+import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
 import com.bangkit.befitoutfit.ui.component.ColumnRecommend
 
 @OptIn(
@@ -24,6 +25,7 @@ fun RecommendScreen(
     recommend: Recommend,
     modifier: Modifier = Modifier,
     onRefresh: () -> Unit = {},
+    onError: (String) -> Unit = {},
     onClickDetailOutfit: (Outfit) -> Unit = {},
     pullRefreshState: PullRefreshState = rememberPullRefreshState(
         refreshing = state is State.Loading,
@@ -38,8 +40,7 @@ fun RecommendScreen(
             )
     ) {
         when (state) {
-            is State.Success -> {}
-            is State.Error -> {}
+            is State.Error -> onError(state.message.errorMessageHandler())
             else -> {}
         }
 

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.helper.BottomSheetType
-import com.bangkit.befitoutfit.helper.InputChecker.emailChecker
+import com.bangkit.befitoutfit.helper.StringExtensions.emailChecker
 import com.bangkit.befitoutfit.ui.screen.addOutfit.AddOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.detailOutfit.DetailOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.profile.ProfileViewModel
@@ -45,6 +45,7 @@ fun BottomSheet(
     sheetState: SheetState = rememberModalBottomSheetState(),
     session: Session = Session(),
     outfit: Outfit = Outfit(),
+    onError: (String) -> Unit = {},
     dismiss: () -> Unit = {},
 ) {
     if (showBottomSheet) {
@@ -119,6 +120,7 @@ fun BottomSheet(
                                 email = valueEmail,
                             )
                         },
+                        onError = onError,
                         dismiss = dismiss,
                     )
                 }
@@ -186,6 +188,7 @@ fun BottomSheet(
                                 imageUrl = outfit.imageUrl
                             )
                         },
+                        onError = onError,
                         dismiss = dismiss,
                     )
                 }
@@ -262,6 +265,7 @@ fun BottomSheet(
                                 imageUrl = outfit.imageUrl
                             )
                         },
+                        onError = onError,
                         dismiss = dismiss,
                     )
                 }

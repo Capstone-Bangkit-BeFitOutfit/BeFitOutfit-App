@@ -42,6 +42,7 @@ import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
 import com.bangkit.befitoutfit.data.model.Info
 import com.bangkit.befitoutfit.helper.State
+import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
 import com.bangkit.befitoutfit.helper.TextFieldType
 
 @OptIn(
@@ -64,6 +65,7 @@ fun ContentAddOutfit(
     valueOutfitType: String,
     onValueChangeOutfitType: (String) -> Unit,
     onClickAdd: () -> Unit,
+    onError: (String) -> Unit,
     dismiss: () -> Unit,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
@@ -77,7 +79,9 @@ fun ContentAddOutfit(
 ) {
     when (state) {
         is State.Success -> dismiss()
-        is State.Error -> {/*TODO: ContentAddOutfit error handling*/
+        is State.Error -> {
+            dismiss()
+            onError(state.message.errorMessageHandler())
         }
 
         else -> {}
