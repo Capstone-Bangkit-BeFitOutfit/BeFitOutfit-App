@@ -162,6 +162,11 @@ fun BeFitOutfitApp(
                         navigateToLogin = {
                             navController.navigateUp()
                         },
+                        onError = {
+                            scope.launch {
+                                hostState.showSnackbar(it)
+                            }
+                        },
                     )
                 }
             }
