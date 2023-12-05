@@ -222,6 +222,11 @@ fun BeFitOutfitApp(
             sheetState = sheetState,
             session = session,
             outfit = selectedOutfit,
+            onError = {
+                scope.launch {
+                    hostState.showSnackbar(it)
+                }
+            },
             dismiss = {
                 scope.launch {
                     sheetState.hide()

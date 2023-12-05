@@ -45,6 +45,7 @@ fun BottomSheet(
     sheetState: SheetState = rememberModalBottomSheetState(),
     session: Session = Session(),
     outfit: Outfit = Outfit(),
+    onError: (String) -> Unit = {},
     dismiss: () -> Unit = {},
 ) {
     if (showBottomSheet) {
@@ -186,6 +187,7 @@ fun BottomSheet(
                                 imageUrl = outfit.imageUrl
                             )
                         },
+                        onError = onError,
                         dismiss = dismiss,
                     )
                 }

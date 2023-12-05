@@ -34,6 +34,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.bangkit.befitoutfit.R
 import com.bangkit.befitoutfit.helper.State
+import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
 import com.bangkit.befitoutfit.helper.TextFieldType
 
 @OptIn(
@@ -54,13 +55,16 @@ fun ContentDetailOutfit(
     valueOutfitType: String,
     onValueChangeOutfitType: (String) -> Unit,
     onClickUpdate: () -> Unit,
+    onError: (String) -> Unit,
     dismiss: () -> Unit,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
 ) {
     when (state) {
         is State.Success -> dismiss()
-        is State.Error -> {/*TODO: ContentDetailOutfit error handling*/
+        is State.Error -> {
+            dismiss()
+            onError(state.message.errorMessageHandler())
         }
 
         else -> {}
