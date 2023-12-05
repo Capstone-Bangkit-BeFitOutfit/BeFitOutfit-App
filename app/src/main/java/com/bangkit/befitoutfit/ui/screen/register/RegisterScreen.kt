@@ -12,9 +12,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.bangkit.befitoutfit.data.model.Info
-import com.bangkit.befitoutfit.helper.InputChecker.emailChecker
-import com.bangkit.befitoutfit.helper.InputChecker.passwordChecker
 import com.bangkit.befitoutfit.helper.State
+import com.bangkit.befitoutfit.helper.StringExtensions.emailChecker
+import com.bangkit.befitoutfit.helper.StringExtensions.passwordChecker
 import com.bangkit.befitoutfit.ui.component.ContentRegister
 
 @Composable
