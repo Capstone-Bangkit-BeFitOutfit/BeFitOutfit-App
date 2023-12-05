@@ -264,6 +264,7 @@ fun BottomSheet(
                                 imageUrl = outfit.imageUrl
                             )
                         },
+                        onError = onError,
                         dismiss = dismiss,
                     )
                 }
