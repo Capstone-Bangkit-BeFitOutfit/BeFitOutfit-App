@@ -197,6 +197,11 @@ fun BeFitOutfitApp(
                         state = viewModel.state.collectAsState().value,
                         recommend = viewModel.recommend,
                         onRefresh = viewModel::getRecommend,
+                        onError = {
+                            scope.launch {
+                                hostState.showSnackbar(it)
+                            }
+                        },
                         onClickDetailOutfit = { outfit ->
                             selectedOutfit = outfit
                             bottomSheetType = BottomSheetType.DetailOutfit
