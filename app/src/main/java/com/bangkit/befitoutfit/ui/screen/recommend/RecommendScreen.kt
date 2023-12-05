@@ -40,7 +40,6 @@ fun RecommendScreen(
             )
     ) {
         when (state) {
-            is State.Success -> {}
             is State.Error -> onError(state.message.errorMessageHandler())
             else -> {}
         }
