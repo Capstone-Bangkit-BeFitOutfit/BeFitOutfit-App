@@ -28,15 +28,14 @@ import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
@@ -150,14 +149,13 @@ fun ContentAddOutfit(
                 onValueChange = onValueChangeOutfitName,
                 onClick = onClickOutfitName,
                 focusManager = focusManager,
-                imeAction = ImeAction.Done,
             )
         }
 
         item {
             ExposedDropdownMenuBox(
                 expanded = expanded,
-                onExpandedChange = onExpandedChange,
+                onExpandedChange = if (state is State.Idle) onExpandedChange else { _ -> },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -166,12 +164,13 @@ fun ContentAddOutfit(
                         bottom = 16.dp,
                     ),
             ) {
-                TextField(
+                OutlinedTextField(
                     value = valueOutfitType,
                     onValueChange = onValueChangeOutfitType,
                     modifier = Modifier
                         .fillMaxWidth()
                         .menuAnchor(),
+                    enabled = state is State.Idle,
                     readOnly = true,
                     label = {
                         Text(
@@ -184,7 +183,9 @@ fun ContentAddOutfit(
                         )
                     },
                     trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        ExposedDropdownMenuDefaults.TrailingIcon(
+                            expanded = expanded,
+                        )
                     },
                 )
 
@@ -211,6 +212,7 @@ fun ContentAddOutfit(
                                 onExpandedChange(false)
                             },
                             modifier = Modifier.fillMaxWidth(),
+                            enabled = state is State.Idle,
                         )
                     }
                 }
@@ -229,7 +231,7 @@ fun ContentAddOutfit(
                     )
                     .toggleable(
                         value = valueInclude,
-                        onValueChange = onValueChangeInclude,
+                        onValueChange = if (state is State.Idle) onValueChangeInclude else { _ -> },
                     )
                     .padding(
                         horizontal = 16.dp,
@@ -239,6 +241,7 @@ fun ContentAddOutfit(
                 Checkbox(
                     checked = valueInclude,
                     onCheckedChange = null,
+                    enabled = state is State.Idle,
                 )
                 Text(
                     text = "Include this outfit in recommendation",
@@ -258,7 +261,7 @@ fun ContentAddOutfit(
                     .padding(
                         horizontal = 16.dp,
                     ),
-                enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName,
+                enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName && valueOutfitImage != null,
             ) {
                 Text(
                     text = "Add",

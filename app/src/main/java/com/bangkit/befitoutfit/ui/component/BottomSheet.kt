@@ -261,8 +261,9 @@ fun BottomSheet(
                         onClickAdd = {
                             viewModel.addOutfit(
                                 name = valueOutfitName,
-                                type = outfit.type,
-                                imageUrl = outfit.imageUrl
+                                type = valueOutfitType,
+                                image = valueOutfitImage,
+                                include = valueInclude,
                             )
                         },
                         onError = onError,
