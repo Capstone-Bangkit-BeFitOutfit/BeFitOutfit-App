@@ -14,6 +14,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.helper.State
+import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
 import com.bangkit.befitoutfit.helper.TextFieldType
 
 @Composable
@@ -29,13 +30,16 @@ fun ContentProfile(
     onValueChangeEmail: (String) -> Unit,
     onClickEmail: () -> Unit,
     onClickUpdate: () -> Unit,
+    onError: (String) -> Unit,
     dismiss: () -> Unit,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
 ) {
     when (state) {
         is State.Success -> dismiss()
-        is State.Error -> {/*TODO: ContentProfile error handling*/
+        is State.Error -> {
+            dismiss()
+            onError(state.message.errorMessageHandler())
         }
 
         else -> {}

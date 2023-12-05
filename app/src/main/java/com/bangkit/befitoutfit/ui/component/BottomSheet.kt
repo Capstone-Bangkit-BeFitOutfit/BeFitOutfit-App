@@ -120,6 +120,7 @@ fun BottomSheet(
                                 email = valueEmail,
                             )
                         },
+                        onError = onError,
                         dismiss = dismiss,
                     )
                 }
