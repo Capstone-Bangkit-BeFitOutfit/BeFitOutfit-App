@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import com.bangkit.befitoutfit.data.model.Login
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.helper.StringExtensions.emailChecker
+import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
 import com.bangkit.befitoutfit.helper.StringExtensions.passwordChecker
 import com.bangkit.befitoutfit.ui.component.ContentLogin
 
@@ -23,6 +24,7 @@ fun LoginScreen(
     login: (String, String) -> Unit,
     navigateToMain: () -> Unit,
     navigateToRegister: () -> Unit,
+    onError: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var valueEmail by remember {
@@ -54,9 +56,7 @@ fun LoginScreen(
 
     when (state) {
         is State.Success -> navigateToMain()
-        is State.Error -> {/*TODO: login error handling*/
-        }
-
+        is State.Error -> onError(state.message.errorMessageHandler())
         else -> {}
     }
 

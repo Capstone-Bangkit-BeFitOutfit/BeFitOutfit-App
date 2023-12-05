@@ -150,6 +150,11 @@ fun BeFitOutfitApp(
                         navigateToRegister = {
                             navController.navigate(Screen.Register.route)
                         },
+                        onError = {
+                            scope.launch {
+                                hostState.showSnackbar(it)
+                            }
+                        },
                     )
                 }
                 composable(
