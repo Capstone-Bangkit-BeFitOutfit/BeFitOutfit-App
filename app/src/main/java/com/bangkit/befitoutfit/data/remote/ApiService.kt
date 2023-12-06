@@ -58,8 +58,7 @@ interface ApiService {
         @Path("id") id: Int,
         @Part("name") name: RequestBody,
         @Part("type") type: RequestBody,
-        /*TODO: change to MultipartBody.Part*/
-        @Part("imageUrl") imageUrl: RequestBody,
+        @Part("include") include: RequestBody,
     )
 
     @GET("recommend")
