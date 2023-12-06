@@ -22,7 +22,7 @@ class DetailOutfitViewModel(
         id: Int,
         name: String,
         type: String,
-        imageUrl: String,
+        include: Boolean,
     ) = viewModelScope.launch(
         context = Dispatchers.IO,
     ) {
@@ -30,7 +30,7 @@ class DetailOutfitViewModel(
             id = id,
             name = name,
             type = type,
-            imageUrl = imageUrl,
+            include = include,
         ).onStart {
             state.value = State.Loading
         }.catch {

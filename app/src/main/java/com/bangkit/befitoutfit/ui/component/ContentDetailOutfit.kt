@@ -17,8 +17,8 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -121,7 +121,7 @@ fun ContentDetailOutfit(
         item {
             ExposedDropdownMenuBox(
                 expanded = expanded,
-                onExpandedChange = onExpandedChange,
+                onExpandedChange = if (state is State.Idle) onExpandedChange else { _ -> },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -130,12 +130,13 @@ fun ContentDetailOutfit(
                         bottom = 16.dp,
                     ),
             ) {
-                TextField(
+                OutlinedTextField(
                     value = valueOutfitType,
                     onValueChange = onValueChangeOutfitType,
                     modifier = Modifier
                         .fillMaxWidth()
                         .menuAnchor(),
+                    enabled = state is State.Idle,
                     readOnly = true,
                     label = {
                         Text(
@@ -148,7 +149,9 @@ fun ContentDetailOutfit(
                         )
                     },
                     trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        ExposedDropdownMenuDefaults.TrailingIcon(
+                            expanded = expanded,
+                        )
                     },
                 )
 
@@ -175,6 +178,7 @@ fun ContentDetailOutfit(
                                 onExpandedChange(false)
                             },
                             modifier = Modifier.fillMaxWidth(),
+                            enabled = state is State.Idle,
                         )
                     }
                 }
@@ -193,7 +197,7 @@ fun ContentDetailOutfit(
                     )
                     .toggleable(
                         value = valueInclude,
-                        onValueChange = onValueChangeInclude,
+                        onValueChange = if (state is State.Idle) onValueChangeInclude else { _ -> },
                     )
                     .padding(
                         horizontal = 16.dp,
@@ -203,6 +207,7 @@ fun ContentDetailOutfit(
                 Checkbox(
                     checked = valueInclude,
                     onCheckedChange = null,
+                    enabled = state is State.Idle,
                 )
                 Text(
                     text = "Include this outfit in recommendation",

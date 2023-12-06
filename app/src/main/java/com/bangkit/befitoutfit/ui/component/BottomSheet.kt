@@ -185,7 +185,7 @@ fun BottomSheet(
                                 id = outfit.id,
                                 name = valueOutfitName,
                                 type = outfit.type,
-                                imageUrl = outfit.imageUrl
+                                include = valueInclude,
                             )
                         },
                         onError = onError,

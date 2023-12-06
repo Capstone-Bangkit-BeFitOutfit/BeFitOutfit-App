@@ -52,15 +52,20 @@ class OutfitRepository(
         id: Int,
         name: String,
         type: String,
-        imageUrl: String,
+        include: Boolean,
     ) = flow {
-        /*TODO: feature uri to photo*/
         emit(
             value = apiService.updateOutfit(
                 id = id,
-                name = name.toRequestBody("text/plain".toMediaType()),
-                type = type.toRequestBody("text/plain".toMediaType()),
-                imageUrl = imageUrl.toRequestBody("text/plain".toMediaType())
+                name = name.toRequestBody(
+                    "text/plain".toMediaType(),
+                ),
+                type = type.toRequestBody(
+                    "text/plain".toMediaType(),
+                ),
+                include = include.toString().toRequestBody(
+                    "text/plain".toMediaType(),
+                ),
             ),
         )
     }
