@@ -42,19 +42,43 @@ class MainApplication : Application() {
 
         startKoin {
             androidLogger()
-            androidContext(this@MainApplication)
-            modules(app)
+            androidContext(
+                androidContext = this@MainApplication,
+            )
+            modules(
+                modules = listOf(
+                    preferencesModule,
+                    networkModule,
+                    repositoryModule,
+                    viewModelModule,
+                ),
+            )
         }
     }
 
     companion object {
-        private val Context.session by preferencesDataStore(name = "session")
-        private val Context.setting by preferencesDataStore(name = "setting")
+        private val Context.session by preferencesDataStore(
+            name = "session",
+        )
+        private val Context.setting by preferencesDataStore(
+            name = "setting",
+        )
 
-        val app = module {
-            single { SessionPreferences(androidContext().session) }
-            single { SettingPreferences(androidContext().setting) }
+        val preferencesModule = module {
+            single {
+                SessionPreferences(
+                    datastore = androidContext().session,
+                )
+            }
 
+            single {
+                SettingPreferences(
+                    datastore = androidContext().setting,
+                )
+            }
+        }
+
+        val networkModule = module {
             single {
                 Retrofit.Builder().baseUrl(if (MOCK) BASE_URL_MOCK else BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create()).client(
@@ -63,23 +87,105 @@ class MainApplication : Application() {
                             .build()
                     ).build().create(ApiService::class.java)
             }
+        }
 
-            single { AuthRepository(get()) }
-            single { OutfitRepository(get()) }
-            single { RecommendRepository(get(), get(), get()) }
-            single { SessionRepository(get()) }
-            single { SettingRepository(get()) }
-            single { UserRepository(get(), get()) }
+        val repositoryModule = module {
+            single {
+                AuthRepository(
+                    apiService = get(),
+                )
+            }
 
-            viewModel { AddOutfitViewModel(get()) }
-            viewModel { DetailOutfitViewModel(get()) }
-            viewModel { LoginViewModel(get(), get()) }
-            viewModel { MainViewModel(get()) }
-            viewModel { MyOutfitViewModel(get()) }
-            viewModel { ProfileViewModel(get(), get()) }
-            viewModel { RecommendViewModel(get()) }
-            viewModel { RegisterViewModel(get()) }
-            viewModel { SettingRecommendViewModel(get()) }
+            single {
+                OutfitRepository(
+                    apiService = get(),
+                )
+            }
+
+            single {
+                RecommendRepository(
+                    sessionPreferences = get(),
+                    settingPreferences = get(),
+                    apiService = get(),
+                )
+            }
+
+            single {
+                SessionRepository(
+                    sessionPreferences = get(),
+                )
+            }
+
+            single {
+                SettingRepository(
+                    settingPreferences = get(),
+                )
+            }
+
+            single {
+                UserRepository(
+                    sessionPreferences = get(),
+                    apiService = get(),
+                )
+            }
+        }
+
+        val viewModelModule = module {
+            viewModel {
+                AddOutfitViewModel(
+                    outfitRepository = get(),
+                )
+            }
+
+            viewModel {
+                DetailOutfitViewModel(
+                    outfitRepository = get(),
+                )
+            }
+
+            viewModel {
+                LoginViewModel(
+                    authRepository = get(),
+                    sessionRepository = get(),
+                )
+            }
+
+            viewModel {
+                MainViewModel(
+                    sessionRepository = get(),
+                )
+            }
+
+            viewModel {
+                MyOutfitViewModel(
+                    outfitRepository = get(),
+                )
+            }
+
+            viewModel {
+                ProfileViewModel(
+                    sessionRepository = get(),
+                    userRepository = get(),
+                )
+            }
+
+            viewModel {
+                RecommendViewModel(
+                    recommendRepository = get(),
+                )
+            }
+
+            viewModel {
+                RegisterViewModel(
+                    authRepository = get(),
+                )
+            }
+
+            viewModel {
+                SettingRecommendViewModel(
+                    settingRepository = get(),
+                )
+            }
         }
     }
 }
