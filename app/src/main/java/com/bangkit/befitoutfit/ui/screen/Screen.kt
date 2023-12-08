@@ -14,21 +14,33 @@ sealed class Screen(
     val fabTitle: String = "",
     val fabIcon: ImageVector = Icons.Outlined.Circle,
 ) {
-    data object Auth : Screen(route = "Auth")
-    data object Login : Screen(route = "Login")
-    data object Register : Screen(route = "Register")
-    data object Main : Screen(route = "Main")
+    data object Auth : Screen(
+        route = "Auth",
+    )
+
+    data object Login : Screen(
+        route = "Login",
+    )
+
+    data object Register : Screen(
+        route = "Register",
+    )
+
+    data object Main : Screen(
+        route = "Main",
+    )
+
     data object MyOutfit : Screen(
         route = "My Outfit",
         icon = Icons.Outlined.Checkroom,
         fabTitle = "Add Outfit",
-        fabIcon = Icons.Outlined.AddAPhoto
+        fabIcon = Icons.Outlined.AddAPhoto,
     )
 
     data object Recommend : Screen(
         route = "Recommend",
         icon = Icons.Outlined.Recommend,
         fabTitle = "Setting Recommend",
-        fabIcon = Icons.Outlined.Settings
+        fabIcon = Icons.Outlined.Settings,
     )
 }
