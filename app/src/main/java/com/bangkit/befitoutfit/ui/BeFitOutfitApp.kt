@@ -50,10 +50,10 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun BeFitOutfitApp(
     context: Context,
-    startDestination: String,
-    session: Session,
-    clearSession: () -> Unit,
     modifier: Modifier = Modifier,
+    startDestination: String = Screen.Main.route,
+    session: Session = Session(),
+    clearSession: () -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
     hostState: SnackbarHostState = remember {
