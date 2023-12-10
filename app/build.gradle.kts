@@ -114,6 +114,14 @@ dependencies {
     // retrofit
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    // tensorflow lite
+    val tensorflowLiteVersion = "0.4.4"
+    implementation("org.tensorflow:tensorflow-lite-task-vision:$tensorflowLiteVersion")
+    implementation("org.tensorflow:tensorflow-lite-gpu-delegate-plugin:$tensorflowLiteVersion")
+
+    // tensorflow lite gpu
+    implementation("org.tensorflow:tensorflow-lite-gpu:2.14.0")
+
     // viewmodel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 }

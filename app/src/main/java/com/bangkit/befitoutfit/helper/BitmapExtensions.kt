@@ -27,4 +27,21 @@ object BitmapExtensions {
 
         return null
     }
+
+    fun Bitmap.centerCrop(cropWidth: Int, cropHeight: Int): Bitmap {
+        val x = (width - cropWidth) / 2
+        val y = (height - cropHeight) / 2
+
+        if (x < 0 || y < 0 || cropWidth > width || cropHeight > height) throw IllegalArgumentException(
+            "Invalid arguments for center cropping\nwidth: $width\nheight: $height\ncropWidth: $cropWidth\ncropHeight: $cropHeight",
+        )
+
+        return Bitmap.createBitmap(
+            this,
+            x,
+            y,
+            cropWidth,
+            cropHeight,
+        )
+    }
 }
