@@ -18,13 +18,25 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
 
-        buildConfigField("Boolean", "DEBUG", "true")
-        buildConfigField("Boolean", "MOCK", "true")
-        buildConfigField("String", "BASE_URL", "\"\"")
+        buildConfigField(
+            "Boolean",
+            "DEBUG",
+            "true",
+        )
+        buildConfigField(
+            "Boolean",
+            "MOCK",
+            "false",
+        )
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            "\"https://befitoutfit.et.r.appspot.com/\"",
+        )
         buildConfigField(
             "String",
             "BASE_URL_MOCK",
-            "\"https://6f8fe1dd-8dc7-4a6e-b061-f6d8283bfef3.mock.pstmn.io\""
+            "\"https://be25263b-a3c2-4fcc-a653-af5e0e436790.mock.pstmn.io\""
         )
     }
 
@@ -69,12 +81,12 @@ dependencies {
 
     // camerax
     val cameraxVersion = "1.3.0"
-    implementation("androidx.camera:camera-core:${cameraxVersion}")
-    implementation("androidx.camera:camera-camera2:${cameraxVersion}")
-    implementation("androidx.camera:camera-lifecycle:${cameraxVersion}")
-    implementation("androidx.camera:camera-video:${cameraxVersion}")
-    implementation("androidx.camera:camera-view:${cameraxVersion}")
-    implementation("androidx.camera:camera-extensions:${cameraxVersion}")
+    implementation("androidx.camera:camera-core:$cameraxVersion")
+    implementation("androidx.camera:camera-camera2:$cameraxVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
+    implementation("androidx.camera:camera-video:$cameraxVersion")
+    implementation("androidx.camera:camera-view:$cameraxVersion")
+    implementation("androidx.camera:camera-extensions:$cameraxVersion")
 
     // coil
     implementation("io.coil-kt:coil-compose:2.5.0")
