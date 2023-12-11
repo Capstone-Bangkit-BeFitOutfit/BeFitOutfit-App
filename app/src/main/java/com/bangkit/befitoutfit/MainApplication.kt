@@ -98,6 +98,7 @@ class MainApplication : Application() {
 
             single {
                 OutfitRepository(
+                    sessionPreferences = get(),
                     apiService = get(),
                 )
             }

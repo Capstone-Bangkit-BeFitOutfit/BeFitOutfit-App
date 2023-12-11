@@ -14,6 +14,7 @@ class RecommendRepository(
     fun getRecommend() = flow {
         emit(
             value = apiService.getRecommend(
+                token = "Bearer ${sessionPreferences.getSession().first().token}",
                 email = sessionPreferences.getSession().first().email,
                 event = settingPreferences.getRecommend().first().event
             )
