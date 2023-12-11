@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("org.jetbrains.kotlin.android")
 }
 
@@ -17,27 +18,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
-
-        buildConfigField(
-            "Boolean",
-            "DEBUG",
-            "true",
-        )
-        buildConfigField(
-            "Boolean",
-            "MOCK",
-            "false",
-        )
-        buildConfigField(
-            "String",
-            "BASE_URL",
-            "\"https://befitoutfit.et.r.appspot.com/\"",
-        )
-        buildConfigField(
-            "String",
-            "BASE_URL_MOCK",
-            "\"https://be25263b-a3c2-4fcc-a653-af5e0e436790.mock.pstmn.io\""
-        )
     }
 
     buildTypes {
