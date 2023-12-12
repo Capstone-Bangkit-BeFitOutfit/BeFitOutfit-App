@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.helper.BottomSheetType
+import com.bangkit.befitoutfit.helper.ListOutfit
 import com.bangkit.befitoutfit.helper.StringExtensions.emailChecker
 import com.bangkit.befitoutfit.ui.screen.addOutfit.AddOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.detailOutfit.DetailOutfitViewModel
@@ -294,7 +295,7 @@ fun BottomSheet(
                 BottomSheetType.SettingRecommend -> {
                     val viewModel: SettingRecommendViewModel = koinViewModel()
 
-                    val (event, onEventSelected) = remember {
+                    val (event, onSelectedEvent) = remember {
                         mutableStateOf(
                             value = runBlocking {
                                 viewModel.getSettingRecommend().first().event
@@ -303,12 +304,9 @@ fun BottomSheet(
                     }
 
                     ContentSettingRecommend(
-                        listEvent = listOf(
-                            "Casual",
-                            "Formal",
-                        ),
+                        listEvent = ListOutfit.event,
                         event = event,
-                        onSelected = onEventSelected,
+                        onSelected = onSelectedEvent,
                         setSettingRecommend = viewModel::setSettingRecommend,
                     )
                 }
