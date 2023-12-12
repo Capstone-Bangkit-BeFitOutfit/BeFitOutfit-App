@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.bangkit.befitoutfit.R
+import com.bangkit.befitoutfit.helper.ListOutfit
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
 import com.bangkit.befitoutfit.helper.TextFieldType
@@ -162,11 +163,7 @@ fun ContentDetailOutfit(
                     },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    listOf(
-                        "Top",
-                        "Bottom",
-                        "Extra",
-                    ).forEach {
+                    ListOutfit.type.forEach {
                         DropdownMenuItem(
                             text = {
                                 Text(
