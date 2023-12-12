@@ -84,4 +84,15 @@ class OutfitRepository(
             ),
         )
     }
+
+    suspend fun deleteOutfit(
+        id: Int,
+    ) = flow {
+        emit(
+            value = apiService.deleteOutfit(
+                token = "Bearer ${sessionPreferences.getSession().first().token}",
+                id = id,
+            ),
+        )
+    }
 }

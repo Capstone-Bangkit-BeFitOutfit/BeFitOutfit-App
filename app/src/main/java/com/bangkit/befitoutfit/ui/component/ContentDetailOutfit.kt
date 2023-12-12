@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
@@ -57,6 +58,7 @@ fun ContentDetailOutfit(
     valueInclude: Boolean,
     onValueChangeInclude: (Boolean) -> Unit,
     onClickUpdate: () -> Unit,
+    onClickDelete: () -> Unit,
     onStateResultFeedback: (String) -> Unit,
     dismiss: () -> Unit,
     modifier: Modifier = Modifier,
@@ -257,18 +259,46 @@ fun ContentDetailOutfit(
         }
 
         item {
-            OutlinedButton(
-                onClick = onClickUpdate,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = 16.dp,
-                    ),
-                enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName && valueOutfitType.isNotEmpty() && (valueOutfitName != outfit.name || valueOutfitType != outfit.type || valueInclude != outfit.include),
+            Row(
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(
-                    text = "Update",
-                )
+                OutlinedButton(
+                    onClick = onClickDelete,
+                    modifier = Modifier
+                        .weight(
+                            weight = 1f,
+                        )
+                        .padding(
+                            start = 16.dp,
+                            end = 8.dp,
+                        ),
+                    enabled = state is State.Idle,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError,
+                    ),
+                ) {
+                    Text(
+                        text = "Delete",
+                    )
+                }
+
+                OutlinedButton(
+                    onClick = onClickUpdate,
+                    modifier = Modifier
+                        .weight(
+                            weight = 1f,
+                        )
+                        .padding(
+                            start = 8.dp,
+                            end = 16.dp,
+                        ),
+                    enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName && valueOutfitType.isNotEmpty() && (valueOutfitName != outfit.name || valueOutfitType != outfit.type || valueInclude != outfit.include),
+                ) {
+                    Text(
+                        text = "Update",
+                    )
+                }
             }
 
             Spacer(

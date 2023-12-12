@@ -189,6 +189,11 @@ fun BottomSheet(
                                 include = valueInclude,
                             )
                         },
+                        onClickDelete = {
+                            viewModel.deleteOutfit(
+                                id = outfit.id,
+                            )
+                        },
                         onStateResultFeedback = onStateResultFeedback,
                         dismiss = dismiss,
                     )

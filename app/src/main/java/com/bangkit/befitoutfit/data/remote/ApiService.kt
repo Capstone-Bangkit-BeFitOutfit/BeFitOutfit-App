@@ -6,6 +6,7 @@ import com.bangkit.befitoutfit.data.model.Outfits
 import com.bangkit.befitoutfit.data.model.Recommend
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -67,6 +68,12 @@ interface ApiService {
         @Part("name") name: RequestBody,
         @Part("type") type: RequestBody,
         @Part("include") include: RequestBody,
+    )
+
+    @DELETE("outfit/{id}")
+    suspend fun deleteOutfit(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
     )
 
     @GET("recommend")
