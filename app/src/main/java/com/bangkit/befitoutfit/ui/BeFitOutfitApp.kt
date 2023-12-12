@@ -197,6 +197,11 @@ fun BeFitOutfitApp(
                             bottomSheetType = BottomSheetType.DetailOutfit
                             showBottomSheet = true
                         },
+                        onTokenExpired = {
+                            clearSession()
+                            navController.popBackStack()
+                            navController.navigate(Screen.Auth.route)
+                        },
                     )
                 }
                 composable(
@@ -216,6 +221,11 @@ fun BeFitOutfitApp(
                             selectedOutfit = outfit
                             bottomSheetType = BottomSheetType.DetailOutfit
                             showBottomSheet = true
+                        },
+                        onTokenExpired = {
+                            clearSession()
+                            navController.popBackStack()
+                            navController.navigate(Screen.Auth.route)
                         },
                     )
                 }

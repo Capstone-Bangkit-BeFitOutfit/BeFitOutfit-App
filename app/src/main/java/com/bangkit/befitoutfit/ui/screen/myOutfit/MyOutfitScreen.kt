@@ -31,6 +31,7 @@ fun MyOutfitScreen(
         refreshing = state is State.Loading,
         onRefresh = onRefresh,
     ),
+    onTokenExpired: () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -41,6 +42,7 @@ fun MyOutfitScreen(
     ) {
         when (state) {
             is State.Error -> {
+                if (state.message.contains("404")) onTokenExpired()
                 onStateResultFeedback(state.message.errorMessageHandler())
             }
 
