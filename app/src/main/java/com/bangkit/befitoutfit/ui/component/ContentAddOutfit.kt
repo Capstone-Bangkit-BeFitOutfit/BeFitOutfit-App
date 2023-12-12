@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
@@ -169,6 +170,7 @@ fun ContentAddOutfit(
                 onValueChange = onValueChangeOutfitName,
                 onClick = onClickOutfitName,
                 focusManager = focusManager,
+                imeAction = ImeAction.Done,
             )
         }
 
