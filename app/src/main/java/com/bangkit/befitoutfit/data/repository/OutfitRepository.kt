@@ -27,6 +27,8 @@ class OutfitRepository(
         name: String,
         type: String,
         image: Bitmap?,
+        event: String,
+        percentage: Float,
         include: Boolean,
     ) = flow {
         image.toJpeg()?.let {
@@ -46,6 +48,8 @@ class OutfitRepository(
                             contentType = "image/jpeg".toMediaType(),
                         ),
                     ),
+                    event = event,
+                    percentage = percentage,
                     include = include.toString().toRequestBody(
                         contentType = "text/plain".toMediaType(),
                     ),

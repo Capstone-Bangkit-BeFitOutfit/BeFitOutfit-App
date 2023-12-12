@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.bangkit.befitoutfit.R
+import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.helper.ListOutfit
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
@@ -43,7 +44,9 @@ import com.bangkit.befitoutfit.helper.TextFieldType
 )
 @Composable
 fun ContentDetailOutfit(
+    /*TODO: rearrange*/
     state: State<Unit>,
+    outfit: Outfit,
     valueOutfitName: String,
     isValidOutfitName: Boolean,
     onValueChangeOutfitName: (String) -> Unit,
@@ -55,6 +58,10 @@ fun ContentDetailOutfit(
     onExpandedChange: (Boolean) -> Unit,
     valueOutfitType: String,
     onValueChangeOutfitType: (String) -> Unit,
+    expandedOutfitEvent: Boolean,
+    onExpandedChangeOutfitEvent: (Boolean) -> Unit,
+    valueOutfitEvent: String,
+    onValueChangeOutfitEvent: (String) -> Unit,
     onClickUpdate: () -> Unit,
     onStateResultFeedback: (String) -> Unit,
     dismiss: () -> Unit,
@@ -183,6 +190,69 @@ fun ContentDetailOutfit(
         }
 
         item {
+            ExposedDropdownMenuBox(
+                expanded = expandedOutfitEvent,
+                onExpandedChange = if (state is State.Idle) onExpandedChangeOutfitEvent else { _ -> },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 16.dp,
+                    ),
+            ) {
+                OutlinedTextField(
+                    value = valueOutfitEvent,
+                    onValueChange = onValueChangeOutfitEvent,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(),
+                    enabled = state is State.Idle,
+                    readOnly = true,
+                    label = {
+                        Text(
+                            text = "Outfit event",
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Select outfit event",
+                        )
+                    },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(
+                            expanded = expandedOutfitEvent,
+                        )
+                    },
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expandedOutfitEvent,
+                    onDismissRequest = {
+                        onExpandedChangeOutfitEvent(false)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    ListOutfit.event.forEach {
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = it,
+                                )
+                            },
+                            onClick = {
+                                onValueChangeOutfitEvent(it)
+                                onExpandedChangeOutfitEvent(false)
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = state is State.Idle,
+                        )
+                    }
+                }
+            }
+        }
+
+        item {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -224,7 +294,7 @@ fun ContentDetailOutfit(
                     .padding(
                         horizontal = 16.dp,
                     ),
-                enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName,
+                enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName && valueOutfitType.isNotEmpty() && valueOutfitEvent.isNotEmpty() && (valueOutfitName != outfit.name || valueOutfitType != outfit.type || valueOutfitEvent != outfit.event || valueInclude != outfit.include),
             ) {
                 Text(
                     text = "Update",

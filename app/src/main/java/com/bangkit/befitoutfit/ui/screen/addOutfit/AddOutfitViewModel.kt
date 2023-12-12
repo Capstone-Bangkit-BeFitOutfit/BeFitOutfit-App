@@ -24,6 +24,8 @@ class AddOutfitViewModel(
         name: String,
         type: String,
         image: Bitmap?,
+        event: String,
+        percentage: Float = 10f,
         include: Boolean,
     ) = viewModelScope.launch(
         context = Dispatchers.IO,
@@ -32,6 +34,8 @@ class AddOutfitViewModel(
             name = name,
             type = type,
             image = image,
+            event = event,
+            percentage = percentage,
             include = include,
         ).onStart {
             state.value = State.Loading

@@ -156,8 +156,20 @@ fun BottomSheet(
                         )
                     }
 
+                    var expandedOutfitEvent by remember {
+                        mutableStateOf(
+                            value = false,
+                        )
+                    }
+                    var valueOutfitEvent by remember {
+                        mutableStateOf(
+                            value = outfit.event,
+                        )
+                    }
+
                     ContentDetailOutfit(
                         state = viewModel.state.collectAsState().value,
+                        outfit = outfit,
                         valueOutfitName = valueOutfitName,
                         isValidOutfitName = isValidOutfitName,
                         onValueChangeOutfitName = {
@@ -179,6 +191,14 @@ fun BottomSheet(
                         valueOutfitType = valueOutfitType,
                         onValueChangeOutfitType = {
                             valueOutfitType = it
+                        },
+                        expandedOutfitEvent = expandedOutfitEvent,
+                        onExpandedChangeOutfitEvent = {
+                            expandedOutfitEvent = it
+                        },
+                        valueOutfitEvent = valueOutfitEvent,
+                        onValueChangeOutfitEvent = {
+                            valueOutfitEvent = it
                         },
                         onClickUpdate = {
                             viewModel.updateOutfit(
@@ -230,6 +250,17 @@ fun BottomSheet(
                         )
                     }
 
+                    var expandedOutfitEvent by remember {
+                        mutableStateOf(
+                            value = false,
+                        )
+                    }
+                    var valueOutfitEvent by remember {
+                        mutableStateOf(
+                            value = "",
+                        )
+                    }
+
                     ContentAddOutfit(
                         /*TODO: rearrange*/
                         state = viewModel.state.collectAsState().value,
@@ -259,11 +290,20 @@ fun BottomSheet(
                         onValueChangeOutfitType = {
                             valueOutfitType = it
                         },
+                        expandedOutfitEvent = expandedOutfitEvent,
+                        onExpandedChangeOutfitEvent = {
+                            expandedOutfitEvent = it
+                        },
+                        valueOutfitEvent = valueOutfitEvent,
+                        onValueChangeOutfitEvent = {
+                            valueOutfitEvent = it
+                        },
                         onClickAdd = {
                             viewModel.addOutfit(
                                 name = valueOutfitName,
                                 type = valueOutfitType,
                                 image = valueOutfitImage,
+                                event = valueOutfitEvent,
                                 include = valueInclude,
                             )
                         },
