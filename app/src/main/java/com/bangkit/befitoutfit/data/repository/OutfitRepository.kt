@@ -42,7 +42,7 @@ class OutfitRepository(
                         contentType = "text/plain".toMediaType(),
                     ),
                     image = MultipartBody.Part.createFormData(
-                        name = "image",
+                        name = "photo",
                         filename = name,
                         body = it.asRequestBody(
                             contentType = "image/jpeg".toMediaType(),
