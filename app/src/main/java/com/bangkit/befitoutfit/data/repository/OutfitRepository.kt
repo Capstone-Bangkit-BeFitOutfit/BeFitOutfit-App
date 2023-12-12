@@ -48,8 +48,12 @@ class OutfitRepository(
                             contentType = "image/jpeg".toMediaType(),
                         ),
                     ),
-                    event = event,
-                    percentage = percentage,
+                    event = event.toRequestBody(
+                        contentType = "text/plain".toMediaType(),
+                    ),
+                    percentage = percentage.toString().toRequestBody(
+                        contentType = "text/plain".toMediaType(),
+                    ),
                     include = include.toString().toRequestBody(
                         contentType = "text/plain".toMediaType(),
                     ),

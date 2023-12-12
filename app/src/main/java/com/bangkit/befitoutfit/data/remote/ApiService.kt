@@ -54,8 +54,8 @@ interface ApiService {
         @Part("name") name: RequestBody,
         @Part("type") type: RequestBody,
         @Part image: MultipartBody.Part,
-        @Part("event") event: String,
-        @Part("percentage") percentage: Float,
+        @Part("event") event: RequestBody,
+        @Part("percentage") percentage: RequestBody,
         @Part("include") include: RequestBody,
     ): Info
 
