@@ -6,9 +6,11 @@ import com.bangkit.befitoutfit.data.model.Outfits
 import com.bangkit.befitoutfit.data.model.Recommend
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -27,7 +29,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("register")
     suspend fun register(
-        @Field("name") name: String,
+        @Field("username") name: String,
         @Field("email") email: String,
         @Field("password") password: String,
     ): Info
@@ -35,34 +37,48 @@ interface ApiService {
     @FormUrlEncoded
     @PUT("user/{id}")
     suspend fun updateUser(
+        @Header("Authorization") token: String,
         @Path("id") id: Int,
         @Field("name") name: String,
         @Field("email") email: String,
     )
 
     @GET("outfit")
-    suspend fun getOutfit(): Outfits
+    suspend fun getOutfit(
+        @Header("Authorization") token: String,
+    ): Outfits
 
     @Multipart
     @POST("outfit/add")
     suspend fun addOutfit(
+        @Header("Authorization") token: String,
+        @Part image: MultipartBody.Part,
         @Part("name") name: RequestBody,
         @Part("type") type: RequestBody,
-        @Part image: MultipartBody.Part,
+        @Part("event") event: RequestBody,
         @Part("include") include: RequestBody,
+        @Part("percentage") percentage: RequestBody,
     ): Info
 
     @Multipart
     @PUT("outfit/{id}")
     suspend fun updateOutfit(
+        @Header("Authorization") token: String,
         @Path("id") id: Int,
         @Part("name") name: RequestBody,
         @Part("type") type: RequestBody,
         @Part("include") include: RequestBody,
     )
 
+    @DELETE("outfit/{id}")
+    suspend fun deleteOutfit(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
+    )
+
     @GET("recommend")
     suspend fun getRecommend(
+        @Header("Authorization") token: String,
         @Query("email") email: String,
         @Query("event") event: String,
     ): Recommend

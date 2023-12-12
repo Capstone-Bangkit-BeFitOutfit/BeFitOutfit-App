@@ -48,4 +48,29 @@ class DetailOutfitViewModel(
             )
         }
     }
+
+    fun deleteOutfit(
+        id: Int,
+    ) = viewModelScope.launch(
+        context = Dispatchers.IO,
+    ) {
+        outfitRepository.deleteOutfit(
+            id = id,
+        ).onStart {
+            state.value = State.Loading
+        }.catch {
+            state.value = State.Error(
+                message = it.message ?: "Unknown error",
+            )
+        }.onCompletion {
+            delay(
+                timeMillis = 100L,
+            )
+            state.value = State.Idle
+        }.collect {
+            state.value = State.Success(
+                data = it,
+            )
+        }
+    }
 }

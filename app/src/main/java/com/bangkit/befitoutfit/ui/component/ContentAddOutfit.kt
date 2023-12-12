@@ -36,11 +36,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
 import com.bangkit.befitoutfit.data.model.Info
 import com.bangkit.befitoutfit.helper.LandmarkImageAnalyzer
+import com.bangkit.befitoutfit.helper.ListOutfit
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
 import com.bangkit.befitoutfit.helper.TextFieldType
@@ -51,22 +53,26 @@ import com.bangkit.befitoutfit.helper.TfLiteLandMarkClassifier
 )
 @Composable
 fun ContentAddOutfit(
-    state: State<Info>,
     context: Context,
-    valueOutfitName: String,
-    isValidOutfitName: Boolean,
-    onValueChangeOutfitName: (String) -> Unit,
-    onClickOutfitName: () -> Unit,
+    state: State<Info>,
     valueOutfitImage: Bitmap?,
     onValueChangeOutfitImage: (Bitmap) -> Unit,
-    valueInclude: Boolean,
-    onValueChangeInclude: (Boolean) -> Unit,
-    expanded: Boolean,
-    onExpandedChange: (Boolean) -> Unit,
+    valueOutfitName: String,
+    onValueChangeOutfitName: (String) -> Unit,
+    isValidOutfitName: Boolean,
+    onClickOutfitName: () -> Unit,
     valueOutfitType: String,
     onValueChangeOutfitType: (String) -> Unit,
+    expandedOutfitType: Boolean,
+    onExpandedChangeOutfitType: (Boolean) -> Unit,
+    valueOutfitEvent: String,
+    onValueChangeOutfitEvent: (String) -> Unit,
+    expandedOutfitEvent: Boolean,
+    onExpandedChangeOutfitEvent: (Boolean) -> Unit,
+    valueInclude: Boolean,
+    onValueChangeInclude: (Boolean) -> Unit,
     onClickAdd: () -> Unit,
-    onError: (String) -> Unit,
+    onStateResultFeedback: (String) -> Unit,
     dismiss: () -> Unit,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
@@ -95,7 +101,7 @@ fun ContentAddOutfit(
         is State.Success -> dismiss()
         is State.Error -> {
             dismiss()
-            onError(state.message.errorMessageHandler())
+            onStateResultFeedback(state.message.errorMessageHandler())
         }
 
         else -> {}
@@ -164,13 +170,14 @@ fun ContentAddOutfit(
                 onValueChange = onValueChangeOutfitName,
                 onClick = onClickOutfitName,
                 focusManager = focusManager,
+                imeAction = ImeAction.Done,
             )
         }
 
         item {
             ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = if (state is State.Idle) onExpandedChange else { _ -> },
+                expanded = expandedOutfitType,
+                onExpandedChange = if (state is State.Idle) onExpandedChangeOutfitType else { _ -> },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -199,23 +206,19 @@ fun ContentAddOutfit(
                     },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = expanded,
+                            expanded = expandedOutfitType,
                         )
                     },
                 )
 
                 ExposedDropdownMenu(
-                    expanded = expanded,
+                    expanded = expandedOutfitType,
                     onDismissRequest = {
-                        onExpandedChange(false)
+                        onExpandedChangeOutfitType(false)
                     },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    listOf(
-                        "Top",
-                        "Bottom",
-                        "Extra",
-                    ).forEach {
+                    ListOutfit.type.forEach {
                         DropdownMenuItem(
                             text = {
                                 Text(
@@ -224,7 +227,70 @@ fun ContentAddOutfit(
                             },
                             onClick = {
                                 onValueChangeOutfitType(it)
-                                onExpandedChange(false)
+                                onExpandedChangeOutfitType(false)
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = state is State.Idle,
+                        )
+                    }
+                }
+            }
+        }
+
+        item {
+            ExposedDropdownMenuBox(
+                expanded = expandedOutfitEvent,
+                onExpandedChange = if (state is State.Idle) onExpandedChangeOutfitEvent else { _ -> },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 16.dp,
+                    ),
+            ) {
+                OutlinedTextField(
+                    value = valueOutfitEvent,
+                    onValueChange = onValueChangeOutfitEvent,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(),
+                    enabled = state is State.Idle,
+                    readOnly = true,
+                    label = {
+                        Text(
+                            text = "Outfit event",
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Select outfit event",
+                        )
+                    },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(
+                            expanded = expandedOutfitEvent,
+                        )
+                    },
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expandedOutfitEvent,
+                    onDismissRequest = {
+                        onExpandedChangeOutfitEvent(false)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    ListOutfit.event.forEach {
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = it,
+                                )
+                            },
+                            onClick = {
+                                onValueChangeOutfitEvent(it)
+                                onExpandedChangeOutfitEvent(false)
                             },
                             modifier = Modifier.fillMaxWidth(),
                             enabled = state is State.Idle,
@@ -276,7 +342,7 @@ fun ContentAddOutfit(
                     .padding(
                         horizontal = 16.dp,
                     ),
-                enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName && valueOutfitImage != null,
+                enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName && valueOutfitImage != null && valueOutfitType.isNotEmpty() && valueOutfitEvent.isNotEmpty(),
             ) {
                 Text(
                     text = "Add",

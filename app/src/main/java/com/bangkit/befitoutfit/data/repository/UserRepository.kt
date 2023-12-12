@@ -15,6 +15,7 @@ class UserRepository(
     ) = flow {
         emit(
             value = apiService.updateUser(
+                token = "Bearer ${sessionPreferences.getSession().first().token}",
                 id = sessionPreferences.getSession().first().id,
                 name = name,
                 email = email,

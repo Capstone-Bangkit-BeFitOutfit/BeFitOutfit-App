@@ -24,7 +24,7 @@ fun LoginScreen(
     login: (String, String) -> Unit,
     navigateToMain: () -> Unit,
     navigateToRegister: () -> Unit,
-    onError: (String) -> Unit,
+    onStateResultFeedback: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var valueEmail by remember {
@@ -55,8 +55,19 @@ fun LoginScreen(
     }
 
     when (state) {
-        is State.Success -> navigateToMain()
-        is State.Error -> onError(state.message.errorMessageHandler())
+        is State.Success -> {
+            navigateToMain()
+            onStateResultFeedback(
+                "Successfully logged in",
+            )
+        }
+
+        is State.Error -> onStateResultFeedback(
+            state.message.errorMessageHandler(
+                specific = "login",
+            ),
+        )
+
         else -> {}
     }
 

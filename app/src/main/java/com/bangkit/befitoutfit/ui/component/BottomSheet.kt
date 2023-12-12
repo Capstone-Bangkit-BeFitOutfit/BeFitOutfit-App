@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.helper.BottomSheetType
+import com.bangkit.befitoutfit.helper.ListOutfit
 import com.bangkit.befitoutfit.helper.StringExtensions.emailChecker
 import com.bangkit.befitoutfit.ui.screen.addOutfit.AddOutfitViewModel
 import com.bangkit.befitoutfit.ui.screen.detailOutfit.DetailOutfitViewModel
@@ -45,7 +46,7 @@ fun BottomSheet(
     sheetState: SheetState = rememberModalBottomSheetState(),
     session: Session = Session(),
     outfit: Outfit = Outfit(),
-    onError: (String) -> Unit = {},
+    onStateResultFeedback: (String) -> Unit = {},
     dismiss: () -> Unit = {},
 ) {
     if (showBottomSheet) {
@@ -120,7 +121,7 @@ fun BottomSheet(
                                 email = valueEmail,
                             )
                         },
-                        onError = onError,
+                        onStateResultFeedback = onStateResultFeedback,
                         dismiss = dismiss,
                     )
                 }
@@ -139,13 +140,7 @@ fun BottomSheet(
                         )
                     }
 
-                    var valueInclude by remember {
-                        mutableStateOf(
-                            value = outfit.include,
-                        )
-                    }
-
-                    var expanded by remember {
+                    var expandedOutfitType by remember {
                         mutableStateOf(
                             value = false,
                         )
@@ -156,45 +151,62 @@ fun BottomSheet(
                         )
                     }
 
+                    var valueInclude by remember {
+                        mutableStateOf(
+                            value = outfit.include,
+                        )
+                    }
+
                     ContentDetailOutfit(
+                        outfit = outfit,
                         state = viewModel.state.collectAsState().value,
                         valueOutfitName = valueOutfitName,
-                        isValidOutfitName = isValidOutfitName,
                         onValueChangeOutfitName = {
                             isValidOutfitName = it.isNotEmpty()
                             valueOutfitName = it
                         },
+                        isValidOutfitName = isValidOutfitName,
                         onClickOutfitName = {
                             valueOutfitName = ""
-                        },
-                        valueOutfitImageUrl = outfit.imageUrl,
-                        valueInclude = valueInclude,
-                        onValueChangeInclude = {
-                            valueInclude = it
-                        },
-                        expanded = expanded,
-                        onExpandedChange = {
-                            expanded = it
                         },
                         valueOutfitType = valueOutfitType,
                         onValueChangeOutfitType = {
                             valueOutfitType = it
                         },
+                        expandedOutfitType = expandedOutfitType,
+                        onExpandedChangeOutfitType = {
+                            expandedOutfitType = it
+                        },
+                        valueInclude = valueInclude,
+                        onValueChangeInclude = {
+                            valueInclude = it
+                        },
                         onClickUpdate = {
                             viewModel.updateOutfit(
                                 id = outfit.id,
                                 name = valueOutfitName,
-                                type = outfit.type,
+                                type = valueOutfitType,
                                 include = valueInclude,
                             )
                         },
-                        onError = onError,
+                        onClickDelete = {
+                            viewModel.deleteOutfit(
+                                id = outfit.id,
+                            )
+                        },
+                        onStateResultFeedback = onStateResultFeedback,
                         dismiss = dismiss,
                     )
                 }
 
                 BottomSheetType.AddOutfit -> {
                     val viewModel: AddOutfitViewModel = koinViewModel()
+
+                    var valueOutfitImage: Bitmap? by remember {
+                        mutableStateOf(
+                            value = null,
+                        )
+                    }
 
                     var valueOutfitName by remember {
                         mutableStateOf(
@@ -207,9 +219,25 @@ fun BottomSheet(
                         )
                     }
 
-                    var valueOutfitImage: Bitmap? by remember {
+                    var valueOutfitType by remember {
                         mutableStateOf(
-                            value = null,
+                            value = "",
+                        )
+                    }
+                    var expandedOutfitType by remember {
+                        mutableStateOf(
+                            value = false,
+                        )
+                    }
+
+                    var valueOutfitEvent by remember {
+                        mutableStateOf(
+                            value = "",
+                        )
+                    }
+                    var expandedOutfitEvent by remember {
+                        mutableStateOf(
+                            value = false,
                         )
                     }
 
@@ -219,54 +247,52 @@ fun BottomSheet(
                         )
                     }
 
-                    var expanded by remember {
-                        mutableStateOf(
-                            value = false,
-                        )
-                    }
-                    var valueOutfitType by remember {
-                        mutableStateOf(
-                            value = "",
-                        )
-                    }
-
                     ContentAddOutfit(
-                        state = viewModel.state.collectAsState().value,
                         context = context,
-                        valueOutfitName = valueOutfitName,
-                        isValidOutfitName = isValidOutfitName,
-                        onValueChangeOutfitName = {
-                            isValidOutfitName = it.isNotEmpty()
-                            valueOutfitName = it
-                        },
-                        onClickOutfitName = {
-                            valueOutfitName = ""
-                        },
+                        state = viewModel.state.collectAsState().value,
                         valueOutfitImage = valueOutfitImage,
                         onValueChangeOutfitImage = {
                             valueOutfitImage = it
                         },
-                        valueInclude = valueInclude,
-                        onValueChangeInclude = {
-                            valueInclude = it
+                        valueOutfitName = valueOutfitName,
+                        onValueChangeOutfitName = {
+                            isValidOutfitName = it.isNotEmpty()
+                            valueOutfitName = it
                         },
-                        expanded = expanded,
-                        onExpandedChange = {
-                            expanded = it
+                        isValidOutfitName = isValidOutfitName,
+                        onClickOutfitName = {
+                            valueOutfitName = ""
                         },
                         valueOutfitType = valueOutfitType,
                         onValueChangeOutfitType = {
                             valueOutfitType = it
                         },
+                        expandedOutfitType = expandedOutfitType,
+                        onExpandedChangeOutfitType = {
+                            expandedOutfitType = it
+                        },
+                        valueOutfitEvent = valueOutfitEvent,
+                        onValueChangeOutfitEvent = {
+                            valueOutfitEvent = it
+                        },
+                        expandedOutfitEvent = expandedOutfitEvent,
+                        onExpandedChangeOutfitEvent = {
+                            expandedOutfitEvent = it
+                        },
+                        valueInclude = valueInclude,
+                        onValueChangeInclude = {
+                            valueInclude = it
+                        },
                         onClickAdd = {
                             viewModel.addOutfit(
+                                image = valueOutfitImage,
                                 name = valueOutfitName,
                                 type = valueOutfitType,
-                                image = valueOutfitImage,
+                                event = valueOutfitEvent,
                                 include = valueInclude,
                             )
                         },
-                        onError = onError,
+                        onStateResultFeedback = onStateResultFeedback,
                         dismiss = dismiss,
                     )
                 }
@@ -274,7 +300,7 @@ fun BottomSheet(
                 BottomSheetType.SettingRecommend -> {
                     val viewModel: SettingRecommendViewModel = koinViewModel()
 
-                    val (event, onEventSelected) = remember {
+                    val (event, onSelectedEvent) = remember {
                         mutableStateOf(
                             value = runBlocking {
                                 viewModel.getSettingRecommend().first().event
@@ -283,12 +309,9 @@ fun BottomSheet(
                     }
 
                     ContentSettingRecommend(
-                        listEvent = listOf(
-                            "Casual",
-                            "Formal",
-                        ),
+                        listEvent = ListOutfit.event,
                         event = event,
-                        onSelected = onEventSelected,
+                        onSelected = onSelectedEvent,
                         setSettingRecommend = viewModel::setSettingRecommend,
                     )
                 }

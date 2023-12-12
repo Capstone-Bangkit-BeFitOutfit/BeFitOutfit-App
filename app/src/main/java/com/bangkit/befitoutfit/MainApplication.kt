@@ -80,12 +80,19 @@ class MainApplication : Application() {
 
         val networkModule = module {
             single {
-                Retrofit.Builder().baseUrl(if (MOCK) BASE_URL_MOCK else BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create()).client(
-                        OkHttpClient.Builder()
-                            .addInterceptor(HttpLoggingInterceptor().setLevel(if (DEBUG) BODY else NONE))
-                            .build()
-                    ).build().create(ApiService::class.java)
+                Retrofit.Builder().baseUrl(
+                    if (MOCK.toBoolean()) BASE_URL_MOCK else BASE_URL,
+                ).addConverterFactory(
+                    GsonConverterFactory.create(),
+                ).client(
+                    OkHttpClient.Builder().addInterceptor(
+                        HttpLoggingInterceptor().setLevel(
+                            if (DEBUG) BODY else NONE,
+                        )
+                    ).build()
+                ).build().create(
+                    ApiService::class.java,
+                )
             }
         }
 
@@ -98,6 +105,7 @@ class MainApplication : Application() {
 
             single {
                 OutfitRepository(
+                    sessionPreferences = get(),
                     apiService = get(),
                 )
             }

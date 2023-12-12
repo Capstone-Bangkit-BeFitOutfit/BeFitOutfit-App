@@ -23,7 +23,7 @@ fun RegisterScreen(
     state: State<Info>,
     register: (String, String, String) -> Unit,
     navigateToLogin: () -> Unit,
-    onError: (String) -> Unit,
+    onStateResultFeedback: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var valueName by remember {
@@ -65,8 +65,19 @@ fun RegisterScreen(
     }
 
     when (state) {
-        is State.Success -> navigateToLogin()
-        is State.Error -> onError(state.message.errorMessageHandler())
+        is State.Success -> {
+            navigateToLogin()
+            onStateResultFeedback(
+                "Successfully created",
+            )
+        }
+
+        is State.Error -> onStateResultFeedback(
+            state.message.errorMessageHandler(
+                specific = "register",
+            ),
+        )
+
         else -> {}
     }
 

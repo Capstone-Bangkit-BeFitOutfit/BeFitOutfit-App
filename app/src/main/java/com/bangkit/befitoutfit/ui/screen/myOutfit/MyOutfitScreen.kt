@@ -25,12 +25,13 @@ fun MyOutfitScreen(
     outfits: List<Outfit>,
     modifier: Modifier = Modifier,
     onRefresh: () -> Unit = {},
-    onError: (String) -> Unit = {},
+    onStateResultFeedback: (String) -> Unit = {},
     onClickDetailOutfit: (Outfit) -> Unit = {},
     pullRefreshState: PullRefreshState = rememberPullRefreshState(
         refreshing = state is State.Loading,
         onRefresh = onRefresh,
     ),
+    onTokenExpired: () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -40,7 +41,11 @@ fun MyOutfitScreen(
             ),
     ) {
         when (state) {
-            is State.Error -> onError(state.message.errorMessageHandler())
+            is State.Error -> {
+                if (state.message.contains("404")) onTokenExpired()
+                onStateResultFeedback(state.message.errorMessageHandler())
+            }
+
             else -> {}
         }
 

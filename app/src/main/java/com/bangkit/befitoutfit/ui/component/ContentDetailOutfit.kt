@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
@@ -33,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.bangkit.befitoutfit.R
+import com.bangkit.befitoutfit.data.model.Outfit
+import com.bangkit.befitoutfit.helper.ListOutfit
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
 import com.bangkit.befitoutfit.helper.TextFieldType
@@ -42,20 +45,21 @@ import com.bangkit.befitoutfit.helper.TextFieldType
 )
 @Composable
 fun ContentDetailOutfit(
+    outfit: Outfit,
     state: State<Unit>,
     valueOutfitName: String,
-    isValidOutfitName: Boolean,
     onValueChangeOutfitName: (String) -> Unit,
+    isValidOutfitName: Boolean,
     onClickOutfitName: () -> Unit,
-    valueOutfitImageUrl: String,
-    valueInclude: Boolean,
-    onValueChangeInclude: (Boolean) -> Unit,
-    expanded: Boolean,
-    onExpandedChange: (Boolean) -> Unit,
     valueOutfitType: String,
     onValueChangeOutfitType: (String) -> Unit,
+    expandedOutfitType: Boolean,
+    onExpandedChangeOutfitType: (Boolean) -> Unit,
+    valueInclude: Boolean,
+    onValueChangeInclude: (Boolean) -> Unit,
     onClickUpdate: () -> Unit,
-    onError: (String) -> Unit,
+    onClickDelete: () -> Unit,
+    onStateResultFeedback: (String) -> Unit,
     dismiss: () -> Unit,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
@@ -64,7 +68,7 @@ fun ContentDetailOutfit(
         is State.Success -> dismiss()
         is State.Error -> {
             dismiss()
-            onError(state.message.errorMessageHandler())
+            onStateResultFeedback(state.message.errorMessageHandler())
         }
 
         else -> {}
@@ -85,7 +89,7 @@ fun ContentDetailOutfit(
                     model = ImageRequest.Builder(
                         context = LocalContext.current,
                     ).data(
-                        data = valueOutfitImageUrl,
+                        data = outfit.imageUrl,
                     ).crossfade(
                         enable = true,
                     ).build(),
@@ -120,8 +124,8 @@ fun ContentDetailOutfit(
 
         item {
             ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = if (state is State.Idle) onExpandedChange else { _ -> },
+                expanded = expandedOutfitType,
+                onExpandedChange = if (state is State.Idle) onExpandedChangeOutfitType else { _ -> },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -150,23 +154,19 @@ fun ContentDetailOutfit(
                     },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = expanded,
+                            expanded = expandedOutfitType,
                         )
                     },
                 )
 
                 ExposedDropdownMenu(
-                    expanded = expanded,
+                    expanded = expandedOutfitType,
                     onDismissRequest = {
-                        onExpandedChange(false)
+                        onExpandedChangeOutfitType(false)
                     },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    listOf(
-                        "Top",
-                        "Bottom",
-                        "Extra",
-                    ).forEach {
+                    ListOutfit.type.forEach {
                         DropdownMenuItem(
                             text = {
                                 Text(
@@ -175,13 +175,52 @@ fun ContentDetailOutfit(
                             },
                             onClick = {
                                 onValueChangeOutfitType(it)
-                                onExpandedChange(false)
+                                onExpandedChangeOutfitType(false)
                             },
                             modifier = Modifier.fillMaxWidth(),
                             enabled = state is State.Idle,
                         )
                     }
                 }
+            }
+        }
+
+        item {
+            ExposedDropdownMenuBox(
+                expanded = false,
+                onExpandedChange = { _ -> },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 16.dp,
+                    ),
+            ) {
+                OutlinedTextField(
+                    value = outfit.event,
+                    onValueChange = {},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(),
+                    enabled = false,
+                    readOnly = true,
+                    label = {
+                        Text(
+                            text = "Outfit event",
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Select outfit event",
+                        )
+                    },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(
+                            expanded = false,
+                        )
+                    },
+                )
             }
         }
 
@@ -220,18 +259,46 @@ fun ContentDetailOutfit(
         }
 
         item {
-            OutlinedButton(
-                onClick = onClickUpdate,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = 16.dp,
-                    ),
-                enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName,
+            Row(
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(
-                    text = "Update",
-                )
+                OutlinedButton(
+                    onClick = onClickDelete,
+                    modifier = Modifier
+                        .weight(
+                            weight = 1f,
+                        )
+                        .padding(
+                            start = 16.dp,
+                            end = 8.dp,
+                        ),
+                    enabled = state is State.Idle,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError,
+                    ),
+                ) {
+                    Text(
+                        text = "Delete",
+                    )
+                }
+
+                OutlinedButton(
+                    onClick = onClickUpdate,
+                    modifier = Modifier
+                        .weight(
+                            weight = 1f,
+                        )
+                        .padding(
+                            start = 8.dp,
+                            end = 16.dp,
+                        ),
+                    enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName && valueOutfitType.isNotEmpty() && (valueOutfitName != outfit.name || valueOutfitType != outfit.type || valueInclude != outfit.include),
+                ) {
+                    Text(
+                        text = "Update",
+                    )
+                }
             }
 
             Spacer(
