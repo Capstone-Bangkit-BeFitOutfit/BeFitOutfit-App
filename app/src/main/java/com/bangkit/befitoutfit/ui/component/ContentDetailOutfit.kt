@@ -44,24 +44,22 @@ import com.bangkit.befitoutfit.helper.TextFieldType
 )
 @Composable
 fun ContentDetailOutfit(
-    /*TODO: rearrange*/
-    state: State<Unit>,
     outfit: Outfit,
+    state: State<Unit>,
     valueOutfitName: String,
-    isValidOutfitName: Boolean,
     onValueChangeOutfitName: (String) -> Unit,
+    isValidOutfitName: Boolean,
     onClickOutfitName: () -> Unit,
-    valueOutfitImageUrl: String,
-    valueInclude: Boolean,
-    onValueChangeInclude: (Boolean) -> Unit,
-    expanded: Boolean,
-    onExpandedChange: (Boolean) -> Unit,
     valueOutfitType: String,
     onValueChangeOutfitType: (String) -> Unit,
-    expandedOutfitEvent: Boolean,
-    onExpandedChangeOutfitEvent: (Boolean) -> Unit,
+    expandedOutfitType: Boolean,
+    onExpandedChangeOutfitType: (Boolean) -> Unit,
     valueOutfitEvent: String,
     onValueChangeOutfitEvent: (String) -> Unit,
+    expandedOutfitEvent: Boolean,
+    onExpandedChangeOutfitEvent: (Boolean) -> Unit,
+    valueInclude: Boolean,
+    onValueChangeInclude: (Boolean) -> Unit,
     onClickUpdate: () -> Unit,
     onStateResultFeedback: (String) -> Unit,
     dismiss: () -> Unit,
@@ -93,7 +91,7 @@ fun ContentDetailOutfit(
                     model = ImageRequest.Builder(
                         context = LocalContext.current,
                     ).data(
-                        data = valueOutfitImageUrl,
+                        data = outfit.imageUrl,
                     ).crossfade(
                         enable = true,
                     ).build(),
@@ -128,8 +126,8 @@ fun ContentDetailOutfit(
 
         item {
             ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = if (state is State.Idle) onExpandedChange else { _ -> },
+                expanded = expandedOutfitType,
+                onExpandedChange = if (state is State.Idle) onExpandedChangeOutfitType else { _ -> },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -158,15 +156,15 @@ fun ContentDetailOutfit(
                     },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = expanded,
+                            expanded = expandedOutfitType,
                         )
                     },
                 )
 
                 ExposedDropdownMenu(
-                    expanded = expanded,
+                    expanded = expandedOutfitType,
                     onDismissRequest = {
-                        onExpandedChange(false)
+                        onExpandedChangeOutfitType(false)
                     },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
@@ -179,7 +177,7 @@ fun ContentDetailOutfit(
                             },
                             onClick = {
                                 onValueChangeOutfitType(it)
-                                onExpandedChange(false)
+                                onExpandedChangeOutfitType(false)
                             },
                             modifier = Modifier.fillMaxWidth(),
                             enabled = state is State.Idle,
