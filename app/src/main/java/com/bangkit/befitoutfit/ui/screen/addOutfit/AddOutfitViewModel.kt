@@ -21,22 +21,22 @@ class AddOutfitViewModel(
         private set
 
     fun addOutfit(
+        image: Bitmap?,
         name: String,
         type: String,
-        image: Bitmap?,
         event: String,
-        percentage: Float = 10f,
         include: Boolean,
+        percentage: Float = 10f,
     ) = viewModelScope.launch(
         context = Dispatchers.IO,
     ) {
         outfitRepository.addOutfit(
+            image = image,
             name = name,
             type = type,
-            image = image,
             event = event,
-            percentage = percentage,
             include = include,
+            percentage = percentage,
         ).onStart {
             state.value = State.Loading
         }.catch {

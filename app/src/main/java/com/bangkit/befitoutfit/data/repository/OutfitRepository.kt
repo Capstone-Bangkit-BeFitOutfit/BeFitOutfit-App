@@ -24,23 +24,17 @@ class OutfitRepository(
     }
 
     suspend fun addOutfit(
+        image: Bitmap?,
         name: String,
         type: String,
-        image: Bitmap?,
         event: String,
-        percentage: Float,
         include: Boolean,
+        percentage: Float,
     ) = flow {
         image.toJpeg()?.let {
             emit(
                 value = apiService.addOutfit(
                     token = "Bearer ${sessionPreferences.getSession().first().token}",
-                    name = name.toRequestBody(
-                        contentType = "text/plain".toMediaType(),
-                    ),
-                    type = type.toRequestBody(
-                        contentType = "text/plain".toMediaType(),
-                    ),
                     image = MultipartBody.Part.createFormData(
                         name = "photo",
                         filename = name,
@@ -48,13 +42,19 @@ class OutfitRepository(
                             contentType = "image/jpeg".toMediaType(),
                         ),
                     ),
+                    name = name.toRequestBody(
+                        contentType = "text/plain".toMediaType(),
+                    ),
+                    type = type.toRequestBody(
+                        contentType = "text/plain".toMediaType(),
+                    ),
                     event = event.toRequestBody(
                         contentType = "text/plain".toMediaType(),
                     ),
-                    percentage = percentage.toString().toRequestBody(
+                    include = include.toString().toRequestBody(
                         contentType = "text/plain".toMediaType(),
                     ),
-                    include = include.toString().toRequestBody(
+                    percentage = percentage.toString().toRequestBody(
                         contentType = "text/plain".toMediaType(),
                     ),
                 ),

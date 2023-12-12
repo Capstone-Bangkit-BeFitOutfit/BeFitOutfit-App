@@ -51,12 +51,12 @@ interface ApiService {
     @POST("outfit/add")
     suspend fun addOutfit(
         @Header("Authorization") token: String,
+        @Part image: MultipartBody.Part,
         @Part("name") name: RequestBody,
         @Part("type") type: RequestBody,
-        @Part image: MultipartBody.Part,
         @Part("event") event: RequestBody,
-        @Part("percentage") percentage: RequestBody,
         @Part("include") include: RequestBody,
+        @Part("percentage") percentage: RequestBody,
     ): Info
 
     @Multipart
