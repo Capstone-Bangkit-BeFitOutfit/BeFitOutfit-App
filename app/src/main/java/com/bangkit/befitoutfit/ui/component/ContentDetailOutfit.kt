@@ -56,7 +56,7 @@ fun ContentDetailOutfit(
     valueOutfitType: String,
     onValueChangeOutfitType: (String) -> Unit,
     onClickUpdate: () -> Unit,
-    onError: (String) -> Unit,
+    onStateResultFeedback: (String) -> Unit,
     dismiss: () -> Unit,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
@@ -65,7 +65,7 @@ fun ContentDetailOutfit(
         is State.Success -> dismiss()
         is State.Error -> {
             dismiss()
-            onError(state.message.errorMessageHandler())
+            onStateResultFeedback(state.message.errorMessageHandler())
         }
 
         else -> {}

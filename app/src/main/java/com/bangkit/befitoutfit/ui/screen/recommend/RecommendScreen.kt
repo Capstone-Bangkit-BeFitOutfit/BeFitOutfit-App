@@ -25,7 +25,7 @@ fun RecommendScreen(
     recommend: Recommend,
     modifier: Modifier = Modifier,
     onRefresh: () -> Unit = {},
-    onError: (String) -> Unit = {},
+    onStateResultFeedback: (String) -> Unit = {},
     onClickDetailOutfit: (Outfit) -> Unit = {},
     pullRefreshState: PullRefreshState = rememberPullRefreshState(
         refreshing = state is State.Loading,
@@ -40,7 +40,10 @@ fun RecommendScreen(
             )
     ) {
         when (state) {
-            is State.Error -> onError(state.message.errorMessageHandler())
+            is State.Error -> {
+                onStateResultFeedback(state.message.errorMessageHandler())
+            }
+
             else -> {}
         }
 

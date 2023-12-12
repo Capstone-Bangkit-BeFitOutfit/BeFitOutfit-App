@@ -52,6 +52,7 @@ import com.bangkit.befitoutfit.helper.TfLiteLandMarkClassifier
 )
 @Composable
 fun ContentAddOutfit(
+    /*TODO: rearrange*/
     state: State<Info>,
     context: Context,
     valueOutfitName: String,
@@ -62,12 +63,12 @@ fun ContentAddOutfit(
     onValueChangeOutfitImage: (Bitmap) -> Unit,
     valueInclude: Boolean,
     onValueChangeInclude: (Boolean) -> Unit,
-    expanded: Boolean,
-    onExpandedChange: (Boolean) -> Unit,
+    expandedOutfitType: Boolean,
+    onExpandedChangeOutfitType: (Boolean) -> Unit,
     valueOutfitType: String,
     onValueChangeOutfitType: (String) -> Unit,
     onClickAdd: () -> Unit,
-    onError: (String) -> Unit,
+    onStateResultFeedback: (String) -> Unit,
     dismiss: () -> Unit,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
@@ -96,7 +97,7 @@ fun ContentAddOutfit(
         is State.Success -> dismiss()
         is State.Error -> {
             dismiss()
-            onError(state.message.errorMessageHandler())
+            onStateResultFeedback(state.message.errorMessageHandler())
         }
 
         else -> {}
@@ -170,8 +171,8 @@ fun ContentAddOutfit(
 
         item {
             ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = if (state is State.Idle) onExpandedChange else { _ -> },
+                expanded = expandedOutfitType,
+                onExpandedChange = if (state is State.Idle) onExpandedChangeOutfitType else { _ -> },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -200,15 +201,15 @@ fun ContentAddOutfit(
                     },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = expanded,
+                            expanded = expandedOutfitType,
                         )
                     },
                 )
 
                 ExposedDropdownMenu(
-                    expanded = expanded,
+                    expanded = expandedOutfitType,
                     onDismissRequest = {
-                        onExpandedChange(false)
+                        onExpandedChangeOutfitType(false)
                     },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
@@ -221,7 +222,7 @@ fun ContentAddOutfit(
                             },
                             onClick = {
                                 onValueChangeOutfitType(it)
-                                onExpandedChange(false)
+                                onExpandedChangeOutfitType(false)
                             },
                             modifier = Modifier.fillMaxWidth(),
                             enabled = state is State.Idle,

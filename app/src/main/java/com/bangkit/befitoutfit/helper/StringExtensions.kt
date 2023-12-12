@@ -27,8 +27,26 @@ object StringExtensions {
         else -> ""
     }
 
-    fun String.errorMessageHandler(): String = when {
+    fun String.errorMessageHandler(
+        specific: String = "",
+    ): String = when {
         this.contains("Unable to resolve host") -> "No internet connection"
-        else -> "Error${if (this.isNotEmpty()) ": $this" else ""}"
+        specific == "register" -> this.errorMessageHandlerRegister()
+        specific == "login" -> this.errorMessageHandlerLogin()
+        this.contains("404") -> "Token expired"
+        else -> this.errorMessage()
     }
+
+    private fun String.errorMessageHandlerRegister(): String = when {
+        this.contains("400") -> "Name already used"
+        this.contains("422") -> "Email invalid"
+        else -> this.errorMessage()
+    }
+
+    private fun String.errorMessageHandlerLogin(): String = when {
+        this.contains("404") -> "Wrong credential"
+        else -> this.errorMessage()
+    }
+
+    private fun String.errorMessage(): String = "Error${if (this.isNotEmpty()) ": $this" else ""}"
 }

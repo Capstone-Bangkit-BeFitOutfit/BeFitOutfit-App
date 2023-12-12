@@ -30,7 +30,7 @@ fun ContentProfile(
     onValueChangeEmail: (String) -> Unit,
     onClickEmail: () -> Unit,
     onClickUpdate: () -> Unit,
-    onError: (String) -> Unit,
+    onStateResultFeedback: (String) -> Unit,
     dismiss: () -> Unit,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
@@ -39,7 +39,7 @@ fun ContentProfile(
         is State.Success -> dismiss()
         is State.Error -> {
             dismiss()
-            onError(state.message.errorMessageHandler())
+            onStateResultFeedback(state.message.errorMessageHandler())
         }
 
         else -> {}

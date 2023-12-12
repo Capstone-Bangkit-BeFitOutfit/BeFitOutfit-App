@@ -45,7 +45,7 @@ fun BottomSheet(
     sheetState: SheetState = rememberModalBottomSheetState(),
     session: Session = Session(),
     outfit: Outfit = Outfit(),
-    onError: (String) -> Unit = {},
+    onStateResultFeedback: (String) -> Unit = {},
     dismiss: () -> Unit = {},
 ) {
     if (showBottomSheet) {
@@ -120,7 +120,7 @@ fun BottomSheet(
                                 email = valueEmail,
                             )
                         },
-                        onError = onError,
+                        onStateResultFeedback = onStateResultFeedback,
                         dismiss = dismiss,
                     )
                 }
@@ -188,7 +188,7 @@ fun BottomSheet(
                                 include = valueInclude,
                             )
                         },
-                        onError = onError,
+                        onStateResultFeedback = onStateResultFeedback,
                         dismiss = dismiss,
                     )
                 }
@@ -219,7 +219,7 @@ fun BottomSheet(
                         )
                     }
 
-                    var expanded by remember {
+                    var expandedOutfitType by remember {
                         mutableStateOf(
                             value = false,
                         )
@@ -231,6 +231,7 @@ fun BottomSheet(
                     }
 
                     ContentAddOutfit(
+                        /*TODO: rearrange*/
                         state = viewModel.state.collectAsState().value,
                         context = context,
                         valueOutfitName = valueOutfitName,
@@ -250,9 +251,9 @@ fun BottomSheet(
                         onValueChangeInclude = {
                             valueInclude = it
                         },
-                        expanded = expanded,
-                        onExpandedChange = {
-                            expanded = it
+                        expandedOutfitType = expandedOutfitType,
+                        onExpandedChangeOutfitType = {
+                            expandedOutfitType = it
                         },
                         valueOutfitType = valueOutfitType,
                         onValueChangeOutfitType = {
@@ -266,7 +267,7 @@ fun BottomSheet(
                                 include = valueInclude,
                             )
                         },
-                        onError = onError,
+                        onStateResultFeedback = onStateResultFeedback,
                         dismiss = dismiss,
                     )
                 }

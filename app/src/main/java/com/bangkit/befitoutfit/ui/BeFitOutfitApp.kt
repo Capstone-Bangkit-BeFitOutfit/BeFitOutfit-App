@@ -150,7 +150,7 @@ fun BeFitOutfitApp(
                         navigateToRegister = {
                             navController.navigate(Screen.Register.route)
                         },
-                        onError = {
+                        onStateResultFeedback = {
                             scope.launch {
                                 hostState.showSnackbar(it)
                             }
@@ -167,7 +167,7 @@ fun BeFitOutfitApp(
                         navigateToLogin = {
                             navController.navigateUp()
                         },
-                        onError = {
+                        onStateResultFeedback = {
                             scope.launch {
                                 hostState.showSnackbar(it)
                             }
@@ -187,7 +187,7 @@ fun BeFitOutfitApp(
                         state = viewModel.state.collectAsState().value,
                         outfits = viewModel.outfits,
                         onRefresh = viewModel::getOutfit,
-                        onError = {
+                        onStateResultFeedback = {
                             scope.launch {
                                 hostState.showSnackbar(it)
                             }
@@ -207,7 +207,7 @@ fun BeFitOutfitApp(
                         state = viewModel.state.collectAsState().value,
                         recommend = viewModel.recommend,
                         onRefresh = viewModel::getRecommend,
-                        onError = {
+                        onStateResultFeedback = {
                             scope.launch {
                                 hostState.showSnackbar(it)
                             }
@@ -232,7 +232,7 @@ fun BeFitOutfitApp(
             sheetState = sheetState,
             session = session,
             outfit = selectedOutfit,
-            onError = {
+            onStateResultFeedback = {
                 scope.launch {
                     hostState.showSnackbar(it)
                 }
