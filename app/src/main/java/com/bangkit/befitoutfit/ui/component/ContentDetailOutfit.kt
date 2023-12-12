@@ -54,10 +54,6 @@ fun ContentDetailOutfit(
     onValueChangeOutfitType: (String) -> Unit,
     expandedOutfitType: Boolean,
     onExpandedChangeOutfitType: (Boolean) -> Unit,
-    valueOutfitEvent: String,
-    onValueChangeOutfitEvent: (String) -> Unit,
-    expandedOutfitEvent: Boolean,
-    onExpandedChangeOutfitEvent: (Boolean) -> Unit,
     valueInclude: Boolean,
     onValueChangeInclude: (Boolean) -> Unit,
     onClickUpdate: () -> Unit,
@@ -189,8 +185,8 @@ fun ContentDetailOutfit(
 
         item {
             ExposedDropdownMenuBox(
-                expanded = expandedOutfitEvent,
-                onExpandedChange = if (state is State.Idle) onExpandedChangeOutfitEvent else { _ -> },
+                expanded = false,
+                onExpandedChange = { _ -> },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -200,12 +196,12 @@ fun ContentDetailOutfit(
                     ),
             ) {
                 OutlinedTextField(
-                    value = valueOutfitEvent,
-                    onValueChange = onValueChangeOutfitEvent,
+                    value = outfit.event,
+                    onValueChange = {},
                     modifier = Modifier
                         .fillMaxWidth()
                         .menuAnchor(),
-                    enabled = state is State.Idle,
+                    enabled = false,
                     readOnly = true,
                     label = {
                         Text(
@@ -219,34 +215,10 @@ fun ContentDetailOutfit(
                     },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = expandedOutfitEvent,
+                            expanded = false,
                         )
                     },
                 )
-
-                ExposedDropdownMenu(
-                    expanded = expandedOutfitEvent,
-                    onDismissRequest = {
-                        onExpandedChangeOutfitEvent(false)
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    ListOutfit.event.forEach {
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    text = it,
-                                )
-                            },
-                            onClick = {
-                                onValueChangeOutfitEvent(it)
-                                onExpandedChangeOutfitEvent(false)
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            enabled = state is State.Idle,
-                        )
-                    }
-                }
             }
         }
 
@@ -292,7 +264,7 @@ fun ContentDetailOutfit(
                     .padding(
                         horizontal = 16.dp,
                     ),
-                enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName && valueOutfitType.isNotEmpty() && valueOutfitEvent.isNotEmpty() && (valueOutfitName != outfit.name || valueOutfitType != outfit.type || valueOutfitEvent != outfit.event || valueInclude != outfit.include),
+                enabled = state is State.Idle && valueOutfitName.isNotEmpty() && isValidOutfitName && valueOutfitType.isNotEmpty() && (valueOutfitName != outfit.name || valueOutfitType != outfit.type || valueInclude != outfit.include),
             ) {
                 Text(
                     text = "Update",

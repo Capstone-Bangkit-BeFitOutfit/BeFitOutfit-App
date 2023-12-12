@@ -150,17 +150,6 @@ fun BottomSheet(
                         )
                     }
 
-                    var expandedOutfitEvent by remember {
-                        mutableStateOf(
-                            value = false,
-                        )
-                    }
-                    var valueOutfitEvent by remember {
-                        mutableStateOf(
-                            value = outfit.event,
-                        )
-                    }
-
                     var valueInclude by remember {
                         mutableStateOf(
                             value = outfit.include,
@@ -187,14 +176,6 @@ fun BottomSheet(
                         onExpandedChangeOutfitType = {
                             expandedOutfitType = it
                         },
-                        valueOutfitEvent = valueOutfitEvent,
-                        onValueChangeOutfitEvent = {
-                            valueOutfitEvent = it
-                        },
-                        expandedOutfitEvent = expandedOutfitEvent,
-                        onExpandedChangeOutfitEvent = {
-                            expandedOutfitEvent = it
-                        },
                         valueInclude = valueInclude,
                         onValueChangeInclude = {
                             valueInclude = it
@@ -203,7 +184,7 @@ fun BottomSheet(
                             viewModel.updateOutfit(
                                 id = outfit.id,
                                 name = valueOutfitName,
-                                type = outfit.type,
+                                type = valueOutfitType,
                                 include = valueInclude,
                             )
                         },
