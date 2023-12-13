@@ -12,6 +12,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.bangkit.befitoutfit.data.model.Login
 import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
@@ -19,7 +20,7 @@ import com.bangkit.befitoutfit.helper.TextFieldType
 
 @Composable
 fun ContentProfile(
-    state: State<Unit>,
+    state: State<Login>,
     session: Session,
     valueName: String,
     isValidName: Boolean,
@@ -36,7 +37,6 @@ fun ContentProfile(
     focusManager: FocusManager = LocalFocusManager.current,
 ) {
     when (state) {
-        is State.Success -> dismiss()
         is State.Error -> {
             dismiss()
             onStateResultFeedback(state.message.errorMessageHandler())

@@ -39,9 +39,9 @@ interface ApiService {
     suspend fun updateUser(
         @Header("Authorization") token: String,
         @Path("id") id: Int,
-        @Field("name") name: String,
+        @Field("username") name: String,
         @Field("email") email: String,
-    )
+    ) : Login
 
     @GET("outfit")
     suspend fun getOutfit(
