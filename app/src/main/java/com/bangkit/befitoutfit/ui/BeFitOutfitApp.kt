@@ -210,7 +210,7 @@ fun BeFitOutfitApp(
                     val viewModel: RecommendViewModel = koinViewModel()
                     RecommendScreen(
                         state = viewModel.state.collectAsState().value,
-                        recommend = viewModel.recommend,
+                        recommendData = viewModel.recommend.data,
                         onRefresh = viewModel::getRecommend,
                         onStateResultFeedback = {
                             scope.launch {
