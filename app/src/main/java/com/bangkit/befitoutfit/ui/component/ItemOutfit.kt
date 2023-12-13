@@ -9,6 +9,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults.cardColors
+import androidx.compose.material3.CardDefaults.cardElevation
+import androidx.compose.material3.CardDefaults.outlinedCardBorder
+import androidx.compose.material3.CardDefaults.outlinedCardColors
+import androidx.compose.material3.CardDefaults.outlinedCardElevation
+import androidx.compose.material3.CardDefaults.outlinedShape
+import androidx.compose.material3.CardDefaults.shape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,6 +25,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -38,6 +46,10 @@ fun ItemOutfit(
             onClick(outfit)
         },
         modifier = modifier.fillMaxWidth(),
+        shape = if (outfit.include) shape else outlinedShape,
+        colors = if (outfit.include) cardColors() else outlinedCardColors(),
+        elevation = if (outfit.include) cardElevation() else outlinedCardElevation(),
+        border = if (outfit.include) null else outlinedCardBorder(),
     ) {
         Row {
             Column(
@@ -51,6 +63,8 @@ fun ItemOutfit(
             ) {
                 Text(
                     text = outfit.name,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
                     style = MaterialTheme.typography.titleLarge,
                 )
 
