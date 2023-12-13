@@ -54,12 +54,21 @@ fun LoginScreen(
         )
     }
 
+    var success by remember {
+        mutableStateOf(
+            value = false,
+        )
+    }
+
     when (state) {
         is State.Success -> {
-            navigateToMain()
-            onStateResultFeedback(
-                "Successfully logged in",
-            )
+            if (!success) {
+                navigateToMain()
+                onStateResultFeedback(
+                    "Successfully logged in",
+                )
+            }
+            success = true
         }
 
         is State.Error -> onStateResultFeedback(
