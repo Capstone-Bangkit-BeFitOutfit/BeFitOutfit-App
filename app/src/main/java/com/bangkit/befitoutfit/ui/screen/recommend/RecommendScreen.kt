@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.bangkit.befitoutfit.data.model.Outfit
 import com.bangkit.befitoutfit.data.model.Recommend
+import com.bangkit.befitoutfit.data.model.RecommendData
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
 import com.bangkit.befitoutfit.ui.component.ColumnRecommend
@@ -22,7 +23,7 @@ import com.bangkit.befitoutfit.ui.component.ColumnRecommend
 @Composable
 fun RecommendScreen(
     state: State<Recommend>,
-    recommend: Recommend,
+    recommendData: RecommendData,
     modifier: Modifier = Modifier,
     onRefresh: () -> Unit = {},
     onStateResultFeedback: (String) -> Unit = {},
@@ -50,7 +51,7 @@ fun RecommendScreen(
         }
 
         ColumnRecommend(
-            recommend = recommend,
+            recommendData = recommendData,
             onClick = onClickDetailOutfit,
         )
 

@@ -13,14 +13,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.bangkit.befitoutfit.data.model.Outfit
-import com.bangkit.befitoutfit.data.model.Recommend
+import com.bangkit.befitoutfit.data.model.RecommendData
 
 @Composable
 fun ColumnRecommend(
-    recommend: Recommend,
+    recommendData: RecommendData,
     modifier: Modifier = Modifier,
     onClick: (Outfit) -> Unit = {},
-    isSuccess: Boolean = recommend.message == "success",
+    top: List<Outfit> = recommendData.top,
+    bottom: List<Outfit> = recommendData.bottom,
+    extra: List<Outfit> = recommendData.extra,
+    isEmpty: Boolean = (top.size + bottom.size + extra.size) == 0,
 ) {
     LazyColumn(
         modifier = modifier
@@ -29,81 +32,81 @@ fun ColumnRecommend(
                 horizontal = 16.dp,
             ),
         contentPadding = PaddingValues(
-            top = if (isSuccess) 16.dp else 0.dp,
-            bottom = if (isSuccess) 88.dp else 0.dp,
+            top = if (isEmpty) 0.dp else 16.dp,
+            bottom = if (isEmpty) 0.dp else 88.dp,
         ),
-        verticalArrangement = if (isSuccess) Arrangement.spacedBy(
+        verticalArrangement = if (isEmpty) Arrangement.Center else Arrangement.spacedBy(
             space = 16.dp,
-        ) else Arrangement.Center,
-        horizontalAlignment = if (isSuccess) Alignment.Start else Alignment.CenterHorizontally,
+        ),
+        horizontalAlignment = if (isEmpty) Alignment.CenterHorizontally else Alignment.Start,
     ) {
-        if (isSuccess) {
-            if (recommend.data.top.isNotEmpty()) {
-                item {
-                    Text(
-                        text = recommend.data.top.first().type,
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                }
-
-                items(
-                    items = recommend.data.top,
-                    key = {
-                        it.toString()
-                    },
-                ) { outfit ->
-                    ItemOutfit(
-                        outfit = outfit,
-                    ) {
-                        onClick(outfit)
-                    }
-                }
+        if (top.isNotEmpty()) {
+            item {
+                Text(
+                    text = top.first().type,
+                    style = MaterialTheme.typography.titleMedium,
+                )
             }
 
-            if (recommend.data.bottom.isNotEmpty()) {
-                item {
-                    Text(
-                        text = recommend.data.bottom.first().type,
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                }
-
-                items(
-                    items = recommend.data.bottom,
-                    key = {
-                        it.toString()
-                    },
-                ) { outfit ->
-                    ItemOutfit(
-                        outfit = outfit,
-                    ) {
-                        onClick(outfit)
-                    }
+            items(
+                items = top,
+                key = {
+                    it.toString()
+                },
+            ) { outfit ->
+                ItemOutfit(
+                    outfit = outfit,
+                ) {
+                    onClick(outfit)
                 }
             }
+        }
 
-            if (recommend.data.extra.isNotEmpty()) {
-                item {
-                    Text(
-                        text = recommend.data.extra.first().type,
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                }
+        if (bottom.isNotEmpty()) {
+            item {
+                Text(
+                    text = bottom.first().type,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+            }
 
-                items(
-                    items = recommend.data.extra,
-                    key = {
-                        it.toString()
-                    },
-                ) { outfit ->
-                    ItemOutfit(
-                        outfit = outfit,
-                    ) {
-                        onClick(outfit)
-                    }
+            items(
+                items = bottom,
+                key = {
+                    it.toString()
+                },
+            ) { outfit ->
+                ItemOutfit(
+                    outfit = outfit,
+                ) {
+                    onClick(outfit)
                 }
             }
-        } else item {
+        }
+
+        if (extra.isNotEmpty()) {
+            item {
+                Text(
+                    text = extra.first().type,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+            }
+
+            items(
+                items = extra,
+                key = {
+                    it.toString()
+                },
+            ) { outfit ->
+                ItemOutfit(
+                    outfit = outfit,
+                ) {
+                    onClick(outfit)
+                }
+            }
+        }
+
+        if (isEmpty) item {
             Text(
                 text = "No outfit recommendation found",
             )
