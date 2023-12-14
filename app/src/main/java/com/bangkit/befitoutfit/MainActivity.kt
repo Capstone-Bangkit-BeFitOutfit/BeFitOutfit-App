@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bangkit.befitoutfit.data.model.Session
 import com.bangkit.befitoutfit.ui.BeFitOutfitApp
 import com.bangkit.befitoutfit.ui.screen.Screen
@@ -30,6 +31,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         if (!hasRequiredPermissions()) requestPermissions(this, CAMERAX_PERMISSIONS, 0)
         setContent {
             BeFitOutfitTheme {

@@ -94,6 +94,9 @@ dependencies {
     // retrofit
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    // splashscreen
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
     // tensorflow lite
     val tensorflowLiteVersion = "0.4.4"
     implementation("org.tensorflow:tensorflow-lite-task-vision:$tensorflowLiteVersion")
