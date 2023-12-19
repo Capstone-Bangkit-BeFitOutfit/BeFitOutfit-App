@@ -46,7 +46,6 @@ import com.bangkit.befitoutfit.helper.ListOutfit
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
 import com.bangkit.befitoutfit.helper.TextFieldType
-import com.bangkit.befitoutfit.helper.TfLiteLandMarkClassifier
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -76,23 +75,18 @@ fun ContentAddOutfit(
     dismiss: () -> Unit,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
-    analyzer: LandmarkImageAnalyzer = remember {
-        LandmarkImageAnalyzer(
-            classifier = TfLiteLandMarkClassifier(
-                context = context,
-            ),
-            /*TODO: use real one*/
-            onResultsDummy = onValueChangeOutfitName,
-        )
-    },
     cameraController: LifecycleCameraController = remember {
         LifecycleCameraController(context).apply {
             setEnabledUseCases(
                 IMAGE_CAPTURE or IMAGE_ANALYSIS
             )
+
             setImageAnalysisAnalyzer(
                 ContextCompat.getMainExecutor(context),
-                analyzer,
+                LandmarkImageAnalyzer(
+                    context = context,
+                    onResult = onValueChangeOutfitEvent,
+                ),
             )
         }
     },
