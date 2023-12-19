@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
 import com.bangkit.befitoutfit.data.model.Info
-import com.bangkit.befitoutfit.helper.LandmarkImageAnalyzer
+import com.bangkit.befitoutfit.helper.ImageAnalyzerOutfitEvent
 import com.bangkit.befitoutfit.helper.ListOutfit
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
@@ -83,7 +83,7 @@ fun ContentAddOutfit(
 
             setImageAnalysisAnalyzer(
                 ContextCompat.getMainExecutor(context),
-                LandmarkImageAnalyzer(
+                ImageAnalyzerOutfitEvent(
                     context = context,
                     onResult = onValueChangeOutfitEvent,
                 ),
