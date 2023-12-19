@@ -275,7 +275,9 @@ fun ContentAddOutfit(
                     },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    ListOutfit.event.forEach {
+                    ListOutfit.event.sortedBy {
+                        it
+                    }.forEach {
                         DropdownMenuItem(
                             text = {
                                 Text(

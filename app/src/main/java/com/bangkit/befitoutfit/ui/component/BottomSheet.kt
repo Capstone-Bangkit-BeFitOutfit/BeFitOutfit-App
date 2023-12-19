@@ -309,7 +309,9 @@ fun BottomSheet(
                     }
 
                     ContentSettingRecommend(
-                        listEvent = ListOutfit.event,
+                        listEvent = ListOutfit.event.sortedBy {
+                            it
+                        },
                         event = event,
                         onSelected = onSelectedEvent,
                         setSettingRecommend = viewModel::setSettingRecommend,

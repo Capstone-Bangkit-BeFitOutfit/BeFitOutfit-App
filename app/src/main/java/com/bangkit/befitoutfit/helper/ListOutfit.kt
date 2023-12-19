@@ -9,18 +9,18 @@ object ListOutfit {
 
     val event = listOf(
         "Concert",
-        "Conference",
-        "Exhibition",
-        "Fashion",
         "Graduation",
         "Meeting",
         "Mountain trip",
         "Picnic",
-        "Protest",
         "Sea holiday",
         "Ski holiday",
+        "Wedding",
+        "Conference",
+        "Exhibition",
+        "Fashion",
+        "Protest",
         "Sport",
         "Theater dance",
-        "Wedding",
     )
 }
