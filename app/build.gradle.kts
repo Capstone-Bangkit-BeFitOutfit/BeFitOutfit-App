@@ -17,28 +17,47 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables { useSupportLibrary = true }
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+                getDefaultProguardFile(
+                    "proguard-android-optimize.txt",
+                ),
+                "proguard-rules.pro",
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions { jvmTarget = "1.8" }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     buildFeatures {
         buildConfig = true
         compose = true
+        mlModelBinding = true
     }
-    composeOptions { kotlinCompilerExtensionVersion = "1.5.4" }
-    packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.4"
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
 
 dependencies {
@@ -59,28 +78,43 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    // camerax
-    val cameraxVersion = "1.3.0"
-    implementation("androidx.camera:camera-core:$cameraxVersion")
-    implementation("androidx.camera:camera-camera2:$cameraxVersion")
-    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
-    implementation("androidx.camera:camera-video:$cameraxVersion")
-    implementation("androidx.camera:camera-view:$cameraxVersion")
-    implementation("androidx.camera:camera-extensions:$cameraxVersion")
+    // camera
+    val cameraVersion = "1.3.1"
+    implementation("androidx.camera:camera-core:$cameraVersion")
+    implementation("androidx.camera:camera-camera2:$cameraVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraVersion")
+    implementation("androidx.camera:camera-video:$cameraVersion")
+    implementation("androidx.camera:camera-view:$cameraVersion")
+    implementation("androidx.camera:camera-extensions:$cameraVersion")
 
-    // coil
-    implementation("io.coil-kt:coil-compose:2.5.0")
+    // coil-compose
+    val coilComposeVersion = "2.5.0"
+    implementation("io.coil-kt:coil-compose:$coilComposeVersion")
 
-    // datastore
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    // converter-gson
+    val converterGsonVersion = "2.9.0"
+    implementation("com.squareup.retrofit2:converter-gson:$converterGsonVersion")
 
-    // koin
-    val koinVersion = "3.5.0"
-    implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
-    testImplementation("io.insert-koin:koin-test-junit4:$koinVersion")
+    // core-splashscreen
+    val coreSplashscreenVersion = "1.0.1"
+    implementation("androidx.core:core-splashscreen:$coreSplashscreenVersion")
 
-    // logging interceptor
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11")
+    // datastore-preferences
+    val datastorePreferencesVersion = "1.0.0"
+    implementation("androidx.datastore:datastore-preferences:$datastorePreferencesVersion")
+
+    // insert-koin
+    val insertKoinVersion = "3.5.0"
+    implementation("io.insert-koin:koin-androidx-compose:$insertKoinVersion")
+    testImplementation("io.insert-koin:koin-test-junit4:$insertKoinVersion")
+
+    // lifecycle-viewmodel-compose
+    val lifecycleViewmodelComposeVersion = "2.7.0-rc02"
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleViewmodelComposeVersion")
+
+    // logging-interceptor
+    val loggingInterceptorVersion = "5.0.0-alpha.12"
+    implementation("com.squareup.okhttp3:logging-interceptor:$loggingInterceptorVersion")
 
     // material
     implementation("androidx.compose.material:material")
@@ -91,20 +125,15 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$navigationVersion")
     androidTestImplementation("androidx.navigation:navigation-testing:$navigationVersion")
 
-    // retrofit
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    // tensorflow
+    val tensorflowVersion = "2.14.0"
+    implementation("org.tensorflow:tensorflow-lite:$tensorflowVersion")
+    implementation("org.tensorflow:tensorflow-lite-gpu:$tensorflowVersion")
 
-    // splashscreen
-    implementation("androidx.core:core-splashscreen:1.0.1")
-
-    // tensorflow lite
+    // tensorflow-lite
     val tensorflowLiteVersion = "0.4.4"
-    implementation("org.tensorflow:tensorflow-lite-task-vision:$tensorflowLiteVersion")
     implementation("org.tensorflow:tensorflow-lite-gpu-delegate-plugin:$tensorflowLiteVersion")
-
-    // tensorflow lite gpu
-    implementation("org.tensorflow:tensorflow-lite-gpu:2.14.0")
-
-    // viewmodel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation("org.tensorflow:tensorflow-lite-metadata:$tensorflowLiteVersion")
+    implementation("org.tensorflow:tensorflow-lite-support:$tensorflowLiteVersion")
+    implementation("org.tensorflow:tensorflow-lite-task-vision:$tensorflowLiteVersion")
 }

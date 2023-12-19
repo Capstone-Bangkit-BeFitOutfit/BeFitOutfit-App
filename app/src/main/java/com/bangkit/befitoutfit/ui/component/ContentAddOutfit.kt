@@ -41,12 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
 import com.bangkit.befitoutfit.data.model.Info
-import com.bangkit.befitoutfit.helper.LandmarkImageAnalyzer
+import com.bangkit.befitoutfit.helper.ImageAnalyzerOutfitEvent
 import com.bangkit.befitoutfit.helper.ListOutfit
 import com.bangkit.befitoutfit.helper.State
 import com.bangkit.befitoutfit.helper.StringExtensions.errorMessageHandler
 import com.bangkit.befitoutfit.helper.TextFieldType
-import com.bangkit.befitoutfit.helper.TfLiteLandMarkClassifier
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -76,23 +75,18 @@ fun ContentAddOutfit(
     dismiss: () -> Unit,
     modifier: Modifier = Modifier,
     focusManager: FocusManager = LocalFocusManager.current,
-    analyzer: LandmarkImageAnalyzer = remember {
-        LandmarkImageAnalyzer(
-            classifier = TfLiteLandMarkClassifier(
-                context = context,
-            ),
-            /*TODO: use real one*/
-            onResultsDummy = onValueChangeOutfitName,
-        )
-    },
     cameraController: LifecycleCameraController = remember {
         LifecycleCameraController(context).apply {
             setEnabledUseCases(
                 IMAGE_CAPTURE or IMAGE_ANALYSIS
             )
+
             setImageAnalysisAnalyzer(
                 ContextCompat.getMainExecutor(context),
-                analyzer,
+                ImageAnalyzerOutfitEvent(
+                    context = context,
+                    onResult = onValueChangeOutfitEvent,
+                ),
             )
         }
     },
@@ -281,7 +275,9 @@ fun ContentAddOutfit(
                     },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    ListOutfit.event.forEach {
+                    ListOutfit.event.sortedBy {
+                        it
+                    }.forEach {
                         DropdownMenuItem(
                             text = {
                                 Text(
